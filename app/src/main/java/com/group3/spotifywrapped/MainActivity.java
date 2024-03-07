@@ -17,6 +17,7 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,8 +80,28 @@ public class MainActivity extends AppCompatActivity {
 
         profileBtn.setOnClickListener((v) -> {
             onGetUserProfileClicked();
-            profileImageView.setImageBitmap(getBitmapFromURL("https://i.scdn.co/image/ab67616d0000b273ab9d1ae18b640b7b0ce390d4"));
-
+//            try {
+//                JSONArray items = resp.getJSONArray("items");
+//
+//                if (items.length() > 0) {
+//                    JSONObject firstItem = items.getJSONObject(0);
+//                    JSONObject album = firstItem.getJSONObject("album");
+//                    JSONArray images = album.getJSONArray("images");
+//
+//                    if (images.length() > 0) {
+//                        JSONObject firstImage = images.getJSONObject(0);
+//                        String imageUrl = firstImage.getString("url");
+//                        System.out.println("First image URL: " + imageUrl);
+//                        profileImageView.setImageBitmap(getBitmapFromURL(imageUrl));
+//                    } else {
+//                        System.out.println("No images found.");
+//                    }
+//                } else {
+//                    System.out.println("No items found.");
+//                }
+//            } catch (JSONException e) {
+//                throw new RuntimeException(e);
+//            }
             //set the image view to the profile picture
 //            profileImageView.setImageResource(resp);
         });
@@ -184,8 +205,6 @@ public class MainActivity extends AppCompatActivity {
 //                    setTextAsync(jsonObject.toString(3), profileTextView);
                     Log.d("JSON", "Got response: " + jsonObject.toString(3));
                     resp = jsonObject;
-                    String urlProfilePicture = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url");
-                    //set the image view to the profile picture
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);

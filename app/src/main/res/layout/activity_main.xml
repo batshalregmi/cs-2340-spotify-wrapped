@@ -60,6 +60,12 @@
                 android:layout_weight="1"
                 android:text="Get User Profile" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/mainMenuImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

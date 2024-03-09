@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/loginpageart"
+    android:background="@drawable/loginpageartnew"
     tools:context=".MainActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:padding="8dp"
-        android:text="Not yet registered? SignUp Now"
+        android:text="Not yet registered? Sign Up Now!"
         android:textAlignment="center"
         android:textColor="@color/purple"
         android:textSize="14sp" />

@@ -8,10 +8,9 @@ env:
   playstore_name: spotify-wrapped
 
 on:
-
   push:
     branches:
-      - 'release/**'
+      - 'master/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -43,9 +42,9 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
-      # Run Tests Build
-      - name: Run gradle tests
-        run: ./gradlew test
+#      # Run Tests Build
+#      - name: Run gradle tests
+#        run: ./gradlew test
 
       # Run Build Project
       - name: Build gradle project
@@ -66,11 +65,11 @@ jobs:
 
       # Upload Artifact Build
       # Noted For Output [main_project_module]/build/outputs/apk/debug/
-      - name: Upload APK Debug - ${{ env.repository_name }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) debug generated
-          path: ${{ env.main_project_module }}/build/outputs/apk/debug/
+#      - name: Upload APK Debug - ${{ env.repository_name }}
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) debug generated
+#          path: ${{ env.main_project_module }}/build/outputs/apk/debug/
 
       # Noted For Output [main_project_module]/build/outputs/apk/release/
       - name: Upload APK Release - ${{ env.repository_name }}

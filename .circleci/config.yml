@@ -1,30 +1,58 @@
-version: 2
+version: 2.1
+
 jobs:
   build:
-    working_directory: ~/code
     docker:
-      - image: circleci/android:api-25-alpha
-    environment:
-      JVM_OPTS: -Xmx3200m
+      - image: circleci/openjdk:17-jdk
+
+    working_directory: ~/project
+
     steps:
       - checkout
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-      #      - run:
-      #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-      #         command: sudo chmod +x ./gradlew
+
       - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+          name: Set current date as env variable
+          command: echo "date_today=$(date +'%Y-%m-%d')" >> $BASH_ENV
+
       - run:
-          name: Run Tests
-          command: ./gradlew lint test
-      - store_artifacts:
-          path: app/build/reports
-          destination: reports
-      - store_test_results:
-          path: app/build/test-results
+          name: Set repository name as env variable
+          command: echo "repository_name=$(echo '${CIRCLE_PROJECT_REPONAME}')" >> $BASH_ENV
+
+      - run:
+          name: Set Up JDK
+          command: sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-17/bin/java 100
+
+      - run:
+          name: Change wrapper permissions
+          command: chmod +x ./gradlew
+
+      - run:
+          name: Build gradle project
+          command: ./gradlew build
+
+      - run:
+          name: Build apk release project (APK) - ${main_project_module} module
+          command: ./gradlew assemble
+
+      - run:
+          name: Upload APK Release - ${repository_name}
+          command: |
+            mkdir -p ~/artifacts
+            cp -r ${main_project_module}/build/outputs/apk/release ~/artifacts
+          when: always
+
+      # You can uncomment and modify the following lines for additional steps if needed.
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+                - main
+                - develop
+            tags:
+              ignore: /.*/

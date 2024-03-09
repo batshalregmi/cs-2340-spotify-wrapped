@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/loginpageart"
+    android:background="@drawable/loginpageartnew"
     tools:context=".MainActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:id="@+id/loginText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="@string/login"
                 android:textAlignment="center"
                 android:textColor="@color/purple"
                 android:textSize="36sp"
@@ -42,7 +42,8 @@
                 android:layout_marginTop="40dp"
                 android:background="@drawable/custom_edittext"
                 android:drawablePadding="8dp"
-                android:hint="Username"
+                android:hint="@string/username"
+                android:inputType="text"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
@@ -54,7 +55,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/custom_edittext"
                 android:drawablePadding="8dp"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:padding="8dp"
                 android:textColor="@color/black"
@@ -66,7 +67,7 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
                 android:backgroundTint="@color/purple"
-                android:text="Login"
+                android:text="@string/login"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
         </LinearLayout>
@@ -78,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:padding="8dp"
-        android:text="Not yet registered? SignUp Now"
+        android:text="@string/not_yet_registered"
         android:textAlignment="center"
         android:textColor="@color/purple"
         android:textSize="14sp" />

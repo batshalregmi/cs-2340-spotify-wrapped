@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a request to get the user profile
         final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=2")
+                .url("https://api.spotify.com/v1/me")
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 

@@ -1,0 +1,22 @@
+language: android
+jdk: oraclejdk8
+
+android:
+  components:
+    - platform-tools
+    - tools
+    - build-tools-30.0.3
+    - android-30
+
+before_install:
+  - yes | sdkmanager "platforms;android-30"
+
+script:
+  - ./gradlew assembleDebug
+
+branches:
+  only:
+    - master
+
+notifications:
+  email: false

@@ -1,8 +1,10 @@
 package com.group3.spotifywrapped;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
@@ -25,7 +27,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
+import database.AppDatabase;
+import database.User;
+import database.UserDao;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -47,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
+    public AppDatabase db;
+    public UserDao userDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +78,24 @@ public class MainActivity extends AppCompatActivity {
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
         ImageView profileImageView = (ImageView) findViewById(R.id.mainMenuImageView);
 
+        // Init Databae
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "local-database").build();
+        userDao = db.userDao();
+
+        // Query Call
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                userDao.insert(new User(
+                        "not.Parker.arneson@gmail.com",
+                        "092318908213",
+                        "lakwndlkand",
+                        "985690493"
+                ));
+            }
+        });
+        thread.start();
 
         // Set the click listeners for the buttons
 
@@ -175,6 +204,17 @@ public class MainActivity extends AppCompatActivity {
      * This method will get the user profile using the token
      */
     public void onGetUserProfileClicked() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<User> users = userDao.getAll();
+                for (User user : users) {
+                    System.out.println(user);
+                }
+            }
+        });
+        thread.start();
+
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;

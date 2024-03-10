@@ -21,5 +21,17 @@ public class User {
     @ColumnInfo(name = "spotify_code")
     public String spotifyCode;
 
+    public User(){}
 
+    public User(String email, String password, String sToken, String sCode) {
+        this.email = email;
+        this.password = password;
+        this.spotifyToken = sToken;
+        this.spotifyCode = sCode;
+    }
+
+    @Override
+    public String toString() {
+        return (email + "\n" + password + "\n" + spotifyToken + "\n" + spotifyCode);
+    }
 }

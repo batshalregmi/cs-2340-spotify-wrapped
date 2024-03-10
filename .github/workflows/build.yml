@@ -1,40 +1,92 @@
-name: Android Build and Test
+name: Generated APK AAB (Upload - Create Artifact To Github Action)
+
+env:
+  # The name of the main module repository
+  main_project_module: app
+
+  # The name of the Play Store
+  playstore_name: spotify-wrapped
 
 on:
   push:
     branches:
-      - master
+      - 'master'
+      - 'main'
   pull_request:
     branches:
-      - master
+      - 'master'
+      - 'main'
+      - 'develop'
+      -
+      # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 
 jobs:
   build:
-    name: Build and Test
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      # Set Current Date As Env Variable
+      - name: Set current date as env variable
+        run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      # Set Repository Name As Env Variable
+      - name: Set repository name as env variable
+        run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+
+      - name: Set Up JDK
+        uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: '11'
+          distribution: 'zulu' # See 'Supported distributions' for available options
+          java-version: '17'
+          cache: 'gradle'
 
-      - name: Set up Android SDK
-        uses: reactivecircus/android-setup-action@v2
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+
+      #      # Run Tests Build
+      #      - name: Run gradle tests
+      #        run: ./gradlew test
+
+      # Run Build Project
+      - name: Build gradle project
+        run: ./gradlew build
+
+      #      # Create APK Debug
+      #      - name: Build apk debug project (APK) - ${{ env.main_project_module }} module
+      #        run: ./gradlew assembleDebug
+
+      # Create APK Release
+      - name: Build apk release project (APK) - ${{ env.main_project_module }} module
+        run: ./gradlew assemble
+
+      #      # Create Bundle AAB Release
+      #      # Noted for main module build [main_project_module]:bundleRelease
+      #      - name: Build app bundle release (AAB) - ${{ env.main_project_module }} module
+      #        run: ./gradlew ${{ env.main_project_module }}:bundleRelease
+
+      # Upload Artifact Build
+      # Noted For Output [main_project_module]/build/outputs/apk/debug/
+      #      - name: Upload APK Debug - ${{ env.repository_name }}
+      #        uses: actions/upload-artifact@v3
+      #        with:
+      #          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) debug generated
+      #          path: ${{ env.main_project_module }}/build/outputs/apk/debug/
+
+      # Noted For Output [main_project_module]/build/outputs/apk/release/
+      - name: Upload APK Release - ${{ env.repository_name }}
+        uses: actions/upload-artifact@v3
         with:
-          components: build-tools-30.0.3, android-30
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) release generated
+          path: ${{ env.main_project_module }}/build/outputs/apk/release/
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: ${{ runner.os }}-gradle
-
-      - name: Build and test with Gradle
-        run: ./gradlew build connectedCheck
+#      # Noted For Output [main_project_module]/build/outputs/bundle/release/
+#      - name: Upload AAB (App Bundle) Release - ${{ env.repository_name }}
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - App bundle(s) AAB release generated
+#          path: ${{ env.main_project_module }}/build/outputs/bundle/release/

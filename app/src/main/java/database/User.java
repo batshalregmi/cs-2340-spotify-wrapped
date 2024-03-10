@@ -1,11 +1,14 @@
 package database;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class User {
+
+    @NonNull
     @PrimaryKey
     public String email;
 

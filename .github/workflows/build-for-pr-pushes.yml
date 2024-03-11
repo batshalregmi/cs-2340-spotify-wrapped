@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'adopt' # See 'Supported distributions' for available options
-          java-version: '8'
+          java-version: '17'
           cache: 'gradle'
 
       - name: Change wrapper permissions
@@ -48,6 +48,3 @@ jobs:
       # Run Build Project
       - name: Build gradle project
         run: ./gradlew build
-      # Create APK Release
-      - name: Build apk release project (APK) - ${{ env.main_project_module }} module
-        run: ./gradlew assemble

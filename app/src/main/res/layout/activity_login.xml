@@ -63,8 +63,6 @@
                 android:paddingTop="6dp"
                 app:hintEnabled="false"
                 app:hintAnimationEnabled="false"
-                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
-                android:inputType="textFilter"
                 app:passwordToggleTint="@color/purple">
 
                 <com.google.android.material.textfield.TextInputEditText

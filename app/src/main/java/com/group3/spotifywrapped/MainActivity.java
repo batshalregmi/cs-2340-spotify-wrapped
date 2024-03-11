@@ -150,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", mAccessToken, mAccessCode, "GET");
+        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper(mAccessToken, mAccessCode);
+        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET");
         test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
         Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
 

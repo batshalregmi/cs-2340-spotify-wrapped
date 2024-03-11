@@ -18,15 +18,21 @@ public class SpotifyApiHelper {
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
     private Call mCall;
     private JSONObject retValue = null;
+    private String mAccessToken, mAccessCode;
 
-    public JSONObject callSpotifyApi(String endpoint, String accessToken, String accessCode, String method) {
-        if (accessToken == null || accessCode == null || method == null || endpoint == null) {
+
+    public SpotifyApiHelper(String accessToken, String accessCode) {
+        if (accessToken == null || accessCode == null) {
             throw new IllegalArgumentException("Invalid arguments");
         }
+        mAccessToken = accessToken;
+        mAccessCode = accessCode;
+    }
+    public JSONObject callSpotifyApi(String endpoint, String method) {
 
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1" + endpoint)
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
         mCall = mOkHttpClient.newCall(request);

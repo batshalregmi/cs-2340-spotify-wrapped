@@ -13,9 +13,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_margin="35dp"
         app:cardCornerRadius="30dp"
-        app:cardElevation="20dp"
+        app:cardElevation="25dp"
         android:background="@drawable/custom_edittext">
 
         <LinearLayout
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="25dp">
 
             <TextView
                 android:id="@+id/loginText"
@@ -39,27 +39,41 @@
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="26dp"
                 android:background="@drawable/custom_edittext"
                 android:drawablePadding="8dp"
                 android:hint="Username"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
-
-            <EditText
-                android:id="@+id/password"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordParent"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_edittext"
-                android:drawablePadding="8dp"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:padding="8dp"
+                android:layout_height="60dp"
+                app:cursorColor="@color/purple"
+                android:layout_marginTop="15dp"
                 android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                app:passwordToggleEnabled="true"
+                android:paddingTop="6dp"
+                app:hintEnabled="false"
+                app:hintAnimationEnabled="false"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+                android:inputType="textFilter"
+                app:passwordToggleTint="@color/purple">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:padding="8dp"
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="18dp"
+                    android:textSize="18sp"
+                    android:hint="Password"
+                    android:background="@drawable/custom_edittext"
+                    android:drawablePadding="8dp"
+                    android:inputType="textPassword"
+                     />
+            </com.google.android.material.textfield.TextInputLayout>
             <Button
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"

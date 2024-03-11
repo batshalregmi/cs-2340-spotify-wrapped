@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/loginpageart"
+    android:background="@drawable/loginpageartnew"
     tools:context=".MainActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -29,9 +29,9 @@
                 android:id="@+id/loginText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="@string/login"
                 android:textAlignment="center"
-                android:textColor="@color/purple"
+                android:textColor="@color/green"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -42,7 +42,8 @@
                 android:layout_marginTop="26dp"
                 android:background="@drawable/custom_edittext"
                 android:drawablePadding="8dp"
-                android:hint="Username"
+                android:hint="@string/username"
+                android:inputType="text"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
@@ -50,8 +51,13 @@
                 android:id="@+id/passwordParent"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                app:cursorColor="@color/purple"
                 android:layout_marginTop="15dp"
+                app:cursorColor="@color/purple"
+                android:background="@drawable/custom_edittext"
+                android:drawablePadding="8dp"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:padding="8dp"
                 android:textColor="@color/black"
                 app:passwordToggleEnabled="true"
                 android:paddingTop="6dp"
@@ -79,8 +85,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
-                android:backgroundTint="@color/purple"
-                android:text="Login"
+                android:backgroundTint="@color/green"
+                android:text="@string/login"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
         </LinearLayout>
@@ -92,8 +98,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:padding="8dp"
-        android:text="Not yet registered? SignUp Now"
+        android:text="@string/not_yet_registered"
         android:textAlignment="center"
-        android:textColor="@color/purple"
+        android:textColor="@color/green"
         android:textSize="14sp" />
 </LinearLayout>

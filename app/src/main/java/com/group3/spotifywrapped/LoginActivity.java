@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 
 public class LoginActivity extends AppCompatActivity {
     EditText username;
@@ -17,7 +19,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         username = findViewById(R.id.username);
-        password = findViewById(R.id.password);
+        password = (EditText) findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

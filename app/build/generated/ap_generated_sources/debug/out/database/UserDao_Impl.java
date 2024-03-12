@@ -48,15 +48,15 @@ public final class UserDao_Impl implements UserDao {
         } else {
           statement.bindString(2, entity.password);
         }
-        if (entity.spotifyToken == null) {
+        if (entity.sToken == null) {
           statement.bindNull(3);
         } else {
-          statement.bindString(3, entity.spotifyToken);
+          statement.bindString(3, entity.sToken);
         }
-        if (entity.spotifyCode == null) {
+        if (entity.sCode == null) {
           statement.bindNull(4);
         } else {
-          statement.bindString(4, entity.spotifyCode);
+          statement.bindString(4, entity.sCode);
         }
       }
     };
@@ -95,15 +95,15 @@ public final class UserDao_Impl implements UserDao {
         } else {
           statement.bindString(2, entity.password);
         }
-        if (entity.spotifyToken == null) {
+        if (entity.sToken == null) {
           statement.bindNull(3);
         } else {
-          statement.bindString(3, entity.spotifyToken);
+          statement.bindString(3, entity.sToken);
         }
-        if (entity.spotifyCode == null) {
+        if (entity.sCode == null) {
           statement.bindNull(4);
         } else {
-          statement.bindString(4, entity.spotifyCode);
+          statement.bindString(4, entity.sCode);
         }
         if (entity.email == null) {
           statement.bindNull(5);
@@ -188,14 +188,14 @@ public final class UserDao_Impl implements UserDao {
           _item.password = _cursor.getString(_cursorIndexOfPassword);
         }
         if (_cursor.isNull(_cursorIndexOfSpotifyToken)) {
-          _item.spotifyToken = null;
+          _item.sToken = null;
         } else {
-          _item.spotifyToken = _cursor.getString(_cursorIndexOfSpotifyToken);
+          _item.sToken = _cursor.getString(_cursorIndexOfSpotifyToken);
         }
         if (_cursor.isNull(_cursorIndexOfSpotifyCode)) {
-          _item.spotifyCode = null;
+          _item.sCode = null;
         } else {
-          _item.spotifyCode = _cursor.getString(_cursorIndexOfSpotifyCode);
+          _item.sCode = _cursor.getString(_cursorIndexOfSpotifyCode);
         }
         _result.add(_item);
       }
@@ -268,14 +268,14 @@ public final class UserDao_Impl implements UserDao {
           _item.password = _cursor.getString(_cursorIndexOfPassword);
         }
         if (_cursor.isNull(_cursorIndexOfSpotifyToken)) {
-          _item.spotifyToken = null;
+          _item.sToken = null;
         } else {
-          _item.spotifyToken = _cursor.getString(_cursorIndexOfSpotifyToken);
+          _item.sToken = _cursor.getString(_cursorIndexOfSpotifyToken);
         }
         if (_cursor.isNull(_cursorIndexOfSpotifyCode)) {
-          _item.spotifyCode = null;
+          _item.sCode = null;
         } else {
-          _item.spotifyCode = _cursor.getString(_cursorIndexOfSpotifyCode);
+          _item.sCode = _cursor.getString(_cursorIndexOfSpotifyCode);
         }
         _result.add(_item);
       }

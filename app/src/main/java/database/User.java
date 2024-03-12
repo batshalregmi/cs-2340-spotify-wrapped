@@ -19,10 +19,10 @@ public class User {
     public String password;
 
     @ColumnInfo(name = "spotify_token")
-    public String spotifyToken;
+    public String sToken;
 
     @ColumnInfo(name = "spotify_code")
-    public String spotifyCode;
+    public String sCode;
 
     public User(){}
 
@@ -30,12 +30,13 @@ public class User {
         this.email = email;
         this.name = name;
         this.password = password;
-        this.spotifyToken = sToken;
-        this.spotifyCode = sCode;
+        this.sToken = sToken;
+        this.sCode = sCode;
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return (email + "\n" + password + "\n" + spotifyToken + "\n" + spotifyCode);
+        return (name + "\n" + email + "\n" + password + "\n" + sToken + "\n" + sCode);
     }
 }

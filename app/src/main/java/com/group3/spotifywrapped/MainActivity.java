@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tokenTextView, codeTextView, profileTextView;
 
     public AppDatabase db;
-    public UserDao userDao;
+    public static UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,54 +88,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 userDao.insert(new User(
-                        "not.Parker.arneson@gmail.com",
-                        "092318908213",
+                        "Parker.arneson@gmail.com",
+                        "Poiu1234",
                         "lakwndlkand",
-                        "985690493"
+                        "985690493",
+                        "Parker"
                 ));
             }
         });
         thread.start();
 
         // Set the click listeners for the buttons
-
-        tokenBtn.setOnClickListener((v) -> {
-            getToken();
-        });
-
-        codeBtn.setOnClickListener((v) -> {
-            getCode();
-        });
-
-        profileBtn.setOnClickListener((v) -> {
-            onGetUserProfileClicked();
-//            try {
-//                JSONArray items = resp.getJSONArray("items");
-//
-//                if (items.length() > 0) {
-//                    JSONObject firstItem = items.getJSONObject(0);
-//                    JSONObject album = firstItem.getJSONObject("album");
-//                    JSONArray images = album.getJSONArray("images");
-//
-//                    if (images.length() > 0) {
-//                        JSONObject firstImage = images.getJSONObject(0);
-//                        String imageUrl = firstImage.getString("url");
-//                        System.out.println("First image URL: " + imageUrl);
-//                        profileImageView.setImageBitmap(getBitmapFromURL(imageUrl));
-//                    } else {
-//                        System.out.println("No images found.");
-//                    }
-//                } else {
-//                    System.out.println("No items found.");
-//                }
-//            } catch (JSONException e) {
-//                throw new RuntimeException(e);
-//            }
-            //set the image view to the profile picture
-//            profileImageView.setImageResource(resp);
-        });
-
-
     }
 
     /**

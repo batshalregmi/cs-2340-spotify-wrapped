@@ -12,6 +12,9 @@ public class User {
     @PrimaryKey
     public String email;
 
+    @ColumnInfo(name = "name")
+    public String name;
+
     @ColumnInfo(name = "password")
     public String password;
 
@@ -23,8 +26,9 @@ public class User {
 
     public User(){}
 
-    public User(String email, String password, String sToken, String sCode) {
+    public User(String email, String password, String sToken, String sCode, String name) {
         this.email = email;
+        this.name = name;
         this.password = password;
         this.spotifyToken = sToken;
         this.spotifyCode = sCode;

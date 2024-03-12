@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SummaryActivity">
+    tools:context=".SummaryActivity.SummaryActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -38,6 +38,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="107dp"
             android:layout_height="494dp"
+            android:id="@+id/recyclerView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 

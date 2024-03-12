@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SummaryActivity"
+            android:name=".SummaryActivity.SummaryActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

@@ -11,9 +11,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.ArrayList;
+import com.group3.spotifywrapped.SummaryActivity.SummaryActivity;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DevStartActivity extends AppCompatActivity {

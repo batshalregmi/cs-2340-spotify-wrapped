@@ -44,40 +44,35 @@
                 android:drawablePadding="8dp"
                 android:hint="@string/username"
                 android:inputType="text"
-                android:padding="8dp"
+                android:padding="13dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordParent"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
                 android:layout_marginTop="15dp"
-                app:cursorColor="@color/purple"
-                android:background="@drawable/custom_edittext"
-                android:drawablePadding="8dp"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:padding="8dp"
+                android:id="@+id/passwordParent"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+
                 android:textColor="@color/black"
-                app:passwordToggleEnabled="true"
-                android:paddingTop="6dp"
+                app:cursorColor="@color/purple"
                 app:hintEnabled="false"
-                app:hintAnimationEnabled="false"
-                app:passwordToggleTint="@color/purple">
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/green">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:padding="8dp"
                     android:id="@+id/password"
-                    android:layout_width="match_parent"
+                    android:layout_width="290dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="18dp"
-                    android:textSize="18sp"
-                    android:hint="Password"
+                    app:hintAnimationEnabled="false"
                     android:background="@drawable/custom_edittext"
-                    android:drawablePadding="8dp"
+                    android:hint="Password"
                     android:inputType="textPassword"
-                     />
+                    android:defaultFocusHighlightEnabled="false"
+
+                    android:padding="8dp" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"

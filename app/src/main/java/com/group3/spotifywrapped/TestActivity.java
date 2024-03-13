@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.group3.spotifywrapped.SummaryActivity.SummaryActivity;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -28,14 +30,14 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class TestActivity extends Activity {
+public class TestActivity extends Activity { // not a fan of how this is implemented, need better global access to token/code - Trent
 
     public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
     public static final String REDIRECT_URI = "spotifywrapped://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
-    private String mAccessToken, mAccessCode;
+    public static String mAccessToken, mAccessCode;
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
@@ -44,6 +46,15 @@ public class TestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        Button backButton = (Button) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TestActivity.this, DevStartActivity.class);
+                startActivity(i);
+            }
+        });
 
         StrictMode.setThreadPolicy(policy);
 
@@ -107,8 +118,7 @@ public class TestActivity extends Activity {
     /**
      * When the app leaves this activity to momentarily get a token/code, this function
      * fetches the result of that external activity to get the response from Spotify
-     */
-    @Override
+     */@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
@@ -123,6 +133,7 @@ public class TestActivity extends Activity {
             setTextAsync(mAccessCode, codeTextView);
         }
     }
+
 
     public static Bitmap getBitmapFromURL(String src) {
         try {

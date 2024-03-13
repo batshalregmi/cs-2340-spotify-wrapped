@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.R;
+import com.group3.spotifywrapped.utils.SpotifyApiHelper;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +82,10 @@ public class SummaryActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
+        JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("me/top/tracks", "GET"); // assuming TestActivity already executed to load token/code
+
 
         List<TopSongsListItem> testList = new ArrayList<>();
         testList.add(new TopSongsListItem("Drake", R.drawable.test_album_cover));

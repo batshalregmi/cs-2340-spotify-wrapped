@@ -1,6 +1,12 @@
 package com.group3.spotifywrapped.utils;
 
+import android.net.Uri;
 import android.util.Log;
+
+import com.group3.spotifywrapped.TestActivity;
+import com.spotify.sdk.android.auth.AuthorizationClient;
+import com.spotify.sdk.android.auth.AuthorizationRequest;
+import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,8 +22,12 @@ import okhttp3.Response;
 
 public class SpotifyApiHelper {
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    private Call mCall;
-    private JSONObject retValue = null;
+    Call mCall;
+    JSONObject retValue = null;
+
+    public JSONObject callSpotifyApi(String endpoint, String method) {
+        return callSpotifyApi(endpoint, TestActivity.mAccessToken, TestActivity.mAccessCode, method);
+    }
 
     public JSONObject callSpotifyApi(String endpoint, String accessToken, String accessCode, String method) {
         if (accessToken == null || accessCode == null || method == null || endpoint == null) {

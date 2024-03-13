@@ -1,5 +1,6 @@
 package com.group3.spotifywrapped;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +36,14 @@ public class DevStartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DevStartActivity.this, SummaryActivity.class);
+                startActivity(i);
+            }
+        });
+        buttons.put("TestActivity", (Button)findViewById(R.id.testActivity));
+        buttons.get("TestActivity").setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DevStartActivity.this, TestActivity.class);
                 startActivity(i);
             }
         });

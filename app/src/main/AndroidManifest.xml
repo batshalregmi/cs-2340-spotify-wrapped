@@ -24,15 +24,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".SummaryActivity.SummaryActivity"
             android:exported="true"/>
         <activity
             android:name=".TestActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Spotifywrapped" />
+            android:exported="true"
+            android:theme="@style/Theme.Spotifywrapped"/>
     </application>
 
 </manifest>

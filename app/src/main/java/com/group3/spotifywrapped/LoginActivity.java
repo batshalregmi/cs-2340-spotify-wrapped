@@ -24,7 +24,6 @@ public class LoginActivity extends AppCompatActivity {
     public static UserDao userDao;
     public Thread thread;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,13 +32,12 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
 
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "local-database").build();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "local-database").build();
         userDao = db.userDao();
 
-  loginButton.setOnClickListener(new View.OnClickListener() {
-      String dbPassword;
-      String dbEmail;
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            String dbPassword;
+            String dbEmail;
             @Override
             public void onClick(View view) {
                 thread = new Thread(new Runnable() {

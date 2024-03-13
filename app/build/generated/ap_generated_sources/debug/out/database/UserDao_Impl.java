@@ -33,7 +33,7 @@ public final class UserDao_Impl implements UserDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `User` (`email`,`password`,`spotify_token`,`spotify_code`) VALUES (?,?,?,?)";
+        return "INSERT OR ABORT INTO `User` (`email`,`name`,`password`,`spotify_token`,`spotify_code`) VALUES (?,?,?,?,?)";
       }
 
       @Override
@@ -43,20 +43,25 @@ public final class UserDao_Impl implements UserDao {
         } else {
           statement.bindString(1, entity.email);
         }
-        if (entity.password == null) {
+        if (entity.name == null) {
           statement.bindNull(2);
         } else {
-          statement.bindString(2, entity.password);
+          statement.bindString(2, entity.name);
         }
-        if (entity.sToken == null) {
+        if (entity.password == null) {
           statement.bindNull(3);
         } else {
-          statement.bindString(3, entity.sToken);
+          statement.bindString(3, entity.password);
         }
-        if (entity.sCode == null) {
+        if (entity.sToken == null) {
           statement.bindNull(4);
         } else {
-          statement.bindString(4, entity.sCode);
+          statement.bindString(4, entity.sToken);
+        }
+        if (entity.sCode == null) {
+          statement.bindNull(5);
+        } else {
+          statement.bindString(5, entity.sCode);
         }
       }
     };
@@ -80,7 +85,7 @@ public final class UserDao_Impl implements UserDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "UPDATE OR ABORT `User` SET `email` = ?,`password` = ?,`spotify_token` = ?,`spotify_code` = ? WHERE `email` = ?";
+        return "UPDATE OR ABORT `User` SET `email` = ?,`name` = ?,`password` = ?,`spotify_token` = ?,`spotify_code` = ? WHERE `email` = ?";
       }
 
       @Override
@@ -90,25 +95,30 @@ public final class UserDao_Impl implements UserDao {
         } else {
           statement.bindString(1, entity.email);
         }
-        if (entity.password == null) {
+        if (entity.name == null) {
           statement.bindNull(2);
         } else {
-          statement.bindString(2, entity.password);
+          statement.bindString(2, entity.name);
         }
-        if (entity.sToken == null) {
+        if (entity.password == null) {
           statement.bindNull(3);
         } else {
-          statement.bindString(3, entity.sToken);
+          statement.bindString(3, entity.password);
         }
-        if (entity.sCode == null) {
+        if (entity.sToken == null) {
           statement.bindNull(4);
         } else {
-          statement.bindString(4, entity.sCode);
+          statement.bindString(4, entity.sToken);
         }
-        if (entity.email == null) {
+        if (entity.sCode == null) {
           statement.bindNull(5);
         } else {
-          statement.bindString(5, entity.email);
+          statement.bindString(5, entity.sCode);
+        }
+        if (entity.email == null) {
+          statement.bindNull(6);
+        } else {
+          statement.bindString(6, entity.email);
         }
       }
     };
@@ -170,9 +180,10 @@ public final class UserDao_Impl implements UserDao {
     final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
     try {
       final int _cursorIndexOfEmail = CursorUtil.getColumnIndexOrThrow(_cursor, "email");
+      final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
       final int _cursorIndexOfPassword = CursorUtil.getColumnIndexOrThrow(_cursor, "password");
-      final int _cursorIndexOfSpotifyToken = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_token");
-      final int _cursorIndexOfSpotifyCode = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_code");
+      final int _cursorIndexOfSToken = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_token");
+      final int _cursorIndexOfSCode = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_code");
       final List<User> _result = new ArrayList<User>(_cursor.getCount());
       while (_cursor.moveToNext()) {
         final User _item;
@@ -182,22 +193,57 @@ public final class UserDao_Impl implements UserDao {
         } else {
           _item.email = _cursor.getString(_cursorIndexOfEmail);
         }
+        if (_cursor.isNull(_cursorIndexOfName)) {
+          _item.name = null;
+        } else {
+          _item.name = _cursor.getString(_cursorIndexOfName);
+        }
         if (_cursor.isNull(_cursorIndexOfPassword)) {
           _item.password = null;
         } else {
           _item.password = _cursor.getString(_cursorIndexOfPassword);
         }
-        if (_cursor.isNull(_cursorIndexOfSpotifyToken)) {
+        if (_cursor.isNull(_cursorIndexOfSToken)) {
           _item.sToken = null;
         } else {
-          _item.sToken = _cursor.getString(_cursorIndexOfSpotifyToken);
+          _item.sToken = _cursor.getString(_cursorIndexOfSToken);
         }
-        if (_cursor.isNull(_cursorIndexOfSpotifyCode)) {
+        if (_cursor.isNull(_cursorIndexOfSCode)) {
           _item.sCode = null;
         } else {
-          _item.sCode = _cursor.getString(_cursorIndexOfSpotifyCode);
+          _item.sCode = _cursor.getString(_cursorIndexOfSCode);
         }
         _result.add(_item);
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public String getName(final String email) {
+    final String _sql = "SELECT name FROM user WHERE email LIKE ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (email == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, email);
+    }
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final String _result;
+      if (_cursor.moveToFirst()) {
+        if (_cursor.isNull(0)) {
+          _result = null;
+        } else {
+          _result = _cursor.getString(0);
+        }
+      } else {
+        _result = null;
       }
       return _result;
     } finally {
@@ -250,9 +296,10 @@ public final class UserDao_Impl implements UserDao {
     final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
     try {
       final int _cursorIndexOfEmail = CursorUtil.getColumnIndexOrThrow(_cursor, "email");
+      final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
       final int _cursorIndexOfPassword = CursorUtil.getColumnIndexOrThrow(_cursor, "password");
-      final int _cursorIndexOfSpotifyToken = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_token");
-      final int _cursorIndexOfSpotifyCode = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_code");
+      final int _cursorIndexOfSToken = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_token");
+      final int _cursorIndexOfSCode = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_code");
       final List<User> _result = new ArrayList<User>(_cursor.getCount());
       while (_cursor.moveToNext()) {
         final User _item;
@@ -262,20 +309,25 @@ public final class UserDao_Impl implements UserDao {
         } else {
           _item.email = _cursor.getString(_cursorIndexOfEmail);
         }
+        if (_cursor.isNull(_cursorIndexOfName)) {
+          _item.name = null;
+        } else {
+          _item.name = _cursor.getString(_cursorIndexOfName);
+        }
         if (_cursor.isNull(_cursorIndexOfPassword)) {
           _item.password = null;
         } else {
           _item.password = _cursor.getString(_cursorIndexOfPassword);
         }
-        if (_cursor.isNull(_cursorIndexOfSpotifyToken)) {
+        if (_cursor.isNull(_cursorIndexOfSToken)) {
           _item.sToken = null;
         } else {
-          _item.sToken = _cursor.getString(_cursorIndexOfSpotifyToken);
+          _item.sToken = _cursor.getString(_cursorIndexOfSToken);
         }
-        if (_cursor.isNull(_cursorIndexOfSpotifyCode)) {
+        if (_cursor.isNull(_cursorIndexOfSCode)) {
           _item.sCode = null;
         } else {
-          _item.sCode = _cursor.getString(_cursorIndexOfSpotifyCode);
+          _item.sCode = _cursor.getString(_cursorIndexOfSCode);
         }
         _result.add(_item);
       }

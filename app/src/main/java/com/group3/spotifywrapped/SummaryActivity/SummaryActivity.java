@@ -2,6 +2,7 @@ package com.group3.spotifywrapped.SummaryActivity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class SummaryActivity extends AppCompatActivity {
     private class MyViewHolder extends RecyclerView.ViewHolder {
@@ -83,15 +87,25 @@ public class SummaryActivity extends AppCompatActivity {
             return insets;
         });
 
+        List<TopSongsListItem> topSongsList = new ArrayList<>();
+        //TODO should be getting token/code from User class but no global scope
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
         JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("me/top/tracks", "GET"); // assuming TestActivity already executed to load token/code
-
-
-        List<TopSongsListItem> testList = new ArrayList<>();
-        testList.add(new TopSongsListItem("Drake", R.drawable.test_album_cover));
+        try {
+            JSONArray topSongs = topSongsResponse.getJSONArray("items");
+            for (int i = 0; i < topSongs.length(); ++i) {
+                JSONObject temp = topSongs.getJSONObject(i);
+                topSongsList.add(new TopSongsListItem(
+                        temp.getString("name"),
+                        R.drawable.test_album_cover
+                ));
+            }
+        } catch (Exception e) {
+            Log.e("JSON", "Exception when parsing JSON response: " + e);
+        }
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new MyAdapter(getApplicationContext(), testList));
+        recyclerView.setAdapter(new MyAdapter(getApplicationContext(), topSongsList));
     }
 }

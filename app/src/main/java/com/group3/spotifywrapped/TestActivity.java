@@ -29,12 +29,13 @@ import java.net.URL;
 
 public class TestActivity extends AppCompatActivity {
 
-    public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
+    public static final String CLIENT_ID = "f2a3c6dab588480cbf5f7f93302bd1fe";
+    public static final String CLIENT_SECRET = "f85f0ee0436f4c1fb00979a41126bb0f";
     public static final String REDIRECT_URI = "spotifywrapped://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
-    public static String mAccessToken, mAccessCode;
+    public String mAccessToken, mAccessCode;
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
@@ -155,7 +156,11 @@ public class TestActivity extends AppCompatActivity {
         }
 
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET");
+        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", mAccessToken, mAccessCode,"GET");
+        if (test == null) {
+            Log.e("JSON", "JSON response null");
+            return;
+        }
         test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
         Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
     }
@@ -180,7 +185,7 @@ public class TestActivity extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email", "user-top-read"}) // <--- Change the scope of your requested token here
+                .setScopes(new String[] { "user-top-read", "user-read-email", "user-read-private" }) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
                 .build();
     }

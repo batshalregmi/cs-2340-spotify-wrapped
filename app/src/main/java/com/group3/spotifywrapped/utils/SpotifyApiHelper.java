@@ -26,7 +26,7 @@ public class SpotifyApiHelper {
     JSONObject retValue = null;
 
     public JSONObject callSpotifyApi(String endpoint, String method) {
-        return callSpotifyApi(endpoint, TestActivity.mAccessToken, TestActivity.mAccessCode, method);
+        return callSpotifyApi(endpoint, "", "", method);
     }
 
     public JSONObject callSpotifyApi(String endpoint, String accessToken, String accessCode, String method) {
@@ -38,6 +38,10 @@ public class SpotifyApiHelper {
                 .url("https://api.spotify.com/v1" + endpoint)
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
+
+        if (mCall != null) {
+            mCall.cancel();
+        }
 
         mCall = mOkHttpClient.newCall(request);
 

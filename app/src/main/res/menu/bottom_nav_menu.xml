@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <item
+        android:id="@+id/wrapped"
+        android:title="Wrapped"
+        android:icon="@drawable/ic_wrapped"/>
+    <item
+        android:id="@+id/person"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings"/>
 </menu>

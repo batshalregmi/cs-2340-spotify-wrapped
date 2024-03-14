@@ -50,8 +50,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
                 thread.start();
 
-                // TODO: This is kind of buggy, will fix tonight
-                // Only works with emails with the password "password"
                 if (password.getText().toString().equals(dbPassword)) {
                     Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
                 } else {

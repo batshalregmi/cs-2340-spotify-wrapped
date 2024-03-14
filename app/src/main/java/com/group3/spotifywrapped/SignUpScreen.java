@@ -1,4 +1,5 @@
 package com.group3.spotifywrapped;
+import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import database.AppDatabase;
@@ -22,9 +24,8 @@ public class SignUpScreen extends AppCompatActivity {
     EditText email;
     EditText name;
     Button createAccountButton;
-
-    public AppDatabase db;
     public static UserDao userDao;
+    public AppDatabase db;
     public Thread thread;
 
 
@@ -38,6 +39,7 @@ public class SignUpScreen extends AppCompatActivity {
         email = findViewById(R.id.email);
         name = findViewById(R.id.name);
         createAccountButton = findViewById(R.id.createAccount);
+
 
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "local-database").build();
@@ -56,16 +58,34 @@ public class SignUpScreen extends AppCompatActivity {
                 });
                 thread.start();
 
-                // TODO: This is kind of buggy, will fix tonight
-                // Only works with emails with the password "password"
-
-                if (username.getText().toString().equals(dbUsername)) {
-                    Toast.makeText(SignUpScreen.this, "The Username has been taken!", Toast.LENGTH_SHORT).show();
-                }
-                if(!password.equals(confirmPassword)) {
+                if (!password.getText().toString().equals(confirmPassword.getText().toString())) {
                     Toast.makeText(SignUpScreen.this, "Your passwords do not match!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(SignUpScreen.this, "New Account Created!", Toast.LENGTH_SHORT).show();
+                    new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    // stoken and sCode are from API call
+                                    userDao.insert(new User(
+                                            username.toString(),
+                                            password.toString(),
+                                            email.toString(),
+                                            name.toString(),
+                                            "TEST TOKEN",
+                                            "TEST CODE"
+                                    ));
+                                } catch (android.database.sqlite.SQLiteConstraintException e) {
+                                    // UI stuff and DB stuff can't be on same thread bc of thread locking
+                                    // Need to create another thread to show toast
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(SignUpScreen.this, "The Username has been taken!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+                        }).start();
                 }
             }
         });

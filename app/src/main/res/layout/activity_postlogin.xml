@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/light_green"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
@@ -23,19 +22,11 @@
             android:layout_width="wrap_content"
             android:layout_height="49dp"
             android:layout_marginTop="300dp"
+            android:textColor="@color/green"
+
             android:text="Welcome (username) to your Spotify Wrapped!"
             android:textAlignment="center"
-            android:textSize="20dp" />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-        </ScrollView>
+            android:textSize="20sp" />
 
     </FrameLayout>
 
@@ -44,7 +35,7 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-16dp">
+        tools:layout_editor_absoluteY="0dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
@@ -52,12 +43,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="13dp"
             android:background="@drawable/bottom_background"
             android:elevation="2dp"
-            app:itemIconSize="30dp"
+            app:itemIconSize="40dp"
             app:itemIconTint="@drawable/item_selector"
             app:itemRippleColor="@android:color/transparent"
             app:labelVisibilityMode="unlabeled"

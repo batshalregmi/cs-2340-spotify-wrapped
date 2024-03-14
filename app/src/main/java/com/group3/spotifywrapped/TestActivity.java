@@ -1,11 +1,8 @@
 package com.group3.spotifywrapped;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,11 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.group3.spotifywrapped.SummaryActivity.SummaryActivity;
+import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,18 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import database.AppDatabase;
-import database.User;
-import database.UserDao;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -48,16 +34,9 @@ public class TestActivity extends AppCompatActivity {
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
-
-    private final OkHttpClient mOkHttpClient = new OkHttpClient();
     public static String mAccessToken, mAccessCode;
-    private Call mCall;
-    public JSONObject resp;
 
     private TextView tokenTextView, codeTextView, profileTextView;
-
-    public AppDatabase db;
-    public static UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,30 +56,31 @@ public class TestActivity extends AppCompatActivity {
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
+        Button backBtn = (Button) findViewById(R.id.backButton);
         ImageView profileImageView = (ImageView) findViewById(R.id.mainMenuImageView);
 
-        // Init Databae
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "local-database").build();
-        userDao = db.userDao();
-
-        // Query Call
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                userDao.insert(new User(
-                        "Parker.arneson@gmail.com",
-                        "Poiu1234",
-                        "lakwndlkand",
-                        "985690493",
-                        "Parker"
-                ));
-            }
-        });
-        thread.start();
 
         // Set the click listeners for the buttons
 
+        tokenBtn.setOnClickListener((v) -> {
+            getToken();
+        });
+
+        codeBtn.setOnClickListener((v) -> {
+            getCode();
+        });
+
+        profileBtn.setOnClickListener((v) -> {
+            try {
+                onGetUserProfileClicked();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        backBtn.setOnClickListener((v) -> {
+            Intent i = new Intent(TestActivity.this, DevStartActivity.class);
+            startActivity(i);
+        });
     }
 
     /**
@@ -168,56 +148,16 @@ public class TestActivity extends AppCompatActivity {
      * Get user profile
      * This method will get the user profile using the token
      */
-    public void onGetUserProfileClicked() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<User> users = userDao.getAll();
-                for (User user : users) {
-                    System.out.println(user);
-                }
-            }
-        });
-        thread.start();
-
+    public void onGetUserProfileClicked() throws JSONException {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Create a request to get the user profile
-        final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=2")
-                .addHeader("Authorization", "Bearer " + mAccessToken)
-                .build();
-
-        cancelCall();
-        mCall = mOkHttpClient.newCall(request);
-
-        mCall.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("HTTP", "Failed to fetch data: " + e);
-                Toast.makeText(TestActivity.this, "Failed to fetch data, watch Logcat for more details",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                ImageView profileImageView = (ImageView) findViewById(R.id.mainMenuImageView);
-                try {
-                    final JSONObject jsonObject = new JSONObject(response.body().string());
-//                    setTextAsync(jsonObject.toString(3), profileTextView);
-                    Log.d("JSON", "Got response: " + jsonObject.toString(3));
-                    resp = jsonObject;
-
-                } catch (JSONException e) {
-                    Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(TestActivity.this, "Failed to parse data, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
+        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET");
+        test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
+        Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
     }
 
     /**
@@ -254,15 +194,4 @@ public class TestActivity extends AppCompatActivity {
         return Uri.parse(REDIRECT_URI);
     }
 
-    private void cancelCall() {
-        if (mCall != null) {
-            mCall.cancel();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        cancelCall();
-        super.onDestroy();
-    }
 }

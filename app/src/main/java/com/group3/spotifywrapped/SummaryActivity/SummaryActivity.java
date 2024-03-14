@@ -1,11 +1,16 @@
 package com.group3.spotifywrapped.SummaryActivity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +24,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.R;
+import com.group3.spotifywrapped.TestActivity;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
+import com.spotify.sdk.android.auth.AuthorizationClient;
+import com.spotify.sdk.android.auth.AuthorizationRequest;
+import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +39,13 @@ import java.util.List;
 import java.util.Map;
 
 public class SummaryActivity extends AppCompatActivity {
+    public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
+    public static final String REDIRECT_URI = "spotifywrapped://auth";
+    public static final int AUTH_TOKEN_REQUEST_CODE = 0;
+    public static final int AUTH_CODE_REQUEST_CODE = 1;
+
+    private List<TopSongsListItem> topSongsList = new ArrayList<>();
+
     private class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView songNameView;
         private TextView songNumberView;
@@ -79,18 +95,18 @@ public class SummaryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_summary);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
-        List<TopSongsListItem> topSongsList = new ArrayList<>();
+        loadTopSongsList();
+    }
+
+    private void loadTopSongsList() {
         //TODO should be getting token/code from User class but no global scope
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-        JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("me/top/tracks", "GET"); // assuming TestActivity already executed to load token/code
+        Log.i("Dev", TestActivity.mAccessToken);
+        JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET"); // assuming TestActivity already executed to load token/code
         try {
             JSONArray topSongs = topSongsResponse.getJSONArray("items");
             for (int i = 0; i < topSongs.length(); ++i) {

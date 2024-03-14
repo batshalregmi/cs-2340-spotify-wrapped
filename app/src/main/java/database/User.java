@@ -10,13 +10,16 @@ public class User {
 
     @NonNull
     @PrimaryKey
+    public String username;
+
+    @ColumnInfo(name = "password")
+    public String password;
+
+    @ColumnInfo(name = "email")
     public String email;
 
     @ColumnInfo(name = "name")
     public String name;
-
-    @ColumnInfo(name = "password")
-    public String password;
 
     @ColumnInfo(name = "spotify_token")
     public String sToken;
@@ -26,13 +29,13 @@ public class User {
 
     public User(){}
 
-    public User(String email, String password, String sToken, String sCode, String name) {
-        this.email = email;
-        this.name = name;
+    public User(@NonNull String username, String password, String email, String name, String sToken, String sCode) {
+        this.username = username.toLowerCase();
         this.password = password;
+        this.email = email.toLowerCase();
+        this.name = name.toLowerCase();
         this.sToken = sToken;
         this.sCode = sCode;
-        this.name = name;
     }
 
     @Override

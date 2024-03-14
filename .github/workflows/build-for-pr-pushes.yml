@@ -25,7 +25,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@v3
+=======
+      - uses: actions/checkout@v4
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
 
       # Set Current Date As Env Variable
       - name: Set current date as env variable
@@ -36,15 +40,22 @@ jobs:
         run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
 
       - name: Set Up JDK
+<<<<<<< HEAD
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
+=======
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt' # See 'Supported distributions' for available options
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
           java-version: '17'
           cache: 'gradle'
 
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
+<<<<<<< HEAD
       #      # Run Tests Build
       #      - name: Run gradle tests
       #        run: ./gradlew test
@@ -87,3 +98,8 @@ jobs:
 #        with:
 #          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - App bundle(s) AAB release generated
 #          path: ${{ env.main_project_module }}/build/outputs/bundle/release/
+=======
+      # Run Build Project
+      - name: Build gradle project
+        run: ./gradlew build
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2

@@ -1,6 +1,9 @@
 package com.group3.spotifywrapped;
 import androidx.appcompat.app.AppCompatActivity;
+<<<<<<< HEAD
 import androidx.room.Room;
+=======
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,28 +11,36 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import java.util.List;
 
 import database.AppDatabase;
 import database.User;
 import database.UserDao;
+=======
+import com.google.android.material.textfield.TextInputEditText;
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
 
 
 public class LoginActivity extends AppCompatActivity {
     EditText username;
     EditText password;
     Button loginButton;
+<<<<<<< HEAD
 
     public AppDatabase db;
     public static UserDao userDao;
     public Thread thread;
 
 
+=======
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         username = findViewById(R.id.username);
+<<<<<<< HEAD
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
 
@@ -53,12 +64,23 @@ public class LoginActivity extends AppCompatActivity {
                 // TODO: This is kind of buggy, will fix tonight
                 // Only works with emails with the password "password"
                 if (password.getText().toString().equals(dbPassword)) {
+=======
+        password = (EditText) findViewById(R.id.password);
+        loginButton = findViewById(R.id.loginButton);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (username.getText().toString().equals("user") && password.getText().toString().equals("1234")) {
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
                     Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
                 }
+<<<<<<< HEAD
                 System.out.println(password.getText().toString());
                 System.out.println(dbPassword);
+=======
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
             }
         });
     }

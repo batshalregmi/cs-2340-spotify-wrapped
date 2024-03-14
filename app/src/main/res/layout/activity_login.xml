@@ -13,9 +13,15 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
+=======
+        android:layout_margin="35dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="25dp"
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
         android:background="@drawable/custom_edittext">
 
         <LinearLayout
@@ -23,7 +29,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
+<<<<<<< HEAD
             android:padding="24dp">
+=======
+            android:padding="25dp">
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
 
             <TextView
                 android:id="@+id/loginText"
@@ -39,11 +49,16 @@
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+<<<<<<< HEAD
                 android:layout_marginTop="40dp"
+=======
+                android:layout_marginTop="26dp"
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
                 android:background="@drawable/custom_edittext"
                 android:drawablePadding="8dp"
                 android:hint="@string/username"
                 android:inputType="text"
+<<<<<<< HEAD
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
@@ -60,6 +75,36 @@
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
+=======
+                android:padding="13dp"
+                android:textColor="@color/black"
+                android:textColorHighlight="@color/cardview_dark_background" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginTop="15dp"
+                android:id="@+id/passwordParent"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+
+                android:textColor="@color/black"
+                app:cursorColor="@color/purple"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/green">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
+                    android:layout_width="290dp"
+                    android:layout_height="50dp"
+                    app:hintAnimationEnabled="false"
+                    android:background="@drawable/custom_edittext"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:defaultFocusHighlightEnabled="false"
+
+                    android:padding="8dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
 
             <Button
                 android:id="@+id/loginButton"
@@ -83,4 +128,8 @@
         android:textAlignment="center"
         android:textColor="@color/green"
         android:textSize="14sp" />
+<<<<<<< HEAD
 </LinearLayout>
+=======
+</LinearLayout>
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2

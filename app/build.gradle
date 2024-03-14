@@ -45,9 +45,13 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+<<<<<<< HEAD
 
     def room_version = "2.6.1"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+=======
+    implementation 'com.google.android.material:material:1.2.0'
+>>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
 
 }

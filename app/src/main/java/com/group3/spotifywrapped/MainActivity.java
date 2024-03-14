@@ -88,11 +88,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 userDao.insert(new User(
-                        "Parker.arneson@gmail.com",
+                        "Parker1234",
                         "Poiu1234",
+                        "Parker.arneson@gmail.com",
+                        "Parker Arneson",
                         "lakwndlkand",
-                        "985690493",
-                        "Parker"
+                        "985690493"
                 ));
             }
         });

@@ -32,6 +32,9 @@ public interface UserDao {
     @Query("SELECT password FROM user WHERE username LIKE :username LIMIT 1")
     String getPassword(String username);
 
+    @Query("SELECT username FROM user WHERE username LIKE :username LIMIT 1")
+    String getUsername(String username);
+
     @Query("SELECT * FROM user WHERE email LIKE :email LIMIT 1")
     List<User> findByEmail(String email);
 

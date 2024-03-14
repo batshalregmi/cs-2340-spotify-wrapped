@@ -32,8 +32,8 @@ public class User {
     public User(@NonNull String username, String password, String email, String name, String sToken, String sCode) {
         this.username = username.toLowerCase();
         this.password = password;
-        this.email = email.toLowerCase();
-        this.name = name.toLowerCase();
+        this.email = email;
+        this.name = name;
         this.sToken = sToken;
         this.sCode = sCode;
     }

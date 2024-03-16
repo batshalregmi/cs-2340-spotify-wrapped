@@ -1,6 +1,12 @@
 package com.group3.spotifywrapped.utils;
 
+import android.net.Uri;
 import android.util.Log;
+
+import com.group3.spotifywrapped.TestActivity;
+import com.spotify.sdk.android.auth.AuthorizationClient;
+import com.spotify.sdk.android.auth.AuthorizationRequest;
+import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,11 +22,15 @@ import okhttp3.Response;
 
 public class SpotifyApiHelper {
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    private Call mCall;
-    private JSONObject retValue = null;
+    Call mCall;
+    JSONObject retValue = null;
 
-    public JSONObject callSpotifyApi(String endpoint, String accessToken, String accessCode, String method) {
-        if (accessToken == null || accessCode == null || method == null || endpoint == null) {
+    public JSONObject callSpotifyApi(String endpoint, String method) {
+        return callSpotifyApi(endpoint, "", method);
+    }
+
+    public JSONObject callSpotifyApi(String endpoint, String accessToken, String method) {
+        if (accessToken == null || method == null || endpoint == null) {
             throw new IllegalArgumentException("Invalid arguments");
         }
 
@@ -28,7 +38,9 @@ public class SpotifyApiHelper {
                 .url("https://api.spotify.com/v1" + endpoint)
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
+        Log.d("SpotifyApiHelper", "Request used: " + request);
 
+        cancelCall();
         mCall = mOkHttpClient.newCall(request);
 
         final CountDownLatch latch = new CountDownLatch(1);
@@ -36,24 +48,23 @@ public class SpotifyApiHelper {
         mCall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("HTTP", "Failed to fetch data: " + e);
+                Log.d("HTTP", "Failure to fetch data: " + e);
                 latch.countDown();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                JSONObject jsonObject = null;
                 if (response.isSuccessful()) {
                     try {
-                        String responseBody = response.body().string();
-                        jsonObject = new JSONObject(responseBody);
+                        retValue = new JSONObject(response.body().string());
                     } catch (JSONException e) {
+                        cancelCall();
                         Log.d("JSON", "Failed to parse data: " + e);
                     }
                 } else {
+                    cancelCall();
                     Log.d("HTTP", "Failed to fetch data: " + response);
                 }
-                retValue = jsonObject;
                 Log.d("SpotifyApiHelper", "Response: " + retValue);
                 latch.countDown();
             }
@@ -62,10 +73,17 @@ public class SpotifyApiHelper {
         try {
             latch.await();
         } catch (InterruptedException e) {
+            cancelCall();
             Log.d("HTTP", "Thread interrupted while waiting for response");
             Thread.currentThread().interrupt();
         }
 
         return retValue;
+    }
+
+    private void cancelCall() {
+        if (mCall != null) {
+            mCall.cancel();
+        }
     }
 }

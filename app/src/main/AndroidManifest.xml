@@ -14,22 +14,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotifywrapped"
         tools:targetApi="31">
+
         <activity
             android:name=".DevStartActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".SummaryActivity"
-            android:exported="true" />
+            android:name=".LoginActivity"
+            android:exported="true">
+        </activity>
         <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Spotifywrapped" />
+            android:name=".SummaryActivity.SummaryActivity"
+            android:exported="true">
+            <intent-filter>
+                <data android:host="auth" android:scheme="spotifywrapped"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TestActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Spotifywrapped">
+            <intent-filter>
+                <data android:host="auth" android:scheme="spotifywrapped"/>
+            </intent-filter>
+        </activity>
     </application>
-
 </manifest>

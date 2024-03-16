@@ -1,11 +1,11 @@
 package com.group3.spotifywrapped;
+import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Button;
@@ -13,8 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.group3.spotifywrapped.SummaryActivity.SummaryActivity;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -28,14 +27,16 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class TestActivity extends Activity {
+public class TestActivity extends AppCompatActivity {
 
-    public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
+    public static final String CLIENT_ID = "f2a3c6dab588480cbf5f7f93302bd1fe";
+    public static final String CLIENT_SECRET = "f85f0ee0436f4c1fb00979a41126bb0f";
     public static final String REDIRECT_URI = "spotifywrapped://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
-    private String mAccessToken, mAccessCode;
+    public static String mAccessToken = "BQAHuI-UjpAwIhaZcQ4QckC_CHBKw4UoAZ87C0oY_oovvoGzuzJR9MBGLNXu4-XB9kd-ChjDPkcpyZ8jTLpQczIqOOXe9oQKvS1C5NbLBpAHaAUGOixfQ5Gq1ipt5HYsdL1KOyoOnk709m3hKdTbGVIqr_sGkBBC_lrECgfR5z-Lds1dSCgsgTzhX8l2zV4oa5fltTZzo9xrS1wmpiJ-";
+    public String mAccessCode = "";
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
@@ -43,9 +44,6 @@ public class TestActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-        StrictMode.setThreadPolicy(policy);
 
         // Initialize the views
 //        TODO: ADD THE ConstraintLayout FROM THE TUTORIAL
@@ -57,6 +55,7 @@ public class TestActivity extends Activity {
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
+        Button backBtn = (Button) findViewById(R.id.backButton);
         ImageView profileImageView = (ImageView) findViewById(R.id.mainMenuImageView);
 
 
@@ -77,8 +76,10 @@ public class TestActivity extends Activity {
                 throw new RuntimeException(e);
             }
         });
-
-
+        backBtn.setOnClickListener((v) -> {
+            Intent i = new Intent(TestActivity.this, DevStartActivity.class);
+            startActivity(i);
+        });
     }
 
     /**
@@ -102,7 +103,6 @@ public class TestActivity extends Activity {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.CODE);
         AuthorizationClient.openLoginActivity(TestActivity.this, AUTH_CODE_REQUEST_CODE, request);
     }
-
 
     /**
      * When the app leaves this activity to momentarily get a token/code, this function
@@ -153,10 +153,12 @@ public class TestActivity extends Activity {
         }
 
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", mAccessToken, mAccessCode, "GET");
+        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", mAccessToken,"GET");
+        if (test == null) {
+            return;
+        }
         test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
         Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
-
     }
 
     /**
@@ -179,7 +181,24 @@ public class TestActivity extends Activity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email", "user-top-read"}) // <--- Change the scope of your requested token here
+                .setScopes(new String[] {
+                        "ugc-image-upload",
+                        "user-top-read",
+                        "user-read-recently-played",
+                        "user-read-playback-position",
+                        "user-follow-read",
+                        "user-library-read",
+                        "user-library-modify",
+                        "user-read-email",
+                        "user-read-private",
+                        "playlist-read-private",
+                        "streaming",
+                        "user-read-playback-state",
+                        "user-modify-playback-state",
+                        "user-read-currently-playing",
+                        "app-remote-control",
+                        "user-follow-modify"
+                })
                 .setCampaign("your-campaign-token")
                 .build();
     }
@@ -192,5 +211,4 @@ public class TestActivity extends Activity {
     private Uri getRedirectUri() {
         return Uri.parse(REDIRECT_URI);
     }
-
 }

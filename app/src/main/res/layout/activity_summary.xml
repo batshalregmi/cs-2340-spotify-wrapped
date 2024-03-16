@@ -9,9 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-44dp"
-        tools:layout_editor_absoluteY="-137dp">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textView2"
@@ -39,8 +37,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_width="196dp"
-            android:layout_height="481dp"
+            android:layout_width="107dp"
+            android:layout_height="494dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 

@@ -27,6 +27,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+
 public class TestActivity extends AppCompatActivity {
 
     public static final String CLIENT_ID = "f2a3c6dab588480cbf5f7f93302bd1fe";
@@ -35,8 +38,10 @@ public class TestActivity extends AppCompatActivity {
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
-    public static String mAccessToken = "BQAHuI-UjpAwIhaZcQ4QckC_CHBKw4UoAZ87C0oY_oovvoGzuzJR9MBGLNXu4-XB9kd-ChjDPkcpyZ8jTLpQczIqOOXe9oQKvS1C5NbLBpAHaAUGOixfQ5Gq1ipt5HYsdL1KOyoOnk709m3hKdTbGVIqr_sGkBBC_lrECgfR5z-Lds1dSCgsgTzhX8l2zV4oa5fltTZzo9xrS1wmpiJ-";
-    public String mAccessCode = "";
+
+    private final OkHttpClient mOkHttpClient = new OkHttpClient();
+    private String mAccessToken, mAccessCode;
+    private Call mCall;
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
@@ -46,7 +51,6 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
 
         // Initialize the views
-//        TODO: ADD THE ConstraintLayout FROM THE TUTORIAL
         tokenTextView = (TextView) findViewById(R.id.token_text_view);
         codeTextView = (TextView) findViewById(R.id.code_text_view);
         profileTextView = (TextView) findViewById(R.id.response_text_view);
@@ -55,9 +59,6 @@ public class TestActivity extends AppCompatActivity {
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
-        Button backBtn = (Button) findViewById(R.id.backButton);
-        ImageView profileImageView = (ImageView) findViewById(R.id.mainMenuImageView);
-
 
         // Set the click listeners for the buttons
 
@@ -70,16 +71,9 @@ public class TestActivity extends AppCompatActivity {
         });
 
         profileBtn.setOnClickListener((v) -> {
-            try {
-                onGetUserProfileClicked();
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            onGetUserProfileClicked();
         });
-        backBtn.setOnClickListener((v) -> {
-            Intent i = new Intent(TestActivity.this, DevStartActivity.class);
-            startActivity(i);
-        });
+
     }
 
     /**
@@ -104,6 +98,7 @@ public class TestActivity extends AppCompatActivity {
         AuthorizationClient.openLoginActivity(TestActivity.this, AUTH_CODE_REQUEST_CODE, request);
     }
 
+
     /**
      * When the app leaves this activity to momentarily get a token/code, this function
      * fetches the result of that external activity to get the response from Spotify
@@ -124,41 +119,27 @@ public class TestActivity extends AppCompatActivity {
         }
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            Log.e("src",src);
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            Log.e("Bitmap","returned");
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Exception",e.getMessage());
-            return null;
-        }
-    }
-
     /**
      * Get user profile
      * This method will get the user profile using the token
      */
-    public void onGetUserProfileClicked() throws JSONException {
+    public void onGetUserProfileClicked() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", mAccessToken,"GET");
-        if (test == null) {
-            return;
+        try {
+            SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
+            JSONObject test = spotifyApiHelper.callSpotifyApi("/tracks/0lrLj6Uu6niiOezZbsDoS6?si=3d9f3963189142c2", mAccessToken,"GET");
+            if (test == null) {
+                return;
+            }
+            test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
+            Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
+        } catch (Exception e) {
+            Log.d("JSON", e.toString());
         }
-        test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
-        Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
     }
 
     /**
@@ -181,24 +162,7 @@ public class TestActivity extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] {
-                        "ugc-image-upload",
-                        "user-top-read",
-                        "user-read-recently-played",
-                        "user-read-playback-position",
-                        "user-follow-read",
-                        "user-library-read",
-                        "user-library-modify",
-                        "user-read-email",
-                        "user-read-private",
-                        "playlist-read-private",
-                        "streaming",
-                        "user-read-playback-state",
-                        "user-modify-playback-state",
-                        "user-read-currently-playing",
-                        "app-remote-control",
-                        "user-follow-modify"
-                })
+                .setScopes(new String[] { "user-top-read" }) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
                 .build();
     }
@@ -210,5 +174,17 @@ public class TestActivity extends AppCompatActivity {
      */
     private Uri getRedirectUri() {
         return Uri.parse(REDIRECT_URI);
+    }
+
+    private void cancelCall() {
+        if (mCall != null) {
+            mCall.cancel();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        cancelCall();
+        super.onDestroy();
     }
 }

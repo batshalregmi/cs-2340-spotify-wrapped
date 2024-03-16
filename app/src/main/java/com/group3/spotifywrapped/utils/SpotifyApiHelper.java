@@ -1,12 +1,6 @@
 package com.group3.spotifywrapped.utils;
 
-import android.net.Uri;
 import android.util.Log;
-
-import com.group3.spotifywrapped.TestActivity;
-import com.spotify.sdk.android.auth.AuthorizationClient;
-import com.spotify.sdk.android.auth.AuthorizationRequest;
-import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;

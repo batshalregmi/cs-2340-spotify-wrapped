@@ -31,8 +31,8 @@ public class DevStartActivity extends AppCompatActivity {
             return insets;
         });
 
-        buttons.put("SummaryActivity", (Button)findViewById(R.id.summary_activity_button));
-        buttons.get("SummaryActivity").setOnClickListener(new View.OnClickListener() {
+        buttons.put("summary_activity_button", (Button)findViewById(R.id.summary_activity_button));
+        buttons.get("summary_activity_button").setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DevStartActivity.this, SummaryActivity.class);

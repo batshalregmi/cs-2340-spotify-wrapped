@@ -106,7 +106,7 @@ public class SummaryActivity extends AppCompatActivity {
         loadTopSongsList();
 
         ((Button)findViewById(R.id.getTokenButton)).setOnClickListener((v) -> {
-            this.mAccessToken = TestActivity.mAccessToken;
+            //this.mAccessToken = TestActivity.mAccessToken;
             //Log.d("SummaryActivity", "New token: " + mAccessToken);
             loadTopSongsList();
         });

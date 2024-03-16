@@ -35,7 +35,8 @@ public class TestActivity extends AppCompatActivity {
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
-    public String mAccessToken, mAccessCode;
+    public static String mAccessToken = "BQAHuI-UjpAwIhaZcQ4QckC_CHBKw4UoAZ87C0oY_oovvoGzuzJR9MBGLNXu4-XB9kd-ChjDPkcpyZ8jTLpQczIqOOXe9oQKvS1C5NbLBpAHaAUGOixfQ5Gq1ipt5HYsdL1KOyoOnk709m3hKdTbGVIqr_sGkBBC_lrECgfR5z-Lds1dSCgsgTzhX8l2zV4oa5fltTZzo9xrS1wmpiJ-";
+    public String mAccessCode = "";
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
@@ -43,9 +44,6 @@ public class TestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-        StrictMode.setThreadPolicy(policy);
 
         // Initialize the views
 //        TODO: ADD THE ConstraintLayout FROM THE TUTORIAL
@@ -106,7 +104,6 @@ public class TestActivity extends AppCompatActivity {
         AuthorizationClient.openLoginActivity(TestActivity.this, AUTH_CODE_REQUEST_CODE, request);
     }
 
-
     /**
      * When the app leaves this activity to momentarily get a token/code, this function
      * fetches the result of that external activity to get the response from Spotify
@@ -156,9 +153,8 @@ public class TestActivity extends AppCompatActivity {
         }
 
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", mAccessToken, mAccessCode,"GET");
+        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", mAccessToken,"GET");
         if (test == null) {
-            Log.e("JSON", "JSON response null");
             return;
         }
         test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
@@ -185,7 +181,24 @@ public class TestActivity extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-top-read", "user-read-email", "user-read-private" }) // <--- Change the scope of your requested token here
+                .setScopes(new String[] {
+                        "ugc-image-upload",
+                        "user-top-read",
+                        "user-read-recently-played",
+                        "user-read-playback-position",
+                        "user-follow-read",
+                        "user-library-read",
+                        "user-library-modify",
+                        "user-read-email",
+                        "user-read-private",
+                        "playlist-read-private",
+                        "streaming",
+                        "user-read-playback-state",
+                        "user-modify-playback-state",
+                        "user-read-currently-playing",
+                        "app-remote-control",
+                        "user-follow-modify"
+                })
                 .setCampaign("your-campaign-token")
                 .build();
     }
@@ -198,5 +211,4 @@ public class TestActivity extends AppCompatActivity {
     private Uri getRedirectUri() {
         return Uri.parse(REDIRECT_URI);
     }
-
 }

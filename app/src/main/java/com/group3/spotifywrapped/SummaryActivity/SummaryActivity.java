@@ -39,10 +39,13 @@ import java.util.List;
 import java.util.Map;
 
 public class SummaryActivity extends AppCompatActivity {
-    public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
+    public static final String CLIENT_ID = "f2a3c6dab588480cbf5f7f93302bd1fe";
+    public static final String CLIENT_SECRET = "f85f0ee0436f4c1fb00979a41126bb0f";
     public static final String REDIRECT_URI = "spotifywrapped://auth";
+
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
+    private String mAccessToken = "BQCTGrOTBDJaqvxEvvt4vKpXuvFzV2bwJ4gBzxbCOIc5mTwQal9PrK7aVy-Uui69K-VdvNcI99tm6dW7ssy8S-ha4KQYf82uu8dHtN3msanjMx0JCG908dBH1QLrvE2RH5Q6feTqN9xTZlGaIHJa6dSRRyhfdmmgk7W25iOSlgGtPVvnypIduUBHsjieimFKLFCckC3FomFKKlFojZAdU1e2L2yNqJH8SkzTeVGmrhUyOd45NPD-otyQARNQpSB1FAM8yfuPQ2DyKhtf";
 
     private List<TopSongsListItem> topSongsList = new ArrayList<>();
 
@@ -99,7 +102,14 @@ public class SummaryActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Log.d("SummaryActivity", "Current token: " + this.mAccessToken);
         loadTopSongsList();
+
+        ((Button)findViewById(R.id.getTokenButton)).setOnClickListener((v) -> {
+            this.mAccessToken = TestActivity.mAccessToken;
+            //Log.d("SummaryActivity", "New token: " + mAccessToken);
+            loadTopSongsList();
+        });
     }
 
     private void loadTopSongsList() {
@@ -110,23 +120,52 @@ public class SummaryActivity extends AppCompatActivity {
 
         //TODO should be getting token/code from User class but no global scope
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-        Log.i("Dev", "");
-        JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET"); // assuming TestActivity already executed to load token/code
-        try {
-            JSONArray topSongs = topSongsResponse.getJSONArray("items");
-            for (int i = 0; i < topSongs.length(); ++i) {
-                JSONObject temp = topSongs.getJSONObject(i);
-                topSongsList.add(new TopSongsListItem(
-                        temp.getString("name"),
-                        R.drawable.test_album_cover
-                ));
+        if (this.mAccessToken != null) {
+            JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", this.mAccessToken, "GET"); // assuming TestActivity already executed to load token/code
+            try {
+                JSONArray topSongs = topSongsResponse.getJSONArray("items");
+                topSongsList.clear();
+                for (int i = 0; i < topSongs.length(); ++i) {
+                    JSONObject temp = topSongs.getJSONObject(i);
+                    topSongsList.add(new TopSongsListItem(
+                            temp.getString("name"),
+                            R.drawable.test_album_cover
+                    ));
+                }
+            } catch (Exception e) {
+                Log.d("SummaryActivity", "Exception when parsing JSON response: " + e);
             }
-        } catch (Exception e) {
-            Log.e("JSON", "Exception when parsing JSON response: " + e);
         }
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new MyAdapter(getApplicationContext(), topSongsList));
+    }
+    public void getToken() {
+        final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
+        AuthorizationClient.openLoginActivity(SummaryActivity.this, AUTH_TOKEN_REQUEST_CODE, request);
+    }
+
+    private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
+        return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
+                .setShowDialog(false)
+                .setScopes(new String[] { "user-top-read", "user-read-email", "user-read-private" }) // <--- Change the scope of your requested token here
+                .setCampaign("your-campaign-token")
+                .build();
+    }
+
+    private Uri getRedirectUri() {
+        return Uri.parse(REDIRECT_URI);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
+
+        // Check which request code is present (if any)
+        if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
+            mAccessToken = response.getAccessToken();
+        }
     }
 }

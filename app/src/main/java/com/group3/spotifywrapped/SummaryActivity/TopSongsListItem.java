@@ -1,14 +1,16 @@
 package com.group3.spotifywrapped.SummaryActivity;
 
+import android.graphics.drawable.Drawable;
+
 public class TopSongsListItem {
     private String songName;
-    private int image;
+    private Drawable image;
 
-    public TopSongsListItem(String songName, int image) {
+    public TopSongsListItem(String songName, Drawable image) {
         this.songName = songName;
         this.image = image;
     }
 
     public String getSongName() { return songName; }
-    public int getImage() { return image; }
+    public Drawable getImage() { return image; }
 }

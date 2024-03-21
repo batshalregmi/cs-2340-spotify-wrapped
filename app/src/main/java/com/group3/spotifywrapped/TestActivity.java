@@ -1,31 +1,21 @@
 package com.group3.spotifywrapped;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.group3.spotifywrapped.SummaryActivity.SummaryActivity;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -40,7 +30,8 @@ public class TestActivity extends AppCompatActivity {
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    private String mAccessToken, mAccessCode;
+    public static String mAccessToken;
+    private String mAccessCode;
     private Call mCall;
 
     private TextView tokenTextView, codeTextView, profileTextView;
@@ -72,6 +63,14 @@ public class TestActivity extends AppCompatActivity {
 
         profileBtn.setOnClickListener((v) -> {
             onGetUserProfileClicked();
+        });
+
+        findViewById(R.id.test_activity_back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TestActivity.this, DevStartActivity.class);
+                startActivity(i);
+            }
         });
 
     }

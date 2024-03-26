@@ -27,15 +27,20 @@
         <activity
             android:name=".DevStartActivity"
             android:exported="true">
+        </activity>
+        <activity
+            android:name=".SummaryActivity.TopSongsSummaryActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SummaryActivity.TopSongsSummaryActivity"
-            android:exported="true"></activity>
     </application>
 
 </manifest>

@@ -15,25 +15,30 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.group3.spotifywrapped.R;
 
-public class SummaryPagerActivity extends AppCompatActivity {
-    private class SummaryPagerAdapter extends PagerAdapter {
+import java.util.ArrayList;
+import java.util.List;
 
-        @Override
-        public Object instantiateItem(ViewGroup collection, int position) {
-            return null;
+public class SummaryPagerActivity extends AppCompatActivity {
+    private class SummaryPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> fragments = new ArrayList<>();
+
+        public SummaryPagerAdapter(FragmentManager fm, int behavior) {
+            super(fm, behavior);
         }
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
         @Override
         public int getCount() {
-            return 0;
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return false;
+            return fragments.size();
         }
     }
 
@@ -47,5 +52,13 @@ public class SummaryPagerActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        ViewPager pager = findViewById(R.id.pager);
+        SummaryPagerAdapter adapter = new SummaryPagerAdapter(
+                getSupportFragmentManager(),
+                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+        );
+
+        pager.setAdapter(adapter);
     }
 }

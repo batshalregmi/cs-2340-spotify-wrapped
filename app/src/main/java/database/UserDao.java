@@ -40,4 +40,7 @@ public interface UserDao {
 
     @Query("SELECT * FROM user WHERE username LIKE :username LIMIT 1")
     List<User> findByUsername(String username);
+
+    @Query("SELECT spotify_token FROM user WHERE username LIKE :username LIMIT 1")
+    String getToken(String username);
 }

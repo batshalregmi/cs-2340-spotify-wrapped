@@ -2,12 +2,15 @@ package com.group3.spotifywrapped.utils;
 
 import android.util.Log;
 
+import com.group3.spotifywrapped.LoginActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
+import database.UserDao;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -20,19 +23,11 @@ public class SpotifyApiHelper {
     private JSONObject retValue = null;
     private String mAccessToken, mAccessCode;
 
-
-    public SpotifyApiHelper(String accessToken, String accessCode) {
-        if (accessToken == null || accessCode == null) {
-            throw new IllegalArgumentException("Invalid arguments");
-        }
-        mAccessToken = accessToken;
-        mAccessCode = accessCode;
-    }
     public JSONObject callSpotifyApi(String endpoint, String method) {
 
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1" + endpoint)
-                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .addHeader("Authorization", "Bearer " + LoginActivity.mUser.sToken)
                 .build();
 
         mCall = mOkHttpClient.newCall(request);

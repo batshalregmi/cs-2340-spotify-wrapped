@@ -1,5 +1,6 @@
 package com.group3.spotifywrapped.utils;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.group3.spotifywrapped.LoginActivity;
@@ -8,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 
 import database.UserDao;
@@ -68,5 +71,10 @@ public class SpotifyApiHelper {
         }
 
         return retValue;
+    }
+
+    public static Drawable loadImageFromURL(String url) throws java.io.IOException {
+        InputStream is = (InputStream)(new URL(url).getContent());
+        return Drawable.createFromStream(is, "src name");
     }
 }

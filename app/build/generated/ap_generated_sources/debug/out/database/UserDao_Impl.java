@@ -33,35 +33,40 @@ public final class UserDao_Impl implements UserDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `User` (`email`,`name`,`password`,`spotify_token`,`spotify_code`) VALUES (?,?,?,?,?)";
+        return "INSERT OR ABORT INTO `User` (`username`,`password`,`email`,`name`,`spotify_token`,`spotify_code`) VALUES (?,?,?,?,?,?)";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement, final User entity) {
-        if (entity.email == null) {
+        if (entity.username == null) {
           statement.bindNull(1);
         } else {
-          statement.bindString(1, entity.email);
-        }
-        if (entity.name == null) {
-          statement.bindNull(2);
-        } else {
-          statement.bindString(2, entity.name);
+          statement.bindString(1, entity.username);
         }
         if (entity.password == null) {
+          statement.bindNull(2);
+        } else {
+          statement.bindString(2, entity.password);
+        }
+        if (entity.email == null) {
           statement.bindNull(3);
         } else {
-          statement.bindString(3, entity.password);
+          statement.bindString(3, entity.email);
         }
-        if (entity.sToken == null) {
+        if (entity.name == null) {
           statement.bindNull(4);
         } else {
-          statement.bindString(4, entity.sToken);
+          statement.bindString(4, entity.name);
         }
-        if (entity.sCode == null) {
+        if (entity.sToken == null) {
           statement.bindNull(5);
         } else {
-          statement.bindString(5, entity.sCode);
+          statement.bindString(5, entity.sToken);
+        }
+        if (entity.sCode == null) {
+          statement.bindNull(6);
+        } else {
+          statement.bindString(6, entity.sCode);
         }
       }
     };
@@ -69,15 +74,15 @@ public final class UserDao_Impl implements UserDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "DELETE FROM `User` WHERE `email` = ?";
+        return "DELETE FROM `User` WHERE `username` = ?";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement, final User entity) {
-        if (entity.email == null) {
+        if (entity.username == null) {
           statement.bindNull(1);
         } else {
-          statement.bindString(1, entity.email);
+          statement.bindString(1, entity.username);
         }
       }
     };
@@ -85,40 +90,45 @@ public final class UserDao_Impl implements UserDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "UPDATE OR ABORT `User` SET `email` = ?,`name` = ?,`password` = ?,`spotify_token` = ?,`spotify_code` = ? WHERE `email` = ?";
+        return "UPDATE OR ABORT `User` SET `username` = ?,`password` = ?,`email` = ?,`name` = ?,`spotify_token` = ?,`spotify_code` = ? WHERE `username` = ?";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement, final User entity) {
-        if (entity.email == null) {
+        if (entity.username == null) {
           statement.bindNull(1);
         } else {
-          statement.bindString(1, entity.email);
-        }
-        if (entity.name == null) {
-          statement.bindNull(2);
-        } else {
-          statement.bindString(2, entity.name);
+          statement.bindString(1, entity.username);
         }
         if (entity.password == null) {
-          statement.bindNull(3);
+          statement.bindNull(2);
         } else {
-          statement.bindString(3, entity.password);
-        }
-        if (entity.sToken == null) {
-          statement.bindNull(4);
-        } else {
-          statement.bindString(4, entity.sToken);
-        }
-        if (entity.sCode == null) {
-          statement.bindNull(5);
-        } else {
-          statement.bindString(5, entity.sCode);
+          statement.bindString(2, entity.password);
         }
         if (entity.email == null) {
+          statement.bindNull(3);
+        } else {
+          statement.bindString(3, entity.email);
+        }
+        if (entity.name == null) {
+          statement.bindNull(4);
+        } else {
+          statement.bindString(4, entity.name);
+        }
+        if (entity.sToken == null) {
+          statement.bindNull(5);
+        } else {
+          statement.bindString(5, entity.sToken);
+        }
+        if (entity.sCode == null) {
           statement.bindNull(6);
         } else {
-          statement.bindString(6, entity.email);
+          statement.bindString(6, entity.sCode);
+        }
+        if (entity.username == null) {
+          statement.bindNull(7);
+        } else {
+          statement.bindString(7, entity.username);
         }
       }
     };
@@ -179,15 +189,26 @@ public final class UserDao_Impl implements UserDao {
     __db.assertNotSuspendingTransaction();
     final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
     try {
+      final int _cursorIndexOfUsername = CursorUtil.getColumnIndexOrThrow(_cursor, "username");
+      final int _cursorIndexOfPassword = CursorUtil.getColumnIndexOrThrow(_cursor, "password");
       final int _cursorIndexOfEmail = CursorUtil.getColumnIndexOrThrow(_cursor, "email");
       final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
-      final int _cursorIndexOfPassword = CursorUtil.getColumnIndexOrThrow(_cursor, "password");
       final int _cursorIndexOfSToken = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_token");
       final int _cursorIndexOfSCode = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_code");
       final List<User> _result = new ArrayList<User>(_cursor.getCount());
       while (_cursor.moveToNext()) {
         final User _item;
         _item = new User();
+        if (_cursor.isNull(_cursorIndexOfUsername)) {
+          _item.username = null;
+        } else {
+          _item.username = _cursor.getString(_cursorIndexOfUsername);
+        }
+        if (_cursor.isNull(_cursorIndexOfPassword)) {
+          _item.password = null;
+        } else {
+          _item.password = _cursor.getString(_cursorIndexOfPassword);
+        }
         if (_cursor.isNull(_cursorIndexOfEmail)) {
           _item.email = null;
         } else {
@@ -197,11 +218,6 @@ public final class UserDao_Impl implements UserDao {
           _item.name = null;
         } else {
           _item.name = _cursor.getString(_cursorIndexOfName);
-        }
-        if (_cursor.isNull(_cursorIndexOfPassword)) {
-          _item.password = null;
-        } else {
-          _item.password = _cursor.getString(_cursorIndexOfPassword);
         }
         if (_cursor.isNull(_cursorIndexOfSToken)) {
           _item.sToken = null;
@@ -223,14 +239,14 @@ public final class UserDao_Impl implements UserDao {
   }
 
   @Override
-  public String getName(final String email) {
-    final String _sql = "SELECT name FROM user WHERE email LIKE ?";
+  public String getName(final String username) {
+    final String _sql = "SELECT name FROM user WHERE username LIKE ? LIMIT 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
-    if (email == null) {
+    if (username == null) {
       _statement.bindNull(_argIndex);
     } else {
-      _statement.bindString(_argIndex, email);
+      _statement.bindString(_argIndex, username);
     }
     __db.assertNotSuspendingTransaction();
     final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
@@ -253,14 +269,44 @@ public final class UserDao_Impl implements UserDao {
   }
 
   @Override
-  public String getPassword(final String email) {
-    final String _sql = "SELECT password FROM user WHERE email LIKE ? LIMIT 1";
+  public String getPassword(final String username) {
+    final String _sql = "SELECT password FROM user WHERE username LIKE ? LIMIT 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
-    if (email == null) {
+    if (username == null) {
       _statement.bindNull(_argIndex);
     } else {
-      _statement.bindString(_argIndex, email);
+      _statement.bindString(_argIndex, username);
+    }
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final String _result;
+      if (_cursor.moveToFirst()) {
+        if (_cursor.isNull(0)) {
+          _result = null;
+        } else {
+          _result = _cursor.getString(0);
+        }
+      } else {
+        _result = null;
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public String getUsername(final String username) {
+    final String _sql = "SELECT username FROM user WHERE username LIKE ? LIMIT 1";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (username == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, username);
     }
     __db.assertNotSuspendingTransaction();
     final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
@@ -295,15 +341,26 @@ public final class UserDao_Impl implements UserDao {
     __db.assertNotSuspendingTransaction();
     final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
     try {
+      final int _cursorIndexOfUsername = CursorUtil.getColumnIndexOrThrow(_cursor, "username");
+      final int _cursorIndexOfPassword = CursorUtil.getColumnIndexOrThrow(_cursor, "password");
       final int _cursorIndexOfEmail = CursorUtil.getColumnIndexOrThrow(_cursor, "email");
       final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
-      final int _cursorIndexOfPassword = CursorUtil.getColumnIndexOrThrow(_cursor, "password");
       final int _cursorIndexOfSToken = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_token");
       final int _cursorIndexOfSCode = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_code");
       final List<User> _result = new ArrayList<User>(_cursor.getCount());
       while (_cursor.moveToNext()) {
         final User _item;
         _item = new User();
+        if (_cursor.isNull(_cursorIndexOfUsername)) {
+          _item.username = null;
+        } else {
+          _item.username = _cursor.getString(_cursorIndexOfUsername);
+        }
+        if (_cursor.isNull(_cursorIndexOfPassword)) {
+          _item.password = null;
+        } else {
+          _item.password = _cursor.getString(_cursorIndexOfPassword);
+        }
         if (_cursor.isNull(_cursorIndexOfEmail)) {
           _item.email = null;
         } else {
@@ -313,11 +370,6 @@ public final class UserDao_Impl implements UserDao {
           _item.name = null;
         } else {
           _item.name = _cursor.getString(_cursorIndexOfName);
-        }
-        if (_cursor.isNull(_cursorIndexOfPassword)) {
-          _item.password = null;
-        } else {
-          _item.password = _cursor.getString(_cursorIndexOfPassword);
         }
         if (_cursor.isNull(_cursorIndexOfSToken)) {
           _item.sToken = null;
@@ -330,6 +382,98 @@ public final class UserDao_Impl implements UserDao {
           _item.sCode = _cursor.getString(_cursorIndexOfSCode);
         }
         _result.add(_item);
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public List<User> findByUsername(final String username) {
+    final String _sql = "SELECT * FROM user WHERE username LIKE ? LIMIT 1";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (username == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, username);
+    }
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfUsername = CursorUtil.getColumnIndexOrThrow(_cursor, "username");
+      final int _cursorIndexOfPassword = CursorUtil.getColumnIndexOrThrow(_cursor, "password");
+      final int _cursorIndexOfEmail = CursorUtil.getColumnIndexOrThrow(_cursor, "email");
+      final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+      final int _cursorIndexOfSToken = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_token");
+      final int _cursorIndexOfSCode = CursorUtil.getColumnIndexOrThrow(_cursor, "spotify_code");
+      final List<User> _result = new ArrayList<User>(_cursor.getCount());
+      while (_cursor.moveToNext()) {
+        final User _item;
+        _item = new User();
+        if (_cursor.isNull(_cursorIndexOfUsername)) {
+          _item.username = null;
+        } else {
+          _item.username = _cursor.getString(_cursorIndexOfUsername);
+        }
+        if (_cursor.isNull(_cursorIndexOfPassword)) {
+          _item.password = null;
+        } else {
+          _item.password = _cursor.getString(_cursorIndexOfPassword);
+        }
+        if (_cursor.isNull(_cursorIndexOfEmail)) {
+          _item.email = null;
+        } else {
+          _item.email = _cursor.getString(_cursorIndexOfEmail);
+        }
+        if (_cursor.isNull(_cursorIndexOfName)) {
+          _item.name = null;
+        } else {
+          _item.name = _cursor.getString(_cursorIndexOfName);
+        }
+        if (_cursor.isNull(_cursorIndexOfSToken)) {
+          _item.sToken = null;
+        } else {
+          _item.sToken = _cursor.getString(_cursorIndexOfSToken);
+        }
+        if (_cursor.isNull(_cursorIndexOfSCode)) {
+          _item.sCode = null;
+        } else {
+          _item.sCode = _cursor.getString(_cursorIndexOfSCode);
+        }
+        _result.add(_item);
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public String getToken(final String username) {
+    final String _sql = "SELECT spotify_token FROM user WHERE username LIKE ? LIMIT 1";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (username == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, username);
+    }
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final String _result;
+      if (_cursor.moveToFirst()) {
+        if (_cursor.isNull(0)) {
+          _result = null;
+        } else {
+          _result = _cursor.getString(0);
+        }
+      } else {
+        _result = null;
       }
       return _result;
     } finally {

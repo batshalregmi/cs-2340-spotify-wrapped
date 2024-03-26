@@ -162,7 +162,7 @@ public class TestActivity extends AppCompatActivity {
             return;
         }
 
-        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper(mAccessToken, mAccessCode);
+        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
         JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET");
             try {
                 test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");

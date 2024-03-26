@@ -95,7 +95,7 @@ public class TopSongsSummaryActivity extends AppCompatActivity {
         //TODO should be getting token/code from User class but no global scope
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
         if (LoginActivity.mUser.sToken != null) {
-            JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=10", TestActivity.mAccessToken, "GET"); // assuming TestActivity already executed to load token/code
+            JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=10", "GET"); // assuming TestActivity already executed to load token/code
             try {
                 JSONArray topSongs = topSongsResponse.getJSONArray("items");
                 topSongsList.clear();

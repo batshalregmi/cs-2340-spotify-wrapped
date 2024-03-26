@@ -1,0 +1,13 @@
+3 activities 
+first showing overall stats:
+ -minutes listened 
+ -songs played 
+second showing 3 lists: 
+ -top tracks 
+ -top artists 
+ -top albums 
+third showing monthly top 
+ -minuted listened
+ -songs played 
+ -top tracks 
+ -top artists 

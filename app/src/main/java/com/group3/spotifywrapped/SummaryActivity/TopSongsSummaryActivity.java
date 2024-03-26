@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TopSongsSummaryActivity extends AppCompatActivity {
-    private String mAccessToken;
-
     private List<TopSongsListItem> topSongsList = new ArrayList<>();
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
@@ -84,8 +82,6 @@ public class TopSongsSummaryActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        this.mAccessToken = TestActivity.mAccessToken;
-        Log.d("SummaryActivity", "Current token: " + this.mAccessToken);
         loadTopSongsList();
     }
 
@@ -97,8 +93,8 @@ public class TopSongsSummaryActivity extends AppCompatActivity {
 
         //TODO should be getting token/code from User class but no global scope
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-        if (this.mAccessToken != null) {
-            JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=10", this.mAccessToken, "GET"); // assuming TestActivity already executed to load token/code
+        if (TestActivity.mAccessToken != null) {
+            JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=10", TestActivity.mAccessToken, "GET"); // assuming TestActivity already executed to load token/code
             try {
                 JSONArray topSongs = topSongsResponse.getJSONArray("items");
                 topSongsList.clear();

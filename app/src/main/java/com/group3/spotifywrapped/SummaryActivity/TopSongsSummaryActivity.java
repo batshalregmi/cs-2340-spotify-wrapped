@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
-import com.group3.spotifywrapped.TestActivity;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
 import org.json.JSONArray;
@@ -94,7 +93,7 @@ public class TopSongsSummaryActivity extends AppCompatActivity {
 
         //TODO should be getting token/code from User class but no global scope
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-        if (LoginActivity.mUser.sToken != null) {
+        if (LoginActivity.activeUser.sToken != null) {
             JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=10", "GET"); // assuming TestActivity already executed to load token/code
             try {
                 JSONArray topSongs = topSongsResponse.getJSONArray("items");

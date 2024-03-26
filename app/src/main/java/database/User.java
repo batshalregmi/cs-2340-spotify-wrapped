@@ -10,6 +10,9 @@ public class User {
 
     @NonNull
     @PrimaryKey
+    public String id;
+
+    @ColumnInfo(name = "username")
     public String username;
 
     @ColumnInfo(name = "password")
@@ -29,8 +32,9 @@ public class User {
 
     public User(){}
 
-    public User(@NonNull String username, String password, String email, String name, String sToken, String sCode) {
-        this.username = username.toLowerCase();
+    public User(@NonNull String id, String username, String password, String email, String name, String sToken, String sCode) {
+        this.id = id;
+        this.username = username;
         this.password = password;
         this.email = email;
         this.name = name;
@@ -40,6 +44,6 @@ public class User {
 
     @Override
     public String toString() {
-        return (name + "\n" + email + "\n" + password + "\n" + sToken + "\n" + sCode);
+        return ("User");
     }
 }

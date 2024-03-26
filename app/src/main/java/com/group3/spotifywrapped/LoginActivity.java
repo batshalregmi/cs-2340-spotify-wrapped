@@ -1,22 +1,25 @@
 package com.group3.spotifywrapped;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import database.AppDatabase;
 import database.User;
 import database.UserDao;
-import com.google.android.material.textfield.TextInputEditText;
-import com.group3.spotifywrapped.SummaryActivity.TopSongsSummaryActivity;
+
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -31,10 +34,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private String mAccessToken;
 
-    public AppDatabase db;
+    private AppDatabase db;
     public static UserDao userDao;
-    public static User mUser;
-    public Thread thread;
+    public static User activeUser;
+    private List<Thread> threads = new ArrayList<>();
 
 
     @Override
@@ -42,46 +45,38 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "local-database").build();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "local-database")
+                .fallbackToDestructiveMigration()
+                .build();
         userDao = db.userDao();
+
+        //addTestUser();
 
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
-            String dbUsername;
-            String dbEmail;
-            String dbPassword;
 
             @Override
             public void onClick(View view) {
-                thread = new Thread(new Runnable() {
+                threads.add(new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        dbPassword = userDao.getPassword(username.getText().toString().toLowerCase());
-                        dbUsername = userDao.getUsername(username.getText().toString().toLowerCase());
+                        List<User> usersFound = userDao.findByLoginInfo(username.getText().toString(), password.getText().toString());
+                        Log.d("LoginActivity", "User exists: " + (!usersFound.isEmpty()));
+                        
                     }
-                });
-                thread.start();
+                }));
+                threads.get(threads.size() - 1).start();
 
-                if (username.getText().toString().equals(dbUsername) && password.getText().toString().equals(dbPassword)) {
-                    getUser(username.getText().toString());
-                    Intent i = new Intent(LoginActivity.this, TopSongsSummaryActivity.class);
-                    startActivity(i);
-                } else {
-                    Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
-                }
                 System.out.println(password.getText().toString());
-                System.out.println(dbPassword);
             }
         });
     }
-    private void getUser(String username) {
-        mUser.username = username;
-        mUser.password = userDao.getPassword(username.toLowerCase());
+
+    private void loadUser(String id) {
         getToken();
-        mUser.sToken = mAccessToken;
     }
 
     @Override
@@ -91,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check which request code is present (if any)
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
-            mAccessToken = response.getAccessToken();
+            activeUser.sToken = response.getAccessToken();
         }
     }
 
@@ -111,4 +106,25 @@ public class LoginActivity extends AppCompatActivity {
     private Uri getRedirectUri() {
         return Uri.parse(REDIRECT_URI);
     }
+
+    private void addTestUser() {
+        User trentUser = new User(
+                "0",
+                "tdoiron0",
+                "1234",
+                "trentwdoiron@gmail.com",
+                "Trent Doiron",
+                null,
+                null
+        );
+        threads.add(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                userDao.insert(trentUser);
+            }
+        }));
+        threads.get(threads.size() - 1).start();
+    }
+
+
 }

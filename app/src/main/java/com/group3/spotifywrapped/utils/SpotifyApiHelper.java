@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 
-import database.UserDao;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -30,7 +29,7 @@ public class SpotifyApiHelper {
 
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1" + endpoint)
-                .addHeader("Authorization", "Bearer " + LoginActivity.mUser.sToken)
+                .addHeader("Authorization", "Bearer " + LoginActivity.activeUser.sToken)
                 .build();
 
         mCall = mOkHttpClient.newCall(request);

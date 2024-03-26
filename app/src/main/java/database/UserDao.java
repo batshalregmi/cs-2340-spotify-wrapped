@@ -26,21 +26,21 @@ public interface UserDao {
     @Query("SELECT * FROM user")
     List<User> getAll();
 
-    @Query("SELECT name FROM user WHERE username LIKE :username LIMIT 1")
-    String getName(String username);
+    @Query("SELECT name FROM user WHERE id LIKE :id LIMIT 1")
+    String getName(String id);
 
-    @Query("SELECT password FROM user WHERE username LIKE :username LIMIT 1")
-    String getPassword(String username);
+    @Query("SELECT spotify_token FROM user WHERE id LIKE :id LIMIT 1")
+    String getToken(String id);
 
-    @Query("SELECT username FROM user WHERE username LIKE :username LIMIT 1")
-    String getUsername(String username);
-
-    @Query("SELECT * FROM user WHERE email LIKE :email LIMIT 1")
-    List<User> findByEmail(String email);
+    @Query("SELECT * FROM user WHERE username LIKE :username AND password LIKE :password LIMIT 1")
+    List<User> findByLoginInfo(String username, String password);
 
     @Query("SELECT * FROM user WHERE username LIKE :username LIMIT 1")
     List<User> findByUsername(String username);
 
-    @Query("SELECT spotify_token FROM user WHERE username LIKE :username LIMIT 1")
-    String getToken(String username);
+    @Query("SELECT * FROM user WHERE password LIKE :password LIMIT 1")
+    List<User> findByPassword(String password);
+
+    @Query("SELECT * FROM user WHERE id LIKE :id LIMIT 1")
+    List<User> findByID(String id);
 }

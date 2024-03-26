@@ -51,7 +51,7 @@ public class SignUpScreen extends AppCompatActivity {
                 thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        dbUsername = userDao.getUsername(username.getText().toString().toLowerCase());
+                        //dbUsername = userDao.getUsername(username.getText().toString().toLowerCase());
                     }
                 });
                 thread.start();

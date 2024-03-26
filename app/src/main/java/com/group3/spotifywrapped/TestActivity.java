@@ -84,14 +84,7 @@ public class TestActivity extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                userDao.insert(new User(
-                        "Parker1234",
-                        "Poiu1234",
-                        "Parker.arneson@gmail.com",
-                        "Parker Arneson",
-                        "lakwndlkand",
-                        "985690493"
-                ));
+
                 // Set the click listeners for the buttons
 
                 tokenBtn.setOnClickListener((v) -> {

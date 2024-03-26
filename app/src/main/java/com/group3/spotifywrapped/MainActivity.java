@@ -1,8 +1,10 @@
 package com.group3.spotifywrapped;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
@@ -25,6 +27,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import database.AppDatabase;
+import database.User;
+import database.UserDao;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private String mAccessToken, mAccessCode;
 
     private TextView tokenTextView, codeTextView, profileTextView;
+
+    public AppDatabase db;
+    public static UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,27 +74,43 @@ public class MainActivity extends AppCompatActivity {
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
         ImageView profileImageView = (ImageView) findViewById(R.id.mainMenuImageView);
 
+        // Init Databae
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "local-database").build();
+        userDao = db.userDao();
 
-        // Set the click listeners for the buttons
+        // Query Call
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                userDao.insert(new User(
+                        "Parker1234",
+                        "Poiu1234",
+                        "Parker.arneson@gmail.com",
+                        "Parker Arneson",
+                        "lakwndlkand",
+                        "985690493"
+                ));
+                // Set the click listeners for the buttons
 
-        tokenBtn.setOnClickListener((v) -> {
-            getToken();
-        });
+                tokenBtn.setOnClickListener((v) -> {
+                    getToken();
+                });
 
-        codeBtn.setOnClickListener((v) -> {
-            getCode();
-        });
+                codeBtn.setOnClickListener((v) -> {
+                    getCode();
+                });
 
-        profileBtn.setOnClickListener((v) -> {
-            try {
-                onGetUserProfileClicked();
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
+                profileBtn.setOnClickListener((v) -> {
+                    onGetUserProfileClicked();
+                });
             }
         });
+        thread.start();
 
-
+                // Set the click listeners for the buttons
     }
+
 
     /**
      * Get token from Spotify
@@ -122,29 +155,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            Log.e("src",src);
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            Log.e("Bitmap","returned");
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Exception",e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Get user profile
-     * This method will get the user profile using the token
-     */
-    public void onGetUserProfileClicked() throws JSONException {
+    public void onGetUserProfileClicked() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -152,10 +163,18 @@ public class MainActivity extends AppCompatActivity {
 
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper(mAccessToken, mAccessCode);
         JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET");
-        test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
-        Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
+            try {
+                test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
 
-    }
+        }
 
     /**
      * Creates a UI thread to update a TextView in the background

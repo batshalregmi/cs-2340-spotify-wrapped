@@ -3,28 +3,7 @@
   <component name="deploymentTargetDropDown">
     <value>
       <entry key="app">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-<<<<<<< HEAD
-                  <value value="$USER_HOME$/.android/avd/Pixel_7_Pro_API_UpsideDownCakePrivacySandbox.avd" />
-=======
-                  <value value="C:\Users\vivek\.android\avd\Pixel_7_API_UpsideDownCakePrivacySandbox.avd" />
->>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-<<<<<<< HEAD
-          <timeTargetWasSelectedWithDropDown value="2024-03-07T18:29:24.680968Z" />
-=======
-          <timeTargetWasSelectedWithDropDown value="2024-03-13T23:43:47.401742600Z" />
->>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
-        </State>
+        <State />
       </entry>
     </value>
   </component>

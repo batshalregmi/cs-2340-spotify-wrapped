@@ -3,9 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#16c99d</color>
-<<<<<<< HEAD
-=======
     <color name="purple">#8692F7</color>
     <color name="light_green">#D3F1B5</color>
->>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
 </resources>

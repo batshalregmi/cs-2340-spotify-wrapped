@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
-<<<<<<< HEAD
 import database.AppDatabase;
 import database.User;
 import database.UserDao;
@@ -41,8 +40,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-=======
->>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
 public class MainActivity extends AppCompatActivity {
 
     public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
@@ -82,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 AppDatabase.class, "local-database").build();
         userDao = db.userDao();
 
-<<<<<<< HEAD
         // Query Call
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -95,29 +91,26 @@ public class MainActivity extends AppCompatActivity {
                         "lakwndlkand",
                         "985690493"
                 ));
-=======
-        // Set the click listeners for the buttons
+                // Set the click listeners for the buttons
 
-        tokenBtn.setOnClickListener((v) -> {
-            getToken();
-        });
+                tokenBtn.setOnClickListener((v) -> {
+                    getToken();
+                });
 
-        codeBtn.setOnClickListener((v) -> {
-            getCode();
-        });
+                codeBtn.setOnClickListener((v) -> {
+                    getCode();
+                });
 
-        profileBtn.setOnClickListener((v) -> {
-            try {
-                onGetUserProfileClicked();
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
->>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
+                profileBtn.setOnClickListener((v) -> {
+                    onGetUserProfileClicked();
+                });
             }
         });
         thread.start();
 
-        // Set the click listeners for the buttons
+                // Set the click listeners for the buttons
     }
+
 
     /**
      * Get token from Spotify
@@ -162,44 +155,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            Log.e("src",src);
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            Log.e("Bitmap","returned");
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Exception",e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Get user profile
-     * This method will get the user profile using the token
-     */
-<<<<<<< HEAD
     public void onGetUserProfileClicked() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<User> users = userDao.getAll();
-                for (User user : users) {
-                    System.out.println(user);
-                }
-            }
-        });
-        thread.start();
-
-=======
-    public void onGetUserProfileClicked() throws JSONException {
->>>>>>> 91d8be51d79199b873dd63d96d5781257d3648e2
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -207,10 +163,18 @@ public class MainActivity extends AppCompatActivity {
 
         SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper(mAccessToken, mAccessCode);
         JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET");
-        test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
-        Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
+            try {
+                test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
 
-    }
+        }
 
     /**
      * Creates a UI thread to update a TextView in the background

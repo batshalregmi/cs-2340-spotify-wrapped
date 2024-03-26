@@ -1,16 +1,11 @@
 package com.group3.spotifywrapped.utils;
 
-import android.graphics.drawable.Drawable;
 import android.util.Log;
-
-import com.group3.spotifywrapped.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
@@ -21,25 +16,25 @@ import okhttp3.Response;
 
 public class SpotifyApiHelper {
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    Call mCall;
-    JSONObject retValue = null;
+    private Call mCall;
+    private JSONObject retValue = null;
+    private String mAccessToken, mAccessCode;
 
-    public JSONObject callSpotifyApi(String endpoint, String method) {
-        return callSpotifyApi(endpoint, "", method);
-    }
 
-    public JSONObject callSpotifyApi(String endpoint, String accessToken, String method) {
-        if (accessToken == null || method == null || endpoint == null) {
+    public SpotifyApiHelper(String accessToken, String accessCode) {
+        if (accessToken == null || accessCode == null) {
             throw new IllegalArgumentException("Invalid arguments");
         }
+        mAccessToken = accessToken;
+        mAccessCode = accessCode;
+    }
+    public JSONObject callSpotifyApi(String endpoint, String method) {
 
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1" + endpoint)
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
-        Log.d("SpotifyApiHelper", "Request used: " + request);
 
-        cancelCall();
         mCall = mOkHttpClient.newCall(request);
 
         final CountDownLatch latch = new CountDownLatch(1);
@@ -47,23 +42,24 @@ public class SpotifyApiHelper {
         mCall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("HTTP", "Failure to fetch data: " + e);
+                Log.d("HTTP", "Failed to fetch data: " + e);
                 latch.countDown();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                JSONObject jsonObject = null;
                 if (response.isSuccessful()) {
                     try {
-                        retValue = new JSONObject(response.body().string());
+                        String responseBody = response.body().string();
+                        jsonObject = new JSONObject(responseBody);
                     } catch (JSONException e) {
-                        cancelCall();
                         Log.d("JSON", "Failed to parse data: " + e);
                     }
                 } else {
-                    cancelCall();
                     Log.d("HTTP", "Failed to fetch data: " + response);
                 }
+                retValue = jsonObject;
                 Log.d("SpotifyApiHelper", "Response: " + retValue);
                 latch.countDown();
             }
@@ -72,22 +68,10 @@ public class SpotifyApiHelper {
         try {
             latch.await();
         } catch (InterruptedException e) {
-            cancelCall();
             Log.d("HTTP", "Thread interrupted while waiting for response");
             Thread.currentThread().interrupt();
         }
 
         return retValue;
-    }
-
-    private void cancelCall() {
-        if (mCall != null) {
-            mCall.cancel();
-        }
-    }
-
-    public static Drawable loadImageFromURL(String url) throws java.io.IOException {
-        InputStream is = (InputStream)(new URL(url).getContent());
-        return Drawable.createFromStream(is, "src name");
     }
 }

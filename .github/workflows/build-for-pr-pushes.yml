@@ -45,6 +45,14 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
+<<<<<<<<< Temporary merge branch 1
+      # Run Build Project
+      - name: Build gradle project
+        run: ./gradlew build
+      # Create APK Release
+      - name: Build apk release project (APK) - ${{ env.main_project_module }} module
+        run: ./gradlew assemble
+=========
       #      # Run Tests Build
       #      - name: Run gradle tests
       #        run: ./gradlew test
@@ -87,3 +95,4 @@ jobs:
 #        with:
 #          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - App bundle(s) AAB release generated
 #          path: ${{ env.main_project_module }}/build/outputs/bundle/release/
+>>>>>>>>> Temporary merge branch 2

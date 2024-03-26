@@ -24,7 +24,6 @@
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="24dp">
-
             <TextView
                 android:id="@+id/loginText"
                 android:layout_width="match_parent"
@@ -48,18 +47,29 @@
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
 
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_edittext"
-                android:drawablePadding="8dp"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:padding="8dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginTop="15dp"
+                android:id="@+id/passwordParent"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+
                 android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                app:cursorColor="@color/purple"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/green">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    app:hintAnimationEnabled="false"
+                    android:background="@drawable/custom_edittext"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:defaultFocusHighlightEnabled="false"
+                    android:padding="8dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/loginButton"

@@ -1,12 +1,17 @@
 package com.group3.spotifywrapped;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.StrictMode;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,33 +20,50 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import database.AppDatabase;
+import database.User;
+import database.UserDao;
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-public class TestActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
-    public static final String CLIENT_ID = "f2a3c6dab588480cbf5f7f93302bd1fe";
-    public static final String CLIENT_SECRET = "f85f0ee0436f4c1fb00979a41126bb0f";
+    public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
     public static final String REDIRECT_URI = "spotifywrapped://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
-
-    private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    public static String mAccessToken;
-    private String mAccessCode;
-    private Call mCall;
+    private String mAccessToken, mAccessCode;
 
     private TextView tokenTextView, codeTextView, profileTextView;
+
+    public AppDatabase db;
+    public static UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_main);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
 
         // Initialize the views
+//        TODO: ADD THE ConstraintLayout FROM THE TUTORIAL
         tokenTextView = (TextView) findViewById(R.id.token_text_view);
         codeTextView = (TextView) findViewById(R.id.code_text_view);
         profileTextView = (TextView) findViewById(R.id.response_text_view);
@@ -50,30 +72,45 @@ public class TestActivity extends AppCompatActivity {
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
+        ImageView profileImageView = (ImageView) findViewById(R.id.mainMenuImageView);
 
-        // Set the click listeners for the buttons
+        // Init Databae
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "local-database").build();
+        userDao = db.userDao();
 
-        tokenBtn.setOnClickListener((v) -> {
-            getToken();
-        });
-
-        codeBtn.setOnClickListener((v) -> {
-            getCode();
-        });
-
-        profileBtn.setOnClickListener((v) -> {
-            onGetUserProfileClicked();
-        });
-
-        findViewById(R.id.test_activity_back_button).setOnClickListener(new View.OnClickListener() {
+        // Query Call
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(TestActivity.this, DevStartActivity.class);
-                startActivity(i);
+            public void run() {
+                userDao.insert(new User(
+                        "Parker1234",
+                        "Poiu1234",
+                        "Parker.arneson@gmail.com",
+                        "Parker Arneson",
+                        "lakwndlkand",
+                        "985690493"
+                ));
+                // Set the click listeners for the buttons
+
+                tokenBtn.setOnClickListener((v) -> {
+                    getToken();
+                });
+
+                codeBtn.setOnClickListener((v) -> {
+                    getCode();
+                });
+
+                profileBtn.setOnClickListener((v) -> {
+                    onGetUserProfileClicked();
+                });
             }
         });
+        thread.start();
 
+                // Set the click listeners for the buttons
     }
+
 
     /**
      * Get token from Spotify
@@ -83,7 +120,7 @@ public class TestActivity extends AppCompatActivity {
      */
     public void getToken() {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
-        AuthorizationClient.openLoginActivity(TestActivity.this, AUTH_TOKEN_REQUEST_CODE, request);
+        AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_TOKEN_REQUEST_CODE, request);
     }
 
     /**
@@ -94,7 +131,7 @@ public class TestActivity extends AppCompatActivity {
      */
     public void getCode() {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.CODE);
-        AuthorizationClient.openLoginActivity(TestActivity.this, AUTH_CODE_REQUEST_CODE, request);
+        AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_CODE_REQUEST_CODE, request);
     }
 
 
@@ -118,28 +155,26 @@ public class TestActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Get user profile
-     * This method will get the user profile using the token
-     */
     public void onGetUserProfileClicked() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        try {
-            SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-            JSONObject test = spotifyApiHelper.callSpotifyApi("/tracks/0lrLj6Uu6niiOezZbsDoS6?si=3d9f3963189142c2", mAccessToken,"GET");
-            if (test == null) {
-                return;
+        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper(mAccessToken, mAccessCode);
+        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET");
+            try {
+                test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
-            test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
-            Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
-        } catch (Exception e) {
-            Log.d("JSON", e.toString());
+            try {
+                Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
         }
-    }
 
     /**
      * Creates a UI thread to update a TextView in the background
@@ -161,7 +196,7 @@ public class TestActivity extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-top-read" }) // <--- Change the scope of your requested token here
+                .setScopes(new String[] { "user-read-email", "user-top-read"}) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
                 .build();
     }
@@ -175,15 +210,4 @@ public class TestActivity extends AppCompatActivity {
         return Uri.parse(REDIRECT_URI);
     }
 
-    private void cancelCall() {
-        if (mCall != null) {
-            mCall.cancel();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        cancelCall();
-        super.onDestroy();
-    }
 }

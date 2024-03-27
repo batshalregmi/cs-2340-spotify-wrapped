@@ -30,11 +30,14 @@ public class SummaryPagerActivity extends AppCompatActivity {
         public SummaryPagerAdapter(FragmentManager fm, int behavior) {
             super(fm, behavior);
         }
+
         @NonNull
         @Override
         public Fragment getItem(int position) {
             return fragments.get(position);
         }
+
+        public void addItem(Fragment fragment) { fragments.add(fragment); }
 
         @Override
         public int getCount() {
@@ -53,12 +56,13 @@ public class SummaryPagerActivity extends AppCompatActivity {
             return insets;
         });
 
-        ViewPager pager = findViewById(R.id.pager);
         SummaryPagerAdapter adapter = new SummaryPagerAdapter(
                 getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
         );
+        adapter.addItem(new SummaryStatsFragment());
 
+        ViewPager pager = findViewById(R.id.pager);
         pager.setAdapter(adapter);
     }
 }

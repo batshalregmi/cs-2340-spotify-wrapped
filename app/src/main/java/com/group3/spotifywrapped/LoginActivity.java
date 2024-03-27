@@ -22,6 +22,7 @@ import database.AppDatabase;
 import database.User;
 import database.UserDao;
 
+import com.group3.spotifywrapped.SummaryActivity.SummaryPagerActivity;
 import com.group3.spotifywrapped.SummaryActivity.TopSongsSummaryActivity;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -40,9 +41,9 @@ public class LoginActivity extends AppCompatActivity {
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
-    public static UserDao userDao;
     public static User activeUser;
 
+    private UserDao userDao;
     private boolean tokenRecieved = false;
 
     @Override
@@ -75,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                             getToken();
                             while (!tokenRecieved);
                             Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
-                            Intent i = new Intent(LoginActivity.this, TopSongsSummaryActivity.class);
+                            Intent i = new Intent(LoginActivity.this, SummaryPagerActivity.class);
                             startActivity(i);
                         } else {
                             Log.e("LoginActivity", "Login credentials invalid");

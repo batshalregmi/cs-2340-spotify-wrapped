@@ -40,10 +40,10 @@ public class LoginActivity extends AppCompatActivity {
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
-    private AppDatabase db;
     public static UserDao userDao;
     public static User activeUser;
-    private List<Thread> threads = new ArrayList<>();
+
+    private boolean tokenRecieved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,28 +52,28 @@ public class LoginActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "local-database")
+        EditText username = findViewById(R.id.username);
+        EditText password = findViewById(R.id.password);
+        Button loginButton = findViewById(R.id.loginButton);
+
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "local-database")
                 .fallbackToDestructiveMigration()
                 .build();
         userDao = db.userDao();
 
         //addTestUser();
 
-        EditText username = findViewById(R.id.username);
-        EditText password = findViewById(R.id.password);
-        Button loginButton = findViewById(R.id.loginButton);
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                threads.add(new Thread(new Runnable() {
+                Thread loginThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         List<User> usersFound = userDao.findByLoginInfo(username.getText().toString(), password.getText().toString());
                         if (!usersFound.isEmpty()) {
                             activeUser = usersFound.get(0);
                             getToken();
-                            while (activeUser.sToken == null);
+                            while (!tokenRecieved);
                             Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
                             Intent i = new Intent(LoginActivity.this, TopSongsSummaryActivity.class);
                             startActivity(i);
@@ -81,8 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.e("LoginActivity", "Login credentials invalid");
                         }
                     }
-                }));
-                threads.get(threads.size() - 1).start();
+                });
+                loginThread.start();
             }
         });
     }
@@ -112,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             Log.d("LoginActivity", "Response: " + response.getAccessToken());
             activeUser.sToken = response.getAccessToken();
+            tokenRecieved = true;
         }
     }
 
@@ -125,12 +126,12 @@ public class LoginActivity extends AppCompatActivity {
                 null,
                 null
         );
-        threads.add(new Thread(new Runnable() {
+        Thread insertUserThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 userDao.insert(trentUser);
             }
-        }));
-        threads.get(threads.size() - 1).start();
+        });
+        insertUserThread.start();
     }
 }

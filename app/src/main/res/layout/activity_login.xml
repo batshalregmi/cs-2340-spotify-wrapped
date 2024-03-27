@@ -13,9 +13,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="35dp"
+        android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
-        app:cardElevation="25dp"
+        app:cardElevation="20dp"
         android:background="@drawable/custom_edittext">
 
         <LinearLayout
@@ -23,8 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="25dp">
-
+            android:padding="24dp">
             <TextView
                 android:id="@+id/loginText"
                 android:layout_width="match_parent"
@@ -39,12 +38,12 @@
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="26dp"
+                android:layout_marginTop="40dp"
                 android:background="@drawable/custom_edittext"
                 android:drawablePadding="8dp"
                 android:hint="@string/username"
                 android:inputType="text"
-                android:padding="13dp"
+                android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
 
@@ -62,14 +61,13 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password"
-                    android:layout_width="290dp"
+                    android:layout_width="300dp"
                     android:layout_height="50dp"
                     app:hintAnimationEnabled="false"
                     android:background="@drawable/custom_edittext"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:defaultFocusHighlightEnabled="false"
-
                     android:padding="8dp" />
             </com.google.android.material.textfield.TextInputLayout>
 

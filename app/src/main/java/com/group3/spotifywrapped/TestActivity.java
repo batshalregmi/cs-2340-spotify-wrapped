@@ -42,9 +42,14 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class TestActivity extends AppCompatActivity {
-
     public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
     public static final String REDIRECT_URI = "spotifywrapped://auth";
+    public static final String[] SCOPES = new String[] {
+            "user-read-recently-played",
+            "user-library-read",
+            "user-read-email",
+            "user-top-read"
+    };
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
@@ -75,34 +80,17 @@ public class TestActivity extends AppCompatActivity {
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
         ImageView profileImageView = (ImageView) findViewById(R.id.mainMenuImageView);
 
-        // Init Databae
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "local-database").build();
-        userDao = db.userDao();
-
-        // Query Call
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                // Set the click listeners for the buttons
-
-                tokenBtn.setOnClickListener((v) -> {
-                    getToken();
-                });
-
-                codeBtn.setOnClickListener((v) -> {
-                    getCode();
-                });
-
-                profileBtn.setOnClickListener((v) -> {
-                    onGetUserProfileClicked();
-                });
-            }
+        tokenBtn.setOnClickListener((v) -> {
+            getToken();
         });
-        thread.start();
 
-                // Set the click listeners for the buttons
+        codeBtn.setOnClickListener((v) -> {
+            getCode();
+        });
+
+        profileBtn.setOnClickListener((v) -> {
+            onGetUserProfileClicked();
+        });
     }
 
 
@@ -155,21 +143,19 @@ public class TestActivity extends AppCompatActivity {
             return;
         }
 
-        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
-        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET");
-            try {
-                test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
+            JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", mAccessToken, "GET");
+            test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
             try {
                 Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
+        } catch (Exception e) {
+            Log.e("TestActivity", e.toString());
         }
-
+    }
     /**
      * Creates a UI thread to update a TextView in the background
      * Reduces UI latency and makes the system perform more consistently
@@ -190,7 +176,7 @@ public class TestActivity extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email", "user-top-read"}) // <--- Change the scope of your requested token here
+                .setScopes(SCOPES) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
                 .build();
     }

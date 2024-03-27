@@ -102,7 +102,7 @@ public class TopSongsSummaryActivity extends AppCompatActivity {
                     topSongsList.add(getTopSongsListItemFromJSON(topSongs.getJSONObject(i)));
                 }
             } catch (Exception e) {
-                Log.d("SummaryActivity", "Exception when parsing JSON response: " + e);
+                Log.e("SummaryActivity", "Exception when parsing JSON response: " + e);
             }
         }
 

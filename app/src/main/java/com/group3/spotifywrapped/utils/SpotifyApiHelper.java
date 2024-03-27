@@ -23,13 +23,16 @@ public class SpotifyApiHelper {
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
     private Call mCall;
     private JSONObject retValue = null;
-    private String mAccessToken, mAccessCode;
 
     public JSONObject callSpotifyApi(String endpoint, String method) {
+        return callSpotifyApi(endpoint, LoginActivity.activeUser.sToken, method);
+    }
 
+    public JSONObject callSpotifyApi(String endpoint, String mAccessToken, String method) {
+        Log.d("SpotifyApiHelper", "Making Spotify API call...");
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1" + endpoint)
-                .addHeader("Authorization", "Bearer " + LoginActivity.activeUser.sToken)
+                .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
         mCall = mOkHttpClient.newCall(request);
@@ -57,7 +60,6 @@ public class SpotifyApiHelper {
                     Log.d("HTTP", "Failed to fetch data: " + response);
                 }
                 retValue = jsonObject;
-                Log.d("SpotifyApiHelper", "Response: " + retValue);
                 latch.countDown();
             }
         });

@@ -96,7 +96,7 @@ public class SummaryTopListsFragment extends Fragment {
             }
         }
 
-        // TODO I don't know why this is giving error 
+        // TODO I don't know how to fix this error
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new SummaryTopListsFragment.MyAdapter(getApplicationContext(), topSongsList));

@@ -1,13 +1,13 @@
 3 activities 
 first showing overall stats:
- -number of minutes listened 
- -number of songs played 
+ -*number of minutes listened 
+ -*number of songs played 
 second showing 3 lists: 
  -top tracks (5x)
  -top artists (5x) 
  -top albums (5x)
 third showing monthly review: 
- -number of minutes listened
- -number of songs played 
+ -*number of minutes listened
+ -*number of songs played 
  -top tracks (5x) 
  -top artists (5x)

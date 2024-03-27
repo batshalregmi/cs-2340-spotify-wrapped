@@ -19,16 +19,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+// STATIC class which we can use without instantiating
 public class SpotifyApiHelper {
-    private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    private Call mCall;
-    private JSONObject retValue = null;
+    private static final OkHttpClient mOkHttpClient = new OkHttpClient();
+    private static Call mCall;
+    private static JSONObject retValue = null;
 
-    public JSONObject callSpotifyApi(String endpoint, String method) {
-        return callSpotifyApi(endpoint, LoginActivity.activeUser.sToken, method);
-    }
-
-    public JSONObject callSpotifyApi(String endpoint, String mAccessToken, String method) {
+    public static JSONObject callSpotifyApi(String endpoint, String mAccessToken, String method) {
         Log.d("SpotifyApiHelper", "Making Spotify API call...");
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1" + endpoint)

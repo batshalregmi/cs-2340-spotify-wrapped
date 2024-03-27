@@ -8,11 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.List;
-
-import database.AppDatabase;
-import database.User;
-import database.UserDao;
+import com.group3.spotifywrapped.database.AppDatabase;
+import com.group3.spotifywrapped.database.UserDao;
 
 
 public class SignUpScreen extends AppCompatActivity {

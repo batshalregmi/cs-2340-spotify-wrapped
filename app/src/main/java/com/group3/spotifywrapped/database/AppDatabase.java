@@ -1,4 +1,4 @@
-package database;
+package com.group3.spotifywrapped.database;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

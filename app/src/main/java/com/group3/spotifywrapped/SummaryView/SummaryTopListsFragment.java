@@ -1,20 +1,20 @@
-package com.group3.spotifywrapped.SummaryActivity;
+package com.group3.spotifywrapped.SummaryView;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.StrictMode;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TopSongsSummaryActivity extends AppCompatActivity {
+public class SummaryTopListsFragment extends Fragment {
     private List<TopSongsListItem> topSongsList = new ArrayList<>();
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
@@ -47,7 +47,7 @@ public class TopSongsSummaryActivity extends AppCompatActivity {
         public TextView getSongNumberView() { return songNumberView; }
         public ImageView getCoverView() { return albumCoverView; }
     }
-    private class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
+    private class MyAdapter extends RecyclerView.Adapter<SummaryTopListsFragment.MyViewHolder> {
         private Context context;
         private List<TopSongsListItem> items;
 
@@ -58,12 +58,12 @@ public class TopSongsSummaryActivity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view, parent, false));
+        public SummaryTopListsFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new SummaryTopListsFragment.MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view, parent, false));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull SummaryTopListsFragment.MyViewHolder holder, int position) {
             holder.songNameView.setText(items.get(position).getSongName());
             holder.songNumberView.setText(Integer.toString(position + 1));
             holder.albumCoverView.setImageDrawable(items.get(position).getImage());
@@ -75,26 +75,16 @@ public class TopSongsSummaryActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_top_songs_summary);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+    public SummaryTopListsFragment() {}
 
-        loadTopSongsList();
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     private void loadTopSongsList() {
-        topSongsList.add(new TopSongsListItem(
-                "EARFQUAKE",
-                Drawable.createFromPath("C:\\CodeProjects\\Android Studio\\Projects\\cs-2340-spotify-wrapped\\app\\src\\main\\res\\drawable\\test_album_cover.jpeg")
-        ));
-
-        //TODO should be getting token/code from User class but no global scope
-        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
         if (LoginActivity.activeUser.sToken != null) {
-            JSONObject topSongsResponse = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=10", "GET"); // assuming TestActivity already executed to load token/code
+            JSONObject topSongsResponse = SpotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=10", LoginActivity.activeUser.sToken, "GET"); // assuming TestActivity already executed to load token/code
             try {
                 JSONArray topSongs = topSongsResponse.getJSONArray("items");
                 topSongsList.clear();
@@ -106,9 +96,10 @@ public class TopSongsSummaryActivity extends AppCompatActivity {
             }
         }
 
+        // TODO I don't know why this is giving error 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new MyAdapter(getApplicationContext(), topSongsList));
+        recyclerView.setAdapter(new SummaryTopListsFragment.MyAdapter(getApplicationContext(), topSongsList));
     }
 
     private TopSongsListItem getTopSongsListItemFromJSON(JSONObject temp) {
@@ -127,7 +118,6 @@ public class TopSongsSummaryActivity extends AppCompatActivity {
             albumCover = Drawable.createFromPath("C:\\CodeProjects\\Android Studio\\Projects\\cs-2340-spotify-wrapped\\app\\src\\main\\res\\drawable\\test_album_cover.jpeg");
             name = "N/A";
         }
-
         return new TopSongsListItem(name, albumCover);
     }
 }

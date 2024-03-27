@@ -1,4 +1,4 @@
-package com.group3.spotifywrapped.SummaryActivity;
+package com.group3.spotifywrapped.SummaryView;
 
 import android.graphics.drawable.Drawable;
 

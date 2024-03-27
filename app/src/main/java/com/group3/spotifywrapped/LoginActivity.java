@@ -1,11 +1,7 @@
 package com.group3.spotifywrapped;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
-import androidx.room.migration.Migration;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,15 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import database.AppDatabase;
-import database.User;
-import database.UserDao;
+import com.group3.spotifywrapped.database.AppDatabase;
+import com.group3.spotifywrapped.database.User;
+import com.group3.spotifywrapped.database.UserDao;
 
-import com.group3.spotifywrapped.SummaryActivity.SummaryPagerActivity;
-import com.group3.spotifywrapped.SummaryActivity.TopSongsSummaryActivity;
+import com.group3.spotifywrapped.SummaryView.SummaryPagerActivity;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;

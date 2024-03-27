@@ -28,7 +28,7 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
+    public static final String CLIENT_ID = "9e3e12a5d1424f068a20c6db49de005c";
     public static final String REDIRECT_URI = "spotifywrapped://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;

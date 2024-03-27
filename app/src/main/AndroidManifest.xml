@@ -5,14 +5,17 @@
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotifywrapped"
-        tools:targetApi="31"
-        android:enableOnBackInvokedCallback="true">
+        tools:targetApi="31">
+        <activity
+            android:name=".SummaryView.SummaryActivity"
+            android:exported="false" />
         <activity
             android:name=".SummaryView.SummaryPagerActivity"
             android:exported="true" />
@@ -22,27 +25,26 @@
             <intent-filter>
                 <data
                     android:host="auth"
-                    android:scheme="spotifywrapped"/>
+                    android:scheme="spotifywrapped" />
             </intent-filter>
         </activity>
         <activity
             android:name=".DevStartActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".SummaryView.TopSongsSummaryActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <data
                     android:host="auth"
-                    android:scheme="spotifywrapped"/>
+                    android:scheme="spotifywrapped" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

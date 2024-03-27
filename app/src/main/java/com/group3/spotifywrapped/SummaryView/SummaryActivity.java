@@ -3,18 +3,21 @@ package com.group3.spotifywrapped.SummaryView;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
@@ -26,7 +29,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SummaryTopListsFragment extends Fragment {
+public class SummaryActivity extends AppCompatActivity {
     private List<TopSongsListItem> topSongsList = new ArrayList<>();
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
@@ -47,7 +50,7 @@ public class SummaryTopListsFragment extends Fragment {
         public TextView getSongNumberView() { return songNumberView; }
         public ImageView getCoverView() { return albumCoverView; }
     }
-    private class MyAdapter extends RecyclerView.Adapter<SummaryTopListsFragment.MyViewHolder> {
+    private class MyAdapter extends RecyclerView.Adapter<SummaryActivity.MyViewHolder> {
         private Context context;
         private List<TopSongsListItem> items;
 
@@ -58,12 +61,12 @@ public class SummaryTopListsFragment extends Fragment {
 
         @NonNull
         @Override
-        public SummaryTopListsFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new SummaryTopListsFragment.MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view, parent, false));
+        public SummaryActivity.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new SummaryActivity.MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view, parent, false));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull SummaryTopListsFragment.MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull SummaryActivity.MyViewHolder holder, int position) {
             holder.songNameView.setText(items.get(position).getSongName());
             holder.songNumberView.setText(Integer.toString(position + 1));
             holder.albumCoverView.setImageDrawable(items.get(position).getImage());
@@ -75,12 +78,12 @@ public class SummaryTopListsFragment extends Fragment {
         }
     }
 
-    public SummaryTopListsFragment() {}
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadTopSongsList();
+        setContentView(R.layout.activity_summary);
+
+
     }
 
     private void loadTopSongsList() {
@@ -98,9 +101,9 @@ public class SummaryTopListsFragment extends Fragment {
         }
 
         // TODO I don't know how to fix this error
-        RecyclerView recyclerView = getView().findViewById(R.id.recycler_view2);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new SummaryTopListsFragment.MyAdapter(getActivity().getApplicationContext(), topSongsList));
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topSongsList));
     }
 
     private TopSongsListItem getTopSongsListItemFromJSON(JSONObject temp) {

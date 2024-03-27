@@ -27,7 +27,7 @@ public class UserTrackHistory {
 
     public UserTrackHistory() {}
 
-    public void genHistory() {
+    public void retrieveHistory() {
         LocalDateTime currentMoment = LocalDateTime.now();
         LocalDateTime endPoint = currentMoment.minusYears(1);
         while (endPoint.compareTo(currentMoment) < 0) {

@@ -5,12 +5,8 @@ import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
-import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
-import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 import com.group3.spotifywrapped.utils.UserTrackHistory;
-
-import org.json.JSONObject;
 
 public class SummaryStatsFragment extends Fragment {
     public SummaryStatsFragment() {
@@ -22,7 +18,7 @@ public class SummaryStatsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         UserTrackHistory history = new UserTrackHistory();
-        history.genHistory();
+        history.retrieveHistory();
         Log.d("SummaryStatsFragment", "Result: " + history.size() + ", " + history.toString());
     }
 }

@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DevStartActivity extends AppCompatActivity {
-    Map<String, Button> buttons = new HashMap<String, Button>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,23 +24,6 @@ public class DevStartActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
-
-        buttons.put("summary_activity_button", (Button)findViewById(R.id.summary_activity_button));
-        buttons.get("summary_activity_button").setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(DevStartActivity.this, TopSongsSummaryActivity.class);
-                startActivity(i);
-            }
-        });
-        buttons.put("TestActivity", (Button)findViewById(R.id.testActivity));
-        buttons.get("TestActivity").setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(DevStartActivity.this, TestActivity.class);
-                startActivity(i);
-            }
         });
     }
 }

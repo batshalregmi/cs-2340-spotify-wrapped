@@ -55,7 +55,7 @@ public class SummaryPagerActivity extends AppCompatActivity {
                 getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
         );
-        adapter.addItem(new SummaryStatsFragment());
+        adapter.addItem(new SummaryTopListsFragment());
 
         ViewPager pager = findViewById(R.id.pager);
         pager.setAdapter(adapter);

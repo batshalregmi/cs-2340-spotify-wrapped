@@ -69,5 +69,7 @@ public class SignUpScreen extends AppCompatActivity {
                 }
             }
         });
+
+
     }
 }

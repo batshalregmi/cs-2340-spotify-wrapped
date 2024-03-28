@@ -10,14 +10,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.group3.spotifywrapped.SummaryView.SummaryActivity;
 import com.group3.spotifywrapped.database.AppDatabase;
 import com.group3.spotifywrapped.database.User;
 import com.group3.spotifywrapped.database.UserDao;
 
-import com.group3.spotifywrapped.SummaryView.SummaryPagerActivity;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -70,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                             getToken();
                             while (!tokenRecieved);
                             Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
-                            Intent i = new Intent(LoginActivity.this, SummaryPagerActivity.class);
+                            Intent i = new Intent(LoginActivity.this, SummaryActivity.class);
                             startActivity(i);
                         } else {
                             Log.e("LoginActivity", "Login credentials invalid");
@@ -105,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
 
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
-            Log.d("LoginActivity", "Response: " + response.getAccessToken());
+            //Log.d("LoginActivity", "Response: " + response.getAccessToken());
             activeUser.sToken = response.getAccessToken();
             tokenRecieved = true;
         }

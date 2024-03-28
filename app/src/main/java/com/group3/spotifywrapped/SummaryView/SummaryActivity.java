@@ -16,9 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
@@ -83,15 +85,14 @@ public class SummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
-
+        loadTopSongsList();
     }
 
     private void loadTopSongsList() {
         if (LoginActivity.activeUser.sToken != null) {
-            JSONObject topSongsResponse = SpotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=10", LoginActivity.activeUser.sToken, "GET"); // assuming TestActivity already executed to load token/code
+            JSONObject topSongsResponse = SpotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=5", LoginActivity.activeUser.sToken, "GET"); // assuming TestActivity already executed to load token/code
             try {
                 JSONArray topSongs = topSongsResponse.getJSONArray("items");
-                topSongsList.clear();
                 for (int i = 0; i < topSongs.length(); ++i) {
                     topSongsList.add(getTopSongsListItemFromJSON(topSongs.getJSONObject(i)));
                 }
@@ -100,7 +101,6 @@ public class SummaryActivity extends AppCompatActivity {
             }
         }
 
-        // TODO I don't know how to fix this error
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topSongsList));

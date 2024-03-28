@@ -4,35 +4,34 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AccessToken {
-    private String mToken;
+    private AtomicReference<String> mToken;
     private LocalDateTime lastTokenGeneratedDate;
+    private Thread updateThread;
 
-    public AccessToken(String src) {
-        String[] data = src.split(",");
-        this.mToken = data[0];
-        this.lastTokenGeneratedDate = LocalDateTime.parse(data[1]);
+    public AccessToken(String initialToken) {
+        this.mToken = new AtomicReference<>(initialToken);
+        this.lastTokenGeneratedDate = LocalDateTime.now();
+        updateThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    if (LocalDateTime.now().isBefore(lastTokenGeneratedDate.plusMinutes(50))) {
+                        renewToken();
+                    }
+                }
+            }
+        });
+        updateThread.start();
     }
 
     public String getToken() throws IllegalAccessError {
-        Date currentDateTemp = Calendar.getInstance().getTime();
-        LocalDateTime currentDate = currentDateTemp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        currentDate.minusHours(1);
-        if (currentDate.isAfter(lastTokenGeneratedDate)) {
-            throw new IllegalAccessError("Token is old");
-        }
-        return mToken;
+        return mToken.get();
     }
 
-    public void setToken(String mToken) throws IllegalAccessError {
-        Date currentDateTemp = Calendar.getInstance().getTime();
-        LocalDateTime currentDate = currentDateTemp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        currentDate.minusHours(1);
-        if (currentDate.isBefore(lastTokenGeneratedDate)) {
-            throw new IllegalAccessError("Token has not expired yet");
-        }
-        this.mToken = mToken;
-        this.lastTokenGeneratedDate = currentDate;
+    private void renewToken() {
+
     }
 }

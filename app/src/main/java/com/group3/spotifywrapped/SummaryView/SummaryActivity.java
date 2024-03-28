@@ -28,6 +28,7 @@ import java.util.List;
 public class SummaryActivity extends AppCompatActivity {
     private List<TopListItem> topSongsList = new ArrayList<>();
     private List<TopListItem> topArtistsList = new ArrayList<>();
+    private List<TopListItem> topAlbumList = new ArrayList<>();
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView songNameView;
@@ -81,16 +82,35 @@ public class SummaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_summary);
 
         loadTopSongsList();
-        loadTopAtristsList();
+        loadTopArtistsList();
+        loadTopAlbumsList();
     }
 
-    private void loadTopAtristsList() {
+    private void loadTopAlbumsList() {
+        if (LoginActivity.activeUser.sToken != null) {
+            JSONObject topArtistsResponse = SpotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=5", LoginActivity.activeUser.sToken, "GET");
+            try {
+                JSONArray topSongs = topArtistsResponse.getJSONArray("items");
+                for (int i = 0; i < topSongs.length(); ++i) {
+                    topAlbumList.add(getTopArtistsListItemFromJSON(topSongs.getJSONObject(i).getJSONObject("album")));
+                }
+            } catch (Exception e) {
+                Log.e("SummaryActivity", "Exception when parsing JSON response: " + e);
+            }
+        }
+
+        RecyclerView recyclerView = findViewById(R.id.top_albums_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topAlbumList));
+    }
+
+    private void loadTopArtistsList() {
         if (LoginActivity.activeUser.sToken != null) {
             JSONObject topArtistsResponse = SpotifyApiHelper.callSpotifyApi("/me/top/artists?time_range=long_term&limit=5", LoginActivity.activeUser.sToken, "GET");
             try {
                 JSONArray topSongs = topArtistsResponse.getJSONArray("items");
                 for (int i = 0; i < topSongs.length(); ++i) {
-                    topSongsList.add(getTopArtistsListItemFromJSON(topSongs.getJSONObject(i)));
+                    topArtistsList.add(getTopArtistsListItemFromJSON(topSongs.getJSONObject(i)));
                 }
             } catch (Exception e) {
                 Log.e("SummaryActivity", "Exception when parsing JSON response: " + e);

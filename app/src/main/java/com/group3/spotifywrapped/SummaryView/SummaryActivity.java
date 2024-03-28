@@ -10,17 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
@@ -32,7 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SummaryActivity extends AppCompatActivity {
-    private List<TopSongsListItem> topSongsList = new ArrayList<>();
+    private List<TopListItem> topSongsList = new ArrayList<>();
+    private List<TopListItem> topArtistsList = new ArrayList<>();
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView songNameView;
@@ -54,9 +49,9 @@ public class SummaryActivity extends AppCompatActivity {
     }
     private class MyAdapter extends RecyclerView.Adapter<SummaryActivity.MyViewHolder> {
         private Context context;
-        private List<TopSongsListItem> items;
+        private List<TopListItem> items;
 
-        public MyAdapter(Context context, List<TopSongsListItem> items) {
+        public MyAdapter(Context context, List<TopListItem> items) {
             this.context = context;
             this.items = items;
         }
@@ -69,7 +64,7 @@ public class SummaryActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull SummaryActivity.MyViewHolder holder, int position) {
-            holder.songNameView.setText(items.get(position).getSongName());
+            holder.songNameView.setText(items.get(position).getName());
             holder.songNumberView.setText(Integer.toString(position + 1));
             holder.albumCoverView.setImageDrawable(items.get(position).getImage());
         }
@@ -86,6 +81,25 @@ public class SummaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_summary);
 
         loadTopSongsList();
+        loadTopAtristsList();
+    }
+
+    private void loadTopAtristsList() {
+        if (LoginActivity.activeUser.sToken != null) {
+            JSONObject topArtistsResponse = SpotifyApiHelper.callSpotifyApi("/me/top/artists?time_range=long_term&limit=5", LoginActivity.activeUser.sToken, "GET");
+            try {
+                JSONArray topSongs = topArtistsResponse.getJSONArray("items");
+                for (int i = 0; i < topSongs.length(); ++i) {
+                    topSongsList.add(getTopArtistsListItemFromJSON(topSongs.getJSONObject(i)));
+                }
+            } catch (Exception e) {
+                Log.e("SummaryActivity", "Exception when parsing JSON response: " + e);
+            }
+        }
+
+        RecyclerView recyclerView = findViewById(R.id.top_artists_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topArtistsList));
     }
 
     private void loadTopSongsList() {
@@ -101,17 +115,17 @@ public class SummaryActivity extends AppCompatActivity {
             }
         }
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.top_tracks_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topSongsList));
     }
 
-    private TopSongsListItem getTopSongsListItemFromJSON(JSONObject temp) {
+    private TopListItem getTopSongsListItemFromJSON(JSONObject src) {
         Drawable albumCover;
         String name;
         try {
-            name = temp.getString("name");
-            String albumCoverURL = temp
+            name = src.getString("name");
+            String albumCoverURL = src
                     .getJSONObject("album")
                     .getJSONArray("images")
                     .getJSONObject(0)
@@ -122,6 +136,24 @@ public class SummaryActivity extends AppCompatActivity {
             albumCover = Drawable.createFromPath("C:\\CodeProjects\\Android Studio\\Projects\\cs-2340-spotify-wrapped\\app\\src\\main\\res\\drawable\\test_album_cover.jpeg");
             name = "N/A";
         }
-        return new TopSongsListItem(name, albumCover);
+        return new TopListItem(name, albumCover);
+    }
+
+    private TopListItem getTopArtistsListItemFromJSON(JSONObject src) {
+        Drawable albumCover;
+        String name;
+        try {
+            name = src.getString("name");
+            String albumCoverURL = src
+                    .getJSONArray("images")
+                    .getJSONObject(0)
+                    .getString("url");
+            albumCover = SpotifyApiHelper.loadImageFromURL(albumCoverURL);
+        } catch (Exception e) {
+            Log.d("SummaryActivity", e.toString());
+            albumCover = Drawable.createFromPath("C:\\CodeProjects\\Android Studio\\Projects\\cs-2340-spotify-wrapped\\app\\src\\main\\res\\drawable\\test_album_cover.jpeg");
+            name = "N/A";
+        }
+        return new TopListItem(name, albumCover);
     }
 }

@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
 
+
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "local-database").build();
         userDao = db.userDao();
@@ -72,4 +73,5 @@ public class LoginActivity extends AppCompatActivity {
 
             ;
         });
+
     }}

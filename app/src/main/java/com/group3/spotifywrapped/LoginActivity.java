@@ -21,28 +21,42 @@ public class LoginActivity extends AppCompatActivity {
     EditText username;
     EditText password;
     Button loginButton;
-    TextView createAccount;
+    Button createAccount;
 
     public AppDatabase db;
     public static UserDao userDao;
     public Thread thread;
 
+    private void prompt(String text) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(LoginActivity.this, text, Toast.LENGTH_SHORT).show();
+            }
+        }).start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Comp init
         setContentView(R.layout.activity_login);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
+        createAccount = findViewById(R.id.signupText);
 
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "local-database").build();
-        userDao = db.userDao();
+        // Database init
+        //db = Room.databaseBuilder(getApplicationContext(),
+                //AppDatabase.class, "local-database").build();
+        //userDao = db.userDao();
+
+        db = null;
+        userDao = null;
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             String dbPassword;
-            String dbEmail;
 
             @Override
             public void onClick(View view) {
@@ -54,25 +68,21 @@ public class LoginActivity extends AppCompatActivity {
                 });
                 thread.start();
 
-                // TODO: This is kind of buggy, will fix tonight
-                // Only works with emails with the password "password"
                 if (password.getText().toString().equals(dbPassword)) {
                     password = (EditText) findViewById(R.id.password);
                     loginButton = findViewById(R.id.loginButton);
                     loginButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (username.getText().toString().equals("user") && password.getText().toString().equals("1234")) {
-                                Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                            if (password.getText().toString().equals(dbPassword)) {
+                                prompt("Login Successful!");
                             } else {
-                                Toast.makeText(LoginActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
+                                prompt("Login Failed!");
                             }
-                            System.out.println(password.getText().toString());
-                            System.out.println(dbPassword);
                         }
                     });
                 }
-                createAccount = findViewById(R.id.createAccount);
+                
                 createAccount.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -80,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(i);
                     }
                 });
-
             }
 
         });

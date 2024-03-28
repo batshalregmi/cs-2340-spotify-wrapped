@@ -83,7 +83,7 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <TextView
+    <Button
         android:id="@+id/signupText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -9,10 +9,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.group3.spotifywrapped.database.AppDatabase;
+import com.group3.spotifywrapped.database.User;
 import com.group3.spotifywrapped.database.UserDao;
 
 
-public class SignUpScreen extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
     EditText username;
     EditText password;
     EditText confirmPassword;
@@ -57,14 +58,31 @@ public class SignUpScreen extends AppCompatActivity {
                 // Only works with emails with the password "password"
 
                 if (username.getText().toString().equals(dbUsername)) {
-                    Toast.makeText(SignUpScreen.this, "The Username has been taken!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "The Username has been taken!", Toast.LENGTH_SHORT).show();
                 }
-                if(!password.equals(confirmPassword)) {
-                    Toast.makeText(SignUpScreen.this, "Your passwords do not match!", Toast.LENGTH_SHORT).show();
+                if(!password.getText().toString().equals(confirmPassword.getText().toString())) {
+                    Toast.makeText(SignUpActivity.this, "Your passwords do not match!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(SignUpScreen.this, "New Account Created!", Toast.LENGTH_SHORT).show();
+                    addNewUser(username.getText().toString(), password.getText().toString(), name.getText().toString(), email.getText().toString());
+                    Toast.makeText(SignUpActivity.this, "New Account Created!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void addNewUser(String user, String pass, String fName, String sEmail) {
+        User trentUser = new User(
+                user,
+                pass,
+                sEmail,
+                fName
+        );
+        Thread insertUserThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                userDao.insert(trentUser);
+            }
+        });
+        insertUserThread.start();
     }
 }

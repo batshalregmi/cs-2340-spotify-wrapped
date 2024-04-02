@@ -10,11 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.List;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.group3.spotifywrapped.SummaryView.SummaryActivity;
 import com.group3.spotifywrapped.database.AppDatabase;
 import com.group3.spotifywrapped.database.User;
@@ -52,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
+        Button signUpButton = findViewById(R.id.signUpButton);
 
         AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "local-database")
                 .fallbackToDestructiveMigration()
@@ -80,6 +79,14 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
                 loginThread.start();
+            }
+        });
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -115,13 +122,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void addTestUser() {
         User trentUser = new User(
-                "0",
                 "tdoiron0",
                 "1234",
                 "trentwdoiron@gmail.com",
-                "Trent Doiron",
-                null,
-                null
+                "Trent Doiron"
         );
         Thread insertUserThread = new Thread(new Runnable() {
             @Override

@@ -61,6 +61,33 @@
                 android:backgroundTint="@color/green"
                 android:text="Link Spotify Account" />
 
+            <Button
+                android:id="@+id/unlink_spotify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/green"
+                android:text="Unlink Spotify Account" />
+
+            <Button
+                android:id="@+id/change_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/green"
+                android:text="Change Password" />
+
+            <Button
+                android:id="@+id/delete_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:backgroundTint="#FF0000"
+                android:text="Delete Account" />
+
 
         </LinearLayout>
 

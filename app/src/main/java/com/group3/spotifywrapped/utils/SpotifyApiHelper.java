@@ -1,11 +1,16 @@
 package com.group3.spotifywrapped.utils;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
+
+import com.group3.spotifywrapped.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
@@ -14,22 +19,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+// STATIC class which we can use without instantiating
 public class SpotifyApiHelper {
-    private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    private Call mCall;
-    private JSONObject retValue = null;
-    private String mAccessToken, mAccessCode;
+    private static final OkHttpClient mOkHttpClient = new OkHttpClient();
+    private static Call mCall;
+    private static JSONObject retValue = null;
 
-
-    public SpotifyApiHelper(String accessToken, String accessCode) {
-        if (accessToken == null || accessCode == null) {
-            throw new IllegalArgumentException("Invalid arguments");
-        }
-        mAccessToken = accessToken;
-        mAccessCode = accessCode;
-    }
-    public JSONObject callSpotifyApi(String endpoint, String method) {
-
+    public static JSONObject callSpotifyApi(String endpoint, String mAccessToken, String method) {
+        Log.d("SpotifyApiHelper", "Making Spotify API call...");
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1" + endpoint)
                 .addHeader("Authorization", "Bearer " + mAccessToken)
@@ -60,7 +57,6 @@ public class SpotifyApiHelper {
                     Log.d("HTTP", "Failed to fetch data: " + response);
                 }
                 retValue = jsonObject;
-                Log.d("SpotifyApiHelper", "Response: " + retValue);
                 latch.countDown();
             }
         });
@@ -73,5 +69,10 @@ public class SpotifyApiHelper {
         }
 
         return retValue;
+    }
+
+    public static Drawable loadImageFromURL(String url) throws java.io.IOException {
+        InputStream is = (InputStream)(new URL(url).getContent());
+        return Drawable.createFromStream(is, "src name");
     }
 }

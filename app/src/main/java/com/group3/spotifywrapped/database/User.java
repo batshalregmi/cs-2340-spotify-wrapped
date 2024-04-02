@@ -10,9 +10,6 @@ public class User {
 
     @NonNull
     @PrimaryKey
-    public String id;
-
-    @ColumnInfo(name = "username")
     public String username;
 
     @ColumnInfo(name = "password")
@@ -24,22 +21,16 @@ public class User {
     @ColumnInfo(name = "name")
     public String name;
 
-    @ColumnInfo(name = "spotify_token")
     public String sToken;
-
-    @ColumnInfo(name = "spotify_code")
     public String sCode;
 
     public User(){}
 
-    public User(@NonNull String id, String username, String password, String email, String name, String sToken, String sCode) {
-        this.id = id;
+    public User(@NonNull String username, String password, String email, String name) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.name = name;
-        this.sToken = sToken;
-        this.sCode = sCode;
     }
 
     @Override

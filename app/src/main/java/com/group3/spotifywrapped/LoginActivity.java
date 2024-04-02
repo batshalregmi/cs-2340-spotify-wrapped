@@ -115,13 +115,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void addTestUser() {
         User trentUser = new User(
-                "0",
                 "tdoiron0",
                 "1234",
                 "trentwdoiron@gmail.com",
-                "Trent Doiron",
-                null,
-                null
+                "Trent Doiron"
         );
         Thread insertUserThread = new Thread(new Runnable() {
             @Override

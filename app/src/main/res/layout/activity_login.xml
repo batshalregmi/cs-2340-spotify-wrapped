@@ -8,10 +8,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@drawable/loginpageartnew"
     tools:context=".MainActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="wrap_content"
         android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
@@ -82,4 +83,14 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+    <TextView
+        android:id="@+id/signupText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:padding="8dp"
+        android:text="@string/not_yet_registered"
+        android:textAlignment="center"
+        android:textColor="@color/green"
+        android:textSize="14sp" />
 </LinearLayout>

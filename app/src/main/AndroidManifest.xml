@@ -46,10 +46,10 @@
             android:name=".DevStartActivity"
             android:exported="true">
         </activity>
-        <activity android:name=".settingsActivity"
+        <activity android:name=".MainAppViews.SettingsActivity"
             android:exported="true">
         </activity>
-        <activity android:name=".MainView.MainPageActivity"
+        <activity android:name=".MainAppViews.MainPageActivity"
             android:exported="true">
         </activity>
     </application>

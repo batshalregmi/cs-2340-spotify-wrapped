@@ -13,8 +13,7 @@ import android.widget.EditText;
 
 import java.util.List;
 
-import com.group3.spotifywrapped.MainView.MainPageActivity;
-import com.group3.spotifywrapped.SummaryView.SummaryActivity;
+import com.group3.spotifywrapped.MainAppViews.MainPageActivity;
 import com.group3.spotifywrapped.database.AppDatabase;
 import com.group3.spotifywrapped.database.User;
 import com.group3.spotifywrapped.database.UserDao;

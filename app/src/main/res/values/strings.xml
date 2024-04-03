@@ -48,4 +48,9 @@
     <string name="password">Password</string>
     <string name="not_yet_registered">Not yet registered? Sign Up Now!</string>
     <string name="string_Settings">Settings</string>
+    <string name="username_spotify">username</string>
+    <string name="link_spotify_account">Link Spotify Account</string>
+    <string name="unlink_spotify_account">Unlink Spotify Account</string>
+    <string name="change_password">Change Password</string>
+    <string name="delete_account">Delete Account</string>
 </resources>

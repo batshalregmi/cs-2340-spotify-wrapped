@@ -1,12 +1,25 @@
 package com.group3.spotifywrapped.MainAppViews;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
+import com.group3.spotifywrapped.utils.SpotifyApiHelper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -31,7 +44,8 @@ public class SettingsActivity extends AppCompatActivity {
             return false;
         });
 
-
+        ImageView profilePicture = findViewById(R.id.userProfilePicture);
+        JSONObject userResponse = SpotifyApiHelper.callSpotifyApi("/me", LoginActivity.activeUser.sToken, "GET");
+        Log.d("SettingsActivity", "User response: " + userResponse.toString());
     }
-
 }

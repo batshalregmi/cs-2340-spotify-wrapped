@@ -38,7 +38,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/userProfilePicture"
                 android:layout_width="330dp"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"

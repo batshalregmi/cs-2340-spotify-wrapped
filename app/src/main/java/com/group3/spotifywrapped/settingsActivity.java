@@ -1,32 +1,14 @@
 package com.group3.spotifywrapped;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.StrictMode;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.group3.spotifywrapped.utils.SpotifyApiHelper;
-import com.spotify.sdk.android.auth.AuthorizationClient;
-import com.spotify.sdk.android.auth.AuthorizationRequest;
-import com.spotify.sdk.android.auth.AuthorizationResponse;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import database.AppDatabase;
-import database.User;
-import database.UserDao;
 
 public class settingsActivity extends AppCompatActivity {
     Dialog myDialog;
@@ -36,6 +18,7 @@ public class settingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         myDialog = new Dialog(this);
     }
+    // function that opens the custompopup.xml layout when the user clicks on the "Change Password" button
     public void ShowPopup(View v) {
         TextView txtclose;
         Button btnFollow;

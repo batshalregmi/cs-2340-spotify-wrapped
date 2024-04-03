@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/loginpageartnew"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,8 +83,8 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/signupText"
+    <Button
+        android:id="@+id/signUpButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -92,5 +92,6 @@
         android:text="@string/not_yet_registered"
         android:textAlignment="center"
         android:textColor="@color/green"
+        android:background="#00000000"
         android:textSize="14sp" />
 </LinearLayout>

@@ -1,4 +1,4 @@
-package database;
+package com.group3.spotifywrapped.database;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -21,25 +21,21 @@ public class User {
     @ColumnInfo(name = "name")
     public String name;
 
-    @ColumnInfo(name = "spotify_token")
     public String sToken;
 
-    @ColumnInfo(name = "spotify_code")
     public String sCode;
 
     public User(){}
 
-    public User(@NonNull String username, String password, String email, String name, String sToken, String sCode) {
-        this.username = username.toLowerCase();
+    public User(@NonNull String username, String password, String email, String name) {
+        this.username = username;
         this.password = password;
         this.email = email;
         this.name = name;
-        this.sToken = sToken;
-        this.sCode = sCode;
     }
 
     @Override
     public String toString() {
-        return (name + "\n" + email + "\n" + password + "\n" + sToken + "\n" + sCode);
+        return ("User");
     }
 }

@@ -1,4 +1,4 @@
-package database;
+package com.group3.spotifywrapped.database;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -29,15 +29,12 @@ public interface UserDao {
     @Query("SELECT name FROM user WHERE username LIKE :username LIMIT 1")
     String getName(String username);
 
-    @Query("SELECT password FROM user WHERE username LIKE :username LIMIT 1")
-    String getPassword(String username);
-
-    @Query("SELECT username FROM user WHERE username LIKE :username LIMIT 1")
-    String getUsername(String username);
-
-    @Query("SELECT * FROM user WHERE email LIKE :email LIMIT 1")
-    List<User> findByEmail(String email);
+    @Query("SELECT * FROM user WHERE username LIKE :username AND password LIKE :password LIMIT 1")
+    List<User> findByLoginInfo(String username, String password);
 
     @Query("SELECT * FROM user WHERE username LIKE :username LIMIT 1")
     List<User> findByUsername(String username);
+
+    @Query("SELECT * FROM user WHERE password LIKE :password LIMIT 1")
+    List<User> findByPassword(String password);
 }

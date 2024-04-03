@@ -1,6 +1,6 @@
 package com.group3.spotifywrapped;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
+
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,14 +19,18 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import database.AppDatabase;
-import database.User;
-import database.UserDao;
+import com.group3.spotifywrapped.database.AppDatabase;
+import com.group3.spotifywrapped.database.UserDao;
 
-public class MainActivity extends AppCompatActivity {
-
-    public static final String CLIENT_ID = "9e3e12a5d1424f068a20c6db49de005c";
+public class TestActivity extends AppCompatActivity {
+    public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
     public static final String REDIRECT_URI = "spotifywrapped://auth";
+    public static final String[] SCOPES = new String[] {
+            "user-read-recently-played",
+            "user-library-read",
+            "user-read-email",
+            "user-top-read"
+    };
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_test);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
         StrictMode.setThreadPolicy(policy);
@@ -57,41 +61,17 @@ public class MainActivity extends AppCompatActivity {
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
         ImageView profileImageView = (ImageView) findViewById(R.id.mainMenuImageView);
 
-        // Init Databae
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "local-database").build();
-        userDao = db.userDao();
-
-        // Query Call
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                userDao.insert(new User(
-                        "Parker1234",
-                        "Poiu1234",
-                        "Parker.arneson@gmail.com",
-                        "Parker Arneson",
-                        "lakwndlkand",
-                        "985690493"
-                ));
-                // Set the click listeners for the buttons
-
-                tokenBtn.setOnClickListener((v) -> {
-                    getToken();
-                });
-
-                codeBtn.setOnClickListener((v) -> {
-                    getCode();
-                });
-
-                profileBtn.setOnClickListener((v) -> {
-                    onGetUserProfileClicked();
-                });
-            }
+        tokenBtn.setOnClickListener((v) -> {
+            getToken();
         });
-        thread.start();
 
-                // Set the click listeners for the buttons
+        codeBtn.setOnClickListener((v) -> {
+            getCode();
+        });
+
+        profileBtn.setOnClickListener((v) -> {
+            onGetUserProfileClicked();
+        });
     }
 
 
@@ -103,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void getToken() {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
-        AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_TOKEN_REQUEST_CODE, request);
+        AuthorizationClient.openLoginActivity(TestActivity.this, AUTH_TOKEN_REQUEST_CODE, request);
     }
 
     /**
@@ -114,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void getCode() {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.CODE);
-        AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_CODE_REQUEST_CODE, request);
+        AuthorizationClient.openLoginActivity(TestActivity.this, AUTH_CODE_REQUEST_CODE, request);
     }
 
 
@@ -144,21 +124,19 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper(mAccessToken, mAccessCode);
-        JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", "GET");
-            try {
-                test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            SpotifyApiHelper spotifyApiHelper = new SpotifyApiHelper();
+            JSONObject test = spotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=1", mAccessToken, "GET");
+            test = test.getJSONArray("items").getJSONObject(0).getJSONObject("album");
             try {
                 Log.d("JSON", "FORMATTED DATA: " + test.toString(3));
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
+        } catch (Exception e) {
+            Log.e("TestActivity", e.toString());
         }
-
+    }
     /**
      * Creates a UI thread to update a TextView in the background
      * Reduces UI latency and makes the system perform more consistently
@@ -179,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email", "user-top-read"}) // <--- Change the scope of your requested token here
+                .setScopes(SCOPES) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
                 .build();
     }

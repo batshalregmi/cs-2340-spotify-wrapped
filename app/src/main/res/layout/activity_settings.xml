@@ -49,7 +49,7 @@
 
             <TextView
                 android:layout_marginTop="5dp"
-                android:id="@+id/username"
+                android:id="@+id/usernameUnderPicture"
                 android:layout_width="93dp"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"

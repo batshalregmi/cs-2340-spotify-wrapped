@@ -1,23 +1,35 @@
-package com.group3.spotifywrapped;
+package com.group3.spotifywrapped.MainView;
 
-import android.app.Activity;
+import static com.group3.spotifywrapped.SignUpActivity.userDao;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.group3.spotifywrapped.MainView.MainPageActivity;
+import com.group3.spotifywrapped.LoginActivity;
+import com.group3.spotifywrapped.R;
+import com.group3.spotifywrapped.settingsActivity;
 
-public class settingsActivity extends AppCompatActivity {
+public class MainPageActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_postlogin);
+        TextView welcomeMessage = findViewById(R.id.welcomeMessage);
+        String username = LoginActivity.activeUser.username;
+        String message = (String) welcomeMessage.getText();
+        welcomeMessage.setText(message.replace("{{USER}}", username));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -25,11 +37,12 @@ public class settingsActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.bottom_wrapped:
-                        Intent intent1 = new Intent(settingsActivity.this, MainPageActivity.class);
-                        startActivity(intent1);
+
                         break;
 
                     case R.id.bottom_settings:
+                        Intent intent1 = new Intent(MainPageActivity.this, settingsActivity.class);
+                        startActivity(intent1);
                         break;
 
 //                    case R.id.ic_books:
@@ -53,7 +66,5 @@ public class settingsActivity extends AppCompatActivity {
             }
         });
 
-
     }
-
 }

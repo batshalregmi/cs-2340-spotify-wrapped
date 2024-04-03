@@ -46,6 +46,12 @@
             android:name=".DevStartActivity"
             android:exported="true">
         </activity>
+        <activity android:name=".settingsActivity"
+            android:exported="true">
+        </activity>
+        <activity android:name=".MainView.MainPageActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

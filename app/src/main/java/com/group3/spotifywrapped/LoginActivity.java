@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import java.util.List;
 
+import com.group3.spotifywrapped.MainView.MainPageActivity;
 import com.group3.spotifywrapped.SummaryView.SummaryActivity;
 import com.group3.spotifywrapped.database.AppDatabase;
 import com.group3.spotifywrapped.database.User;
@@ -71,7 +72,8 @@ public class LoginActivity extends AppCompatActivity {
                             getToken();
                             while (!tokenRecieved);
                             Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
-                            Intent i = new Intent(LoginActivity.this, SummaryActivity.class);
+                            //switch to settings screen
+                            Intent i = new Intent(view.getContext(), MainPageActivity.class);
                             startActivity(i);
                         } else {
                             Log.e("LoginActivity", "Login credentials invalid");

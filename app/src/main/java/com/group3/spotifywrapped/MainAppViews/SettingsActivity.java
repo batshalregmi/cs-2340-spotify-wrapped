@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,6 +47,30 @@ public class SettingsActivity extends AppCompatActivity {
 
         ImageView profilePicture = findViewById(R.id.userProfilePicture);
         JSONObject userResponse = SpotifyApiHelper.callSpotifyApi("/me", LoginActivity.activeUser.sToken, "GET");
+        String imageUrl = null;
         Log.d("SettingsActivity", "User response: " + userResponse.toString());
+        try {
+            JSONArray images = userResponse.getJSONArray("images");
+            Log.d("SettingsActivity", "User images: " + images.toString());
+            if (images.length() > 0) {
+
+                imageUrl = images.getJSONObject(images.length() - 1).getString("url");
+                Log.d("SettingsActivity", "User image URL: " + imageUrl);
+
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        if (imageUrl != null) {
+            Drawable image = null;
+            try {
+                image = SpotifyApiHelper.loadImageFromURL(imageUrl);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            profilePicture.setImageDrawable(image);
+        }
+        TextView username = findViewById(R.id.usernameUnderPicture);
+        username.setText(LoginActivity.activeUser.username);
     }
 }

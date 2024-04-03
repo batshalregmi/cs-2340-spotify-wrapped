@@ -39,13 +39,13 @@
 
             <ImageView
                 android:id="@+id/userProfilePicture"
-                android:layout_width="330dp"
+                android:layout_width="320dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:layout_height="wrap_content"
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/usernameUnderPicture"
                 android:layout_width="93dp"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"

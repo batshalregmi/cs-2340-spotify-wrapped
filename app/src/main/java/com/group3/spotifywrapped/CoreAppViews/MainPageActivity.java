@@ -1,4 +1,4 @@
-package com.group3.spotifywrapped.MainAppViews;
+package com.group3.spotifywrapped.CoreAppViews;
 
 import android.content.Intent;
 import android.os.Bundle;

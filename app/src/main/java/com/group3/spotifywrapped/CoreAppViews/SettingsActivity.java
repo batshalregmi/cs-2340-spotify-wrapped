@@ -1,4 +1,4 @@
-package com.group3.spotifywrapped.MainAppViews;
+package com.group3.spotifywrapped.CoreAppViews;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -19,8 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -65,6 +63,15 @@ public class SettingsActivity extends AppCompatActivity {
             Drawable image = null;
             try {
                 image = SpotifyApiHelper.loadImageFromURL(imageUrl);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            profilePicture.setImageDrawable(image);
+        } else if (imageUrl == null) {
+            Drawable image = null;
+            try {
+                image = SpotifyApiHelper.loadImageFromURL("https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png");
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

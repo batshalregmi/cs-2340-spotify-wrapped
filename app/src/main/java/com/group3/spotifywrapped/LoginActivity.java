@@ -1,6 +1,5 @@
 package com.group3.spotifywrapped;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,15 +9,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.group3.spotifywrapped.SummaryView.SummaryActivity;
-import com.group3.spotifywrapped.database.AppDatabase;
+import com.group3.spotifywrapped.summary.SummaryActivity;
+import com.group3.spotifywrapped.database.MyDatabase;
 import com.group3.spotifywrapped.database.User;
-import com.group3.spotifywrapped.database.UserDao;
+import com.group3.spotifywrapped.database.MyDatabaseDao;
 
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -39,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static User activeUser;
 
-    private UserDao userDao;
+    private MyDatabaseDao userDao;
     private boolean tokenRecieved = false;
 
     @Override
@@ -53,12 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         EditText password = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "local-database")
-                .fallbackToDestructiveMigration()
-                .build();
-        userDao = db.userDao();
-
-        //addTestUser();
+        MyDatabase db = MyDatabase.getInstance(this);
+        userDao = db.myDatabaseDao();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,21 +106,5 @@ public class LoginActivity extends AppCompatActivity {
             activeUser.sToken = response.getAccessToken();
             tokenRecieved = true;
         }
-    }
-
-    private void addTestUser() {
-        User trentUser = new User(
-                "tdoiron0",
-                "1234",
-                "trentwdoiron@gmail.com",
-                "Trent Doiron"
-        );
-        Thread insertUserThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                userDao.insert(trentUser);
-            }
-        });
-        insertUserThread.start();
     }
 }

@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.group3.spotifywrapped.database.AppDatabase;
-import com.group3.spotifywrapped.database.UserDao;
+import com.group3.spotifywrapped.database.MyDatabaseDao;
+import com.group3.spotifywrapped.database.MyDatabase;
 
 
 public class SignUpScreen extends AppCompatActivity {
@@ -20,8 +20,8 @@ public class SignUpScreen extends AppCompatActivity {
     EditText name;
     Button createAccountButton;
 
-    public AppDatabase db;
-    public static UserDao userDao;
+    public MyDatabase db;
+    public static MyDatabaseDao userDao;
     public Thread thread;
 
 
@@ -37,8 +37,8 @@ public class SignUpScreen extends AppCompatActivity {
         createAccountButton = findViewById(R.id.createAccount);
 
         db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "local-database").build();
-        userDao = db.userDao();
+                MyDatabase.class, "local-database").build();
+        userDao = db.myDatabaseDao();
 
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             String dbUsername;

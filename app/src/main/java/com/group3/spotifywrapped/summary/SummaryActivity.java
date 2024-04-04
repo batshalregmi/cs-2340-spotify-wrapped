@@ -1,4 +1,4 @@
-package com.group3.spotifywrapped.SummaryView;
+package com.group3.spotifywrapped.summary;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -15,20 +15,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
+import com.group3.spotifywrapped.database.DatabaseHelper;
+import com.group3.spotifywrapped.database.Track;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SummaryActivity extends AppCompatActivity {
-    private List<TopListItem> topSongsList = new ArrayList<>();
+    private List<TopListItem> topTracksList = new ArrayList<>();
     private List<TopListItem> topArtistsList = new ArrayList<>();
-    private List<TopListItem> topAlbumList = new ArrayList<>();
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView songNameView;
@@ -81,63 +80,22 @@ public class SummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
-        loadTopSongsList();
-        loadTopArtistsList();
-        loadTopAlbumsList();
+        loadTopTracksList();
     }
 
-    private void loadTopAlbumsList() {
-        if (LoginActivity.activeUser.sToken != null) {
-            JSONObject topArtistsResponse = SpotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=5", LoginActivity.activeUser.sToken, "GET");
+    private void loadTopTracksList() {
+        List<Track> tracks = DatabaseHelper.getTracks(SummarySelectorActivity.getSelectedEntry().id);
+        for (Track it : tracks) {
             try {
-                JSONArray topSongs = topArtistsResponse.getJSONArray("items");
-                for (int i = 0; i < topSongs.length(); ++i) {
-                    topAlbumList.add(getTopArtistsListItemFromJSON(topSongs.getJSONObject(i).getJSONObject("album")));
-                }
+                topTracksList.add(new TopListItem(it.name, SpotifyApiHelper.loadImageFromURL(it.albumUrl)));
             } catch (Exception e) {
-                Log.e("SummaryActivity", "Exception when parsing JSON response: " + e);
-            }
-        }
-
-        RecyclerView recyclerView = findViewById(R.id.top_albums_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topAlbumList));
-    }
-
-    private void loadTopArtistsList() {
-        if (LoginActivity.activeUser.sToken != null) {
-            JSONObject topArtistsResponse = SpotifyApiHelper.callSpotifyApi("/me/top/artists?time_range=long_term&limit=5", LoginActivity.activeUser.sToken, "GET");
-            try {
-                JSONArray topSongs = topArtistsResponse.getJSONArray("items");
-                for (int i = 0; i < topSongs.length(); ++i) {
-                    topArtistsList.add(getTopArtistsListItemFromJSON(topSongs.getJSONObject(i)));
-                }
-            } catch (Exception e) {
-                Log.e("SummaryActivity", "Exception when parsing JSON response: " + e);
-            }
-        }
-
-        RecyclerView recyclerView = findViewById(R.id.top_artists_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topArtistsList));
-    }
-
-    private void loadTopSongsList() {
-        if (LoginActivity.activeUser.sToken != null) {
-            JSONObject topSongsResponse = SpotifyApiHelper.callSpotifyApi("/me/top/tracks?time_range=long_term&limit=5", LoginActivity.activeUser.sToken, "GET"); // assuming TestActivity already executed to load token/code
-            try {
-                JSONArray topSongs = topSongsResponse.getJSONArray("items");
-                for (int i = 0; i < topSongs.length(); ++i) {
-                    topSongsList.add(getTopSongsListItemFromJSON(topSongs.getJSONObject(i)));
-                }
-            } catch (Exception e) {
-                Log.e("SummaryActivity", "Exception when parsing JSON response: " + e);
+                Log.e("SummaryActivity", e.toString());
             }
         }
 
         RecyclerView recyclerView = findViewById(R.id.top_tracks_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topSongsList));
+        recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topTracksList));
     }
 
     private TopListItem getTopSongsListItemFromJSON(JSONObject src) {

@@ -10,6 +10,9 @@ public class User {
 
     @NonNull
     @PrimaryKey
+    public long id;
+
+    @ColumnInfo(name = "username")
     public String username;
 
     @ColumnInfo(name = "password")

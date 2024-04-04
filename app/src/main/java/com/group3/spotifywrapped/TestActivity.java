@@ -19,8 +19,8 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.group3.spotifywrapped.database.AppDatabase;
-import com.group3.spotifywrapped.database.UserDao;
+import com.group3.spotifywrapped.database.MyDatabase;
+import com.group3.spotifywrapped.database.MyDatabaseDao;
 
 public class TestActivity extends AppCompatActivity {
     public static final String CLIENT_ID = "cd5187268d4a421cbfda59e5c697e429";
@@ -38,8 +38,8 @@ public class TestActivity extends AppCompatActivity {
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
-    public AppDatabase db;
-    public static UserDao userDao;
+    public MyDatabase db;
+    public static MyDatabaseDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

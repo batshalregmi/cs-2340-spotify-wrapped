@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="400dp"
+    app:cardCornerRadius="30dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
+<!--    <ImageView-->
+<!--        android:contentDescription="@string/popup_background"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:src="@drawable/popup"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        />-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txtclose"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:background="@color/green"
+            android:gravity="center"
+            android:text="X"
+            android:textColor="@color/green"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/loginText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Change Password"
+            android:textAlignment="center"
+            android:textColor="@color/green"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordParent"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/black"
+            app:cursorColor="@color/purple"
+            app:hintEnabled="false"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/green">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/newPassword"
+                android:layout_width="280dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/custom_edittext"
+                android:defaultFocusHighlightEnabled="false"
+                android:hint="New Password"
+                android:textColorHint="#7DD5BF"
+                android:inputType="textPassword"
+                android:padding="8dp"
+                app:hintAnimationEnabled="false" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirm_passwordParent"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"
+            app:cursorColor="@color/purple"
+            app:hintEnabled="false"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/green">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/confirm_newPassword"
+                android:layout_width="280dp"
+                android:layout_height="50dp"
+                android:background="@drawable/custom_edittext"
+                android:defaultFocusHighlightEnabled="false"
+                android:layout_gravity="center"
+                android:hint="Confirm Password"
+                android:textColorHint="#7DD5BF"
+
+                android:inputType="textPassword"
+                android:padding="8dp"
+                app:hintAnimationEnabled="false" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/green"
+            android:text="Submit"
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="#B7E1D7"
-    tools:context=".CoreAppViews.SettingsActivity">
+    tools:context=".settingsActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="570dp"
@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:background="@color/green"
             android:orientation="vertical"
             android:padding="20dp">
             <TextView
@@ -38,13 +39,16 @@
                 android:textStyle="bold" />
 
             <ImageView
+                android:layout_marginTop="5dp"
                 android:id="@+id/userProfilePicture"
-                android:layout_width="320dp"
-                android:layout_height="200dp"
+                android:layout_width="330dp"
                 android:layout_gravity="center"
-                tools:src="@tools:sample/avatars" />
+                android:layout_height="60dp"
+                tools:src="@tools:sample/avatars"
+                android:contentDescription="spotify profile picture" />
 
             <TextView
+                android:layout_marginTop="5dp"
                 android:id="@+id/usernameUnderPicture"
                 android:layout_width="93dp"
                 android:layout_height="wrap_content"
@@ -54,12 +58,40 @@
 
             <Button
                 android:id="@+id/link_to_spotify"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="Link Spotify Account" />
+                android:text="link spotify acount" />
+
+            <Button
+                android:id="@+id/unlink_spotify"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/green"
+                android:text="unlink spotify account" />
+
+            <Button
+                android:onClick="ShowPopup"
+                android:id="@+id/change_password"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/green"
+                android:text="change password" />
+
+            <Button
+                android:id="@+id/delete_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:backgroundTint="#FF0000"
+                android:text="delete account" />
 
 
         </LinearLayout>
@@ -68,6 +100,7 @@
 
 
     </androidx.cardview.widget.CardView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

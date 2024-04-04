@@ -1,7 +1,6 @@
 package com.group3.spotifywrapped.summary;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +20,8 @@ import com.group3.spotifywrapped.database.DatabaseHelper;
 import com.group3.spotifywrapped.database.Track;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class SummaryActivity extends AppCompatActivity {

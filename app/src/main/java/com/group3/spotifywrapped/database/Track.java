@@ -27,10 +27,7 @@ public class Track {
     public String albumUrl;
 
     @Ignore
-    public Track(String name, String albumUrl) {
-        this.name = name;
-        this.albumUrl = albumUrl;
-    }
+    public Track() {}
 
     public Track(@NonNull long id, long summaryEntryId, int rank, String name, String albumUrl) {
         this.id = id;
@@ -41,10 +38,10 @@ public class Track {
     }
 
     public static Track parseFromJSON(JSONObject src) throws Exception {
-        return new Track(
-                src.getString("name"),
-                src.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url")
-        );
+        Track newTrack = new Track();
+        newTrack.name = src.getString("name");
+        newTrack.albumUrl = src.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url");
+        return newTrack;
     }
 
     @Override
@@ -58,11 +55,6 @@ public class Track {
             return false;
         }
         Track temp = (Track)o;
-        return id == temp.id && summaryEntryId == temp.summaryEntryId && name.equals(temp.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
+        return id == temp.id && summaryEntryId == temp.summaryEntryId && rank == temp.rank && name.equals(temp.name) && albumUrl.equals(temp.albumUrl);
     }
 }

@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.DatabaseHelper;
+import com.group3.spotifywrapped.database.SummaryEntry;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
+
+import java.util.List;
 
 public class SummarySelectorActivity extends AppCompatActivity {
     private static Long selectedEntryId = null;
@@ -18,6 +22,23 @@ public class SummarySelectorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary_selector);
+
+        List<SummaryEntry> summaryEntries = DatabaseHelper.getUserSummaryEntries(LoginActivity.activeUser.id);
+        LinearLayout ll = findViewById(R.id.linearLayout);
+        for (SummaryEntry it : summaryEntries) {
+            Button btn = new Button(this);
+            btn.setText(it.dateCreated);
+            btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectedEntryId = it.id;
+                    Intent i = new Intent(SummarySelectorActivity.this, SummaryActivity.class);
+                    startActivity(i);
+                }
+            });
+            ll.addView(btn);
+        }
 
         Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
         genSummaryButton.setOnClickListener(new View.OnClickListener() {

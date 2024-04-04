@@ -9,6 +9,8 @@ import androidx.room.PrimaryKey;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Comparator;
+
 @Entity
 public class Artist {
     @NonNull
@@ -28,10 +30,7 @@ public class Artist {
     public String profilePictureUrl;
 
     @Ignore
-    public Artist(String name, String profilePictureUrl) {
-        this.name = name;
-        this.profilePictureUrl = profilePictureUrl;
-    }
+    public Artist() {}
     public Artist(@NonNull long id, long summaryEntryId, int rank, String name, String profilePictureUrl) {
         this.id = id;
         this.summaryEntryId = summaryEntryId;
@@ -41,10 +40,10 @@ public class Artist {
     }
 
     public static Artist parseFromJSON(JSONObject src) throws Exception {
-        return new Artist(
-                src.getString("name"),
-                src.getJSONArray("images").getJSONObject(0).getString("url")
-        );
+        Artist newArtist = new Artist();
+        newArtist.name = src.getString("name");
+        newArtist.profilePictureUrl = src.getJSONArray("images").getJSONObject(0).getString("url");
+        return newArtist;
     }
 
     @Override
@@ -58,11 +57,6 @@ public class Artist {
             return false;
         }
         Artist temp = (Artist)o;
-        return (id == temp.id) && (name.equals(temp.name));
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
+        return id == temp.id && summaryEntryId == temp.summaryEntryId && rank == temp.rank && name.equals(temp.name) && profilePictureUrl.equals(temp.profilePictureUrl);
     }
 }

@@ -37,6 +37,8 @@ public interface MyDatabaseDao {
     List<Long> getSummaryEntryIdList();
     @Query("SELECT * FROM summaryentry WHERE id LIKE :id")
     List<SummaryEntry> findSummaryEntriesById(long id);
+    @Query("SELECT * FROM summaryentry WHERE user_id LIKE :userId")
+    List<SummaryEntry> findSummaryEntryByUserId(long userId);
 
     //Artist methods
     @Insert

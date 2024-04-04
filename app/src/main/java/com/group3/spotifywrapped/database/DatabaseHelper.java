@@ -7,6 +7,7 @@ import com.group3.spotifywrapped.LoginActivity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,6 +48,22 @@ public class DatabaseHelper {
 
         return newEntryId;
     }
+    public static List<SummaryEntry> getUserSummaryEntries(long userId) {
+        AtomicReference<List<SummaryEntry>> result = new AtomicReference<>();
+        Thread getEntriesThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                result.set(db.myDatabaseDao().findSummaryEntryByUserId(userId));
+            }
+        });
+        getEntriesThread.start();
+        try {
+            getEntriesThread.join();
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", e.toString());
+        }
+        return result.get();
+    }
     public static List<Track> getTracks(long summaryEntryId) {
         AtomicReference<List<Track>> result = new AtomicReference<>();
         Thread getTracksThread = new Thread(new Runnable() {
@@ -61,6 +78,13 @@ public class DatabaseHelper {
         } catch (Exception e) {
             Log.e("DatabaseHelper", e.toString());
         }
+        result.get().sort(new Comparator<Track>() {
+            @Override
+            public int compare(Track o1, Track o2) {
+                return o1.rank - o2.rank;
+            }
+        });
+
         return result.get();
     }
     public static List<Artist> getArtists(long summaryEntryId) {
@@ -77,6 +101,13 @@ public class DatabaseHelper {
         } catch (Exception e) {
             Log.e("DatabaseHelper", e.toString());
         }
+        result.get().sort(new Comparator<Artist>() {
+            @Override
+            public int compare(Artist o1, Artist o2) {
+                return o1.rank - o2.rank;
+            }
+        });
+
         return result.get();
     }
 

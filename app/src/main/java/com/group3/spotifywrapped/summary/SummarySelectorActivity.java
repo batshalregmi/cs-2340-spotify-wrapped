@@ -14,6 +14,7 @@ import com.group3.spotifywrapped.database.DatabaseHelper;
 import com.group3.spotifywrapped.database.SummaryEntry;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class SummarySelectorActivity extends AppCompatActivity {
@@ -27,7 +28,8 @@ public class SummarySelectorActivity extends AppCompatActivity {
         LinearLayout ll = findViewById(R.id.linearLayout);
         for (SummaryEntry it : summaryEntries) {
             Button btn = new Button(this);
-            btn.setText(it.dateCreated);
+            LocalDateTime date = LocalDateTime.parse(it.dateCreated);
+            btn.setText(String.format("%s-%d-%d\n%d:%d", date.getMonthValue(), date.getDayOfMonth(), date.getYear(), date.getHour(), date.getMinute()));
             btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -4,14 +4,11 @@ import android.content.Context;
 import android.util.Log;
 
 import com.group3.spotifywrapped.LoginActivity;
-import com.group3.spotifywrapped.R;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class DatabaseHelper {
@@ -28,7 +25,7 @@ public class DatabaseHelper {
         db = MyDatabase.getInstance(context);
     }
 
-    public static void addSummaryEntry(List<String> trackNames, List<String> artistNames, List<String> albumURLs, List<String> artistProfilePictureURLs) {
+    public static long insertSummaryEntry(List<Artist> artists, List<Track> tracks) {
         long newEntryId = genUniqueId(GenUniqueIdMode.SUMMARY_ENTRY);
         SummaryEntry newEntry = new SummaryEntry(
                 newEntryId,
@@ -36,6 +33,19 @@ public class DatabaseHelper {
                 LocalDateTime.now().toString()
         );
         asyncInsertSummaryEntry(newEntry);
+
+        for (Artist it : artists) {
+            it.id = genUniqueId(GenUniqueIdMode.ARTIST);
+            it.summaryEntryId = newEntryId;
+            asyncInsertArtist(it);
+        }
+        for (Track it : tracks) {
+            it.id = genUniqueId(GenUniqueIdMode.TRACK);
+            it.summaryEntryId = newEntryId;
+            asyncInsertTrack(it);
+        }
+
+        return newEntryId;
     }
     public static List<Track> getTracks(long summaryEntryId) {
         AtomicReference<List<Track>> result = new AtomicReference<>();

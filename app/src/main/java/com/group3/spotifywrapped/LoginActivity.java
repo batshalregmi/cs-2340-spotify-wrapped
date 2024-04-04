@@ -13,11 +13,13 @@ import android.widget.EditText;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.group3.spotifywrapped.database.DatabaseHelper;
 import com.group3.spotifywrapped.summary.SummaryActivity;
 import com.group3.spotifywrapped.database.MyDatabase;
 import com.group3.spotifywrapped.database.User;
 import com.group3.spotifywrapped.database.MyDatabaseDao;
 
+import com.group3.spotifywrapped.summary.SummarySelectorActivity;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -47,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        DatabaseHelper.init(this);
+
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
@@ -68,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                             getToken();
                             while (!tokenRecieved.get());
                             Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
-                            Intent i = new Intent(LoginActivity.this, SummaryActivity.class);
+                            Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
                             startActivity(i);
                         } else {
                             Log.e("LoginActivity", "Login credentials invalid");

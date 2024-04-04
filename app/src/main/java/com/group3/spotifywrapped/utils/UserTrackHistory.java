@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+//I wanted to do something with this but turned out ot be too much work. Might implement later with a server for fun - Trent
 public class UserTrackHistory {
     private class TrackHistoryItem {
         public String id;

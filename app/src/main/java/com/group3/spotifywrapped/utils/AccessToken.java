@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicReference;
 
+//Not required but could be cool to use to manage a token - Trent
 public class AccessToken {
     private AtomicReference<String> mToken;
     private LocalDateTime lastTokenGeneratedDate;
@@ -32,6 +33,6 @@ public class AccessToken {
     }
 
     private void renewToken() {
-
+        //renew pipeline
     }
 }

@@ -3,7 +3,11 @@ package com.group3.spotifywrapped.database;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @Entity
 public class Artist {
@@ -23,12 +27,24 @@ public class Artist {
     @ColumnInfo(name = "profile_picture_url")
     public String profilePictureUrl;
 
+    @Ignore
+    public Artist(String name, String profilePictureUrl) {
+        this.name = name;
+        this.profilePictureUrl = profilePictureUrl;
+    }
     public Artist(@NonNull long id, long summaryEntryId, int rank, String name, String profilePictureUrl) {
         this.id = id;
         this.summaryEntryId = summaryEntryId;
         this.rank = rank;
         this.name = name;
         this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public static Artist parseFromJSON(JSONObject src) throws Exception {
+        return new Artist(
+                src.getString("name"),
+                src.getJSONArray("images").getJSONObject(0).getString("url")
+        );
     }
 
     @Override

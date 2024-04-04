@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.R;
+import com.group3.spotifywrapped.database.Artist;
 import com.group3.spotifywrapped.database.DatabaseHelper;
 import com.group3.spotifywrapped.database.Track;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
@@ -80,11 +81,27 @@ public class SummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
+        loadTopArtistsList();
         loadTopTracksList();
     }
 
+    private void loadTopArtistsList() {
+        List<Artist> artists = DatabaseHelper.getArtists(SummarySelectorActivity.getSelectedEntryId());
+        for (Artist it : artists) {
+            try {
+                topArtistsList.add(new TopListItem(it.name, SpotifyApiHelper.loadImageFromURL(it.profilePictureUrl)));
+            } catch (Exception e) {
+                Log.e("SummaryActivity", e.toString());
+            }
+        }
+
+        RecyclerView recyclerView = findViewById(R.id.top_artists_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topArtistsList));
+    }
+
     private void loadTopTracksList() {
-        List<Track> tracks = DatabaseHelper.getTracks(SummarySelectorActivity.getSelectedEntry().id);
+        List<Track> tracks = DatabaseHelper.getTracks(SummarySelectorActivity.getSelectedEntryId());
         for (Track it : tracks) {
             try {
                 topTracksList.add(new TopListItem(it.name, SpotifyApiHelper.loadImageFromURL(it.albumUrl)));
@@ -96,42 +113,5 @@ public class SummaryActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.top_tracks_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topTracksList));
-    }
-
-    private TopListItem getTopSongsListItemFromJSON(JSONObject src) {
-        Drawable albumCover;
-        String name;
-        try {
-            name = src.getString("name");
-            String albumCoverURL = src
-                    .getJSONObject("album")
-                    .getJSONArray("images")
-                    .getJSONObject(0)
-                    .getString("url");
-            albumCover = SpotifyApiHelper.loadImageFromURL(albumCoverURL);
-        } catch (Exception e) {
-            Log.d("SummaryActivity", e.toString());
-            albumCover = Drawable.createFromPath("C:\\CodeProjects\\Android Studio\\Projects\\cs-2340-spotify-wrapped\\app\\src\\main\\res\\drawable\\test_album_cover.jpeg");
-            name = "N/A";
-        }
-        return new TopListItem(name, albumCover);
-    }
-
-    private TopListItem getTopArtistsListItemFromJSON(JSONObject src) {
-        Drawable albumCover;
-        String name;
-        try {
-            name = src.getString("name");
-            String albumCoverURL = src
-                    .getJSONArray("images")
-                    .getJSONObject(0)
-                    .getString("url");
-            albumCover = SpotifyApiHelper.loadImageFromURL(albumCoverURL);
-        } catch (Exception e) {
-            Log.d("SummaryActivity", e.toString());
-            albumCover = Drawable.createFromPath("C:\\CodeProjects\\Android Studio\\Projects\\cs-2340-spotify-wrapped\\app\\src\\main\\res\\drawable\\test_album_cover.jpeg");
-            name = "N/A";
-        }
-        return new TopListItem(name, albumCover);
     }
 }

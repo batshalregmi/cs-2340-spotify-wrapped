@@ -22,7 +22,7 @@ public interface MyDatabaseDao {
     @Query("SELECT * FROM user WHERE id LIKE :id")
     List<User> findUsersById(long id);
     @Query("SELECT id FROM user")
-    Set<Long> getUserIdSet();
+    List<Long> getUserIdSet();
     @Query("SELECT * FROM user WHERE username LIKE :username AND password LIKE :password LIMIT 1")
     List<User> findByLoginInfo(String username, String password);
 
@@ -35,7 +35,7 @@ public interface MyDatabaseDao {
     void updateSummaryEntry(SummaryEntry summaryEntry);
 
     @Query("SELECT id FROM summaryentry")
-    Set<Long> getSummaryEntryIdSet();
+    List<Long> getSummaryEntryIdSet();
     @Query("SELECT * FROM summaryentry WHERE id LIKE :id")
     List<SummaryEntry> findSummaryEntriesById(long id);
 
@@ -48,7 +48,7 @@ public interface MyDatabaseDao {
     void updateArtist(Artist artist);
 
     @Query("SELECT id FROM artist")
-    Set<Long> getArtistIdSet();
+    List<Long> getArtistIdSet();
     @Query("SELECT * FROM artist WHERE id LIKE :id")
     List<Artist> findArtistsById(long id);
     @Query("SELECT * FROM artist WHERE summary_entry_id = :id")
@@ -63,7 +63,7 @@ public interface MyDatabaseDao {
     void updateTrack(Track track);
 
     @Query("SELECT id FROM track")
-    Set<Long> getTrackIdSet();
+    List<Long> getTrackIdSet();
     @Query("SELECT * FROM track WHERE id LIKE :id")
     List<Track> findTracksById(long id);
     @Query("SELECT * FROM track WHERE summary_entry_id = :id")

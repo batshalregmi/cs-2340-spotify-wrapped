@@ -29,7 +29,8 @@ public class User {
 
     public User(){}
 
-    public User(@NonNull String username, String password, String email, String name) {
+    public User(@NonNull long id, String username, String password, String email, String name) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;

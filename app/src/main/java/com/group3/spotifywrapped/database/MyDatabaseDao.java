@@ -7,7 +7,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.List;
-import java.util.Set;
 
 @Dao
 public interface MyDatabaseDao {
@@ -22,7 +21,7 @@ public interface MyDatabaseDao {
     @Query("SELECT * FROM user WHERE id LIKE :id")
     List<User> findUsersById(long id);
     @Query("SELECT id FROM user")
-    List<Long> getUserIdSet();
+    List<Long> getUserIdList();
     @Query("SELECT * FROM user WHERE username LIKE :username AND password LIKE :password LIMIT 1")
     List<User> findByLoginInfo(String username, String password);
 
@@ -35,7 +34,7 @@ public interface MyDatabaseDao {
     void updateSummaryEntry(SummaryEntry summaryEntry);
 
     @Query("SELECT id FROM summaryentry")
-    List<Long> getSummaryEntryIdSet();
+    List<Long> getSummaryEntryIdList();
     @Query("SELECT * FROM summaryentry WHERE id LIKE :id")
     List<SummaryEntry> findSummaryEntriesById(long id);
 
@@ -48,7 +47,7 @@ public interface MyDatabaseDao {
     void updateArtist(Artist artist);
 
     @Query("SELECT id FROM artist")
-    List<Long> getArtistIdSet();
+    List<Long> getArtistIdList();
     @Query("SELECT * FROM artist WHERE id LIKE :id")
     List<Artist> findArtistsById(long id);
     @Query("SELECT * FROM artist WHERE summary_entry_id = :id")

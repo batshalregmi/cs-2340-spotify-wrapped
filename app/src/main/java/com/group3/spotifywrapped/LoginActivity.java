@@ -11,8 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.group3.spotifywrapped.summary.SummaryActivity;
 import com.group3.spotifywrapped.database.MyDatabase;
@@ -38,8 +37,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public static User activeUser;
 
-    private MyDatabaseDao userDao;
-    private boolean tokenRecieved = false;
+    private MyDatabaseDao myDatabaseDao;
+    private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +52,9 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.loginButton);
 
         MyDatabase db = MyDatabase.getInstance(this);
-        userDao = db.myDatabaseDao();
+        myDatabaseDao = db.myDatabaseDao();
+
+        //addTestUser();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,11 +62,11 @@ public class LoginActivity extends AppCompatActivity {
                 Thread loginThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        List<User> usersFound = userDao.findByLoginInfo(username.getText().toString(), password.getText().toString());
+                        List<User> usersFound = myDatabaseDao.findByLoginInfo(username.getText().toString(), password.getText().toString());
                         if (!usersFound.isEmpty()) {
                             activeUser = usersFound.get(0);
                             getToken();
-                            while (!tokenRecieved);
+                            while (!tokenRecieved.get());
                             Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
                             Intent i = new Intent(LoginActivity.this, SummaryActivity.class);
                             startActivity(i);
@@ -104,7 +105,24 @@ public class LoginActivity extends AppCompatActivity {
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             //Log.d("LoginActivity", "Response: " + response.getAccessToken());
             activeUser.sToken = response.getAccessToken();
-            tokenRecieved = true;
+            tokenRecieved.set(true);
         }
+    }
+
+    private void addTestUser() {
+        User trentUser = new User(
+                0,
+                "tdoiron0",
+                "1234",
+                "trentwdoiron@gmail.com",
+                "Trent Doiron"
+        );
+        Thread insertUserThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                myDatabaseDao.insertUser(trentUser);
+            }
+        });
+        insertUserThread.start();
     }
 }

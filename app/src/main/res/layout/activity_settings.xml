@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@color/green"
+            android:background="#D4EFE9"
             android:orientation="vertical"
             android:padding="20dp">
             <TextView
@@ -39,11 +39,11 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:id="@+id/userProfilePicture"
                 android:layout_width="330dp"
                 android:layout_gravity="center"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 tools:src="@tools:sample/avatars"
                 android:contentDescription="spotify profile picture" />
 
@@ -51,6 +51,7 @@
                 android:layout_marginTop="5dp"
                 android:id="@+id/usernameUnderPicture"
                 android:layout_width="93dp"
+                android:paddingTop="5dp"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:layout_gravity="center"
@@ -63,7 +64,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="link spotify acount" />
+                android:text="Go to Spotify" />
 
             <Button
                 android:id="@+id/unlink_spotify"

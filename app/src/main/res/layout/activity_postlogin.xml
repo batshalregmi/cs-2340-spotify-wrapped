@@ -18,14 +18,14 @@
         app:layout_constraintVertical_bias="1.0">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/welcomeMessage"
             android:layout_width="wrap_content"
             android:layout_height="49dp"
             android:layout_marginTop="300dp"
-            android:textColor="@color/green"
+            android:text="Welcome {{USER}} to your Spotify Wrapped!"
 
-            android:text="Welcome (username) to your Spotify Wrapped!"
             android:textAlignment="center"
+            android:textColor="@color/green"
             android:textSize="20sp" />
 
     </FrameLayout>

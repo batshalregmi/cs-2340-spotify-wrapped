@@ -5,11 +5,12 @@
     <item
         android:id="@+id/bottom_wrapped"
         android:icon="@drawable/ic_wrapped"
-        android:title="Wrapped" />
+        android:title=""
+        />
 
     <item
         android:id="@+id/bottom_settings"
         android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+        android:title="" />
 
 </menu>

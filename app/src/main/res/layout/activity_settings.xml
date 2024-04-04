@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#B7E1D7"
+    tools:context=".settingsActivity">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="570dp"
+        android:layout_margin="30dp"
+        android:layout_marginBottom="0dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="20dp"
+        android:background="@color/green"
+        android:backgroundTint="#D4EFE9">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/settings_background"
+            android:orientation="vertical"
+            android:padding="20dp">
+            <TextView
+                android:id="@+id/settingsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/string_Settings"
+                android:backgroundTint="@color/cardview_dark_background"
+                android:textAlignment="center"
+                android:textColor="@color/green"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <ImageView
+
+                android:layout_marginTop="5dp"
+                android:id="@+id/userProfilePicture"
+                android:layout_width="330dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                tools:src="@tools:sample/avatars"
+                android:contentDescription="spotify profile picture" />
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:id="@+id/usernameUnderPicture"
+                android:layout_width="93dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:text="@string/username_spotify" />
+
+            <Button
+                android:id="@+id/link_to_spotify"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/green"
+                android:text="@string/link_spotify_account" />
+
+            <Button
+                android:id="@+id/unlink_spotify"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/green"
+                android:text="@string/unlink_spotify_account" />
+
+            <Button
+                android:onClick="ShowPopup"
+                android:id="@+id/change_password"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/green"
+                android:text="@string/change_password" />
+
+            <Button
+                android:id="@+id/delete_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:backgroundTint="#FF0000"
+                android:text="@string/delete_account" />
+
+
+        </LinearLayout>
+
+
+
+
+    </androidx.cardview.widget.CardView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="13dp"
+            android:background="@drawable/bottom_background"
+            android:elevation="3dp"
+            app:itemIconSize="55dp"
+            app:itemIconTint="@drawable/item_selector"
+            app:itemRippleColor="@android:color/transparent"
+            app:menu="@menu/bottom_menu" />
+    </RelativeLayout>
+
+</LinearLayout>

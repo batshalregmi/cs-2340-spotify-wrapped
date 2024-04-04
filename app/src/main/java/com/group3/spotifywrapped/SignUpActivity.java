@@ -65,6 +65,7 @@ public class SignUpActivity extends AppCompatActivity {
                 } else {
                     addNewUser(username.getText().toString(), password.getText().toString(), name.getText().toString(), email.getText().toString());
                     Toast.makeText(SignUpActivity.this, "New Account Created!", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });

@@ -18,8 +18,8 @@ public interface MyDatabaseDao {
     @Update
     void updateUser(User user);
 
-    @Query("SELECT * FROM user WHERE id LIKE :id")
-    List<User> findUsersById(long id);
+    @Query("SELECT * FROM user WHERE id LIKE :id LIMIT 1")
+    User findUserById(long id);
     @Query("SELECT * FROM user WHERE username LIKE :username AND password LIKE :password LIMIT 1")
     User findUserByCredentials(String username, String password);
     @Query("SELECT id FROM user")

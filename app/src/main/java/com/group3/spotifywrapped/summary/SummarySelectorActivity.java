@@ -36,7 +36,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
         for (SummaryEntry it : summaryEntries) {
             Button btn = new Button(this);
             LocalDateTime date = LocalDateTime.parse(it.dateCreated);
-            btn.setText(String.format("%s-%d-%d\n%d:%d", date.getMonthValue(), date.getDayOfMonth(), date.getYear(), date.getHour(), date.getMinute()));
+            btn.setText(String.format("%d-%d-%d\n%d:%02d %s", date.getMonthValue(), date.getDayOfMonth(), date.getYear(), ((date.getHour() == 12 || date.getHour() == 0) ? 12 : date.getHour() % 12), date.getMinute(), ((date.getHour() >= 12) ? "PM" : "AM")));
             btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override

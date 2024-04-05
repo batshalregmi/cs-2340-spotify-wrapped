@@ -15,6 +15,7 @@ import com.group3.spotifywrapped.database.SummaryEntry;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 public class SummarySelectorActivity extends AppCompatActivity {
@@ -25,6 +26,12 @@ public class SummarySelectorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_summary_selector);
 
         List<SummaryEntry> summaryEntries = DatabaseHelper.getUserSummaryEntries(LoginActivity.activeUser.id);
+        summaryEntries.sort(new Comparator<SummaryEntry>() {
+            @Override
+            public int compare(SummaryEntry o1, SummaryEntry o2) {
+                return LocalDateTime.parse(o1.dateCreated).compareTo(LocalDateTime.parse(o2.dateCreated));
+            }
+        });
         LinearLayout ll = findViewById(R.id.linearLayout);
         for (SummaryEntry it : summaryEntries) {
             Button btn = new Button(this);

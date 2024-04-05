@@ -25,7 +25,21 @@ public class DatabaseHelper {
     public static void init(Context context) {
         db = MyDatabase.getInstance(context);
     }
-
+    public static boolean usernameExists(String username) {
+        return db.myDatabaseDao().getUsernameList().contains(username);
+    }
+    public static boolean passwordExists(String password) {
+        return db.myDatabaseDao().getPasswordList().contains(password);
+    }
+    public static boolean loginCredentialsExist(String username, String password) {
+        return usernameExists(username) || passwordExists(password);
+    }
+    public static long insertUser(User newUser) {
+        long newUserId = genUniqueId(GenUniqueIdMode.USER);
+        newUser.id = newUserId;
+        asyncInsertUser(newUser);
+        return newUserId;
+    }
     public static long insertSummaryEntry(List<Artist> artists, List<Track> tracks) {
         long newEntryId = genUniqueId(GenUniqueIdMode.SUMMARY_ENTRY);
         SummaryEntry newEntry = new SummaryEntry(
@@ -47,6 +61,22 @@ public class DatabaseHelper {
         }
 
         return newEntryId;
+    }
+    public static User getUserByLoginCredentials(String username, String password) {
+        AtomicReference<User> result = new AtomicReference<>();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                result.set(db.myDatabaseDao().findUserByCredentials(username, password));
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch(Exception e) {
+            Log.e("DatabaseHelper", e.toString());
+        }
+        return result.get();
     }
     public static List<SummaryEntry> getUserSummaryEntries(long userId) {
         AtomicReference<List<SummaryEntry>> result = new AtomicReference<>();
@@ -170,6 +200,14 @@ public class DatabaseHelper {
             result = rand.nextLong();
         }
         return result;
+    }
+    private static void asyncInsertUser(User newUser) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                db.myDatabaseDao().insertUser(newUser);
+            }
+        }).start();
     }
     private static void asyncInsertSummaryEntry(SummaryEntry newEntry) {
         new Thread(new Runnable() {

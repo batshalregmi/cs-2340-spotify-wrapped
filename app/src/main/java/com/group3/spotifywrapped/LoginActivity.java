@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public static User activeUser;
 
-    private MyDatabaseDao myDatabaseDao;
     private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
 
     @Override
@@ -55,20 +54,14 @@ public class LoginActivity extends AppCompatActivity {
         EditText password = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
 
-        MyDatabase db = MyDatabase.getInstance(this);
-        myDatabaseDao = db.myDatabaseDao();
-
-        //addTestUser();
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Thread loginThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        List<User> usersFound = myDatabaseDao.findByLoginInfo(username.getText().toString(), password.getText().toString());
-                        if (!usersFound.isEmpty()) {
-                            activeUser = usersFound.get(0);
+                        if (DatabaseHelper.loginCredentialsExist(username.getText().toString(), password.getText().toString())) {
+                            activeUser = DatabaseHelper.getUserByLoginCredentials(username.getText().toString(), password.getText().toString());
                             getToken();
                             while (!tokenRecieved.get());
                             Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
@@ -111,22 +104,5 @@ public class LoginActivity extends AppCompatActivity {
             activeUser.sToken = response.getAccessToken();
             tokenRecieved.set(true);
         }
-    }
-
-    private void addTestUser() {
-        User trentUser = new User(
-                0,
-                "tdoiron0",
-                "1234",
-                "trentwdoiron@gmail.com",
-                "Trent Doiron"
-        );
-        Thread insertUserThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                myDatabaseDao.insertUser(trentUser);
-            }
-        });
-        insertUserThread.start();
     }
 }

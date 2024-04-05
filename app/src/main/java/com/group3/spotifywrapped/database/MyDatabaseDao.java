@@ -20,10 +20,14 @@ public interface MyDatabaseDao {
 
     @Query("SELECT * FROM user WHERE id LIKE :id")
     List<User> findUsersById(long id);
+    @Query("SELECT * FROM user WHERE username LIKE :username AND password LIKE :password LIMIT 1")
+    User findUserByCredentials(String username, String password);
     @Query("SELECT id FROM user")
     List<Long> getUserIdList();
-    @Query("SELECT * FROM user WHERE username LIKE :username AND password LIKE :password LIMIT 1")
-    List<User> findByLoginInfo(String username, String password);
+    @Query("SELECT username FROM user")
+    List<String> getUsernameList();
+    @Query("SELECT password FROM user")
+    List<String> getPasswordList();
 
     //SummaryEntry methods
     @Insert

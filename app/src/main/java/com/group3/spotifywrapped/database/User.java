@@ -3,6 +3,8 @@ package com.group3.spotifywrapped.database;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Insert;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -27,8 +29,8 @@ public class User {
     public String sToken;
     public String sCode;
 
+    @Ignore
     public User(){}
-
     public User(@NonNull long id, String username, String password, String email, String name) {
         this.id = id;
         this.username = username;
@@ -39,6 +41,6 @@ public class User {
 
     @Override
     public String toString() {
-        return ("User");
+        return String.format("User::%s", name);
     }
 }

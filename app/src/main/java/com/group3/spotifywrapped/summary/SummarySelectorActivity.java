@@ -20,27 +20,16 @@ import java.util.List;
 
 public class SummarySelectorActivity extends AppCompatActivity {
     private static Long selectedEntryId = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary_selector);
 
-        List<SummaryEntry> summaryEntries = DatabaseHelper.getUserSummaryEntries(LoginActivity.activeUser.id);
-        summaryEntries.sort(new Comparator<SummaryEntry>() {
-            @Override
-            public int compare(SummaryEntry o1, SummaryEntry o2) {
-                return LocalDateTime.parse(o1.dateCreated).compareTo(LocalDateTime.parse(o2.dateCreated));
-            }
-        });
-
         Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
         genSummaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedEntryId = DatabaseHelper.insertSummaryEntry(
-                        SpotifyApiHelper.getTopArtistList(),
-                        SpotifyApiHelper.getTopTrackList()
-                );
                 Intent i = new Intent(SummarySelectorActivity.this, SummaryActivity.class);
                 startActivity(i);
             }

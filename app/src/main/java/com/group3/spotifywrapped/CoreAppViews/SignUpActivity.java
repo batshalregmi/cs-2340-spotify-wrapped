@@ -1,19 +1,27 @@
 package com.group3.spotifywrapped.CoreAppViews;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseUser;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.DatabaseHelper;
 import com.group3.spotifywrapped.database.User;
 
 
 public class SignUpActivity extends AppCompatActivity {
+    public static final String TAG = "SignUpActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,25 +37,17 @@ public class SignUpActivity extends AppCompatActivity {
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //dbUsername = userDao.getUsername(username.getText().toString().toLowerCase());
-                    }
-                });
-                thread.start();
+                LoginActivity.mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
 
-                if (DatabaseHelper.usernameExists(username.getText().toString())) {
-                    Toast.makeText(SignUpActivity.this, "The Username has been taken!", Toast.LENGTH_SHORT).show();
-                }
-                if(!password.getText().toString().equals(confirmPassword.getText().toString())) {
-                    Toast.makeText(SignUpActivity.this, "Your passwords do not match!", Toast.LENGTH_SHORT).show();
-                } else {
-                    addNewUser(username.getText().toString(), password.getText().toString(), name.getText().toString(), email.getText().toString());
-                    Toast.makeText(SignUpActivity.this, "New Account Created!", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(SignUpActivity.this, LoginActivity.class);
-                    startActivity(i);
-                }
+                                } else {
+                                    Log.d(TAG, "createUserWithEmail: failure");
+                                }
+                            }
+                        });
             }
         });
     }

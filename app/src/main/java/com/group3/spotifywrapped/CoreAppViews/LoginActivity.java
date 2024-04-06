@@ -1,4 +1,5 @@
 package com.group3.spotifywrapped.CoreAppViews;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,20 +10,34 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.DatabaseHelper;
 import com.group3.spotifywrapped.database.User;
 
+import com.group3.spotifywrapped.summary.SummaryActivity;
 import com.group3.spotifywrapped.summary.SummarySelectorActivity;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
+
     public static final String CLIENT_ID = "9e3e12a5d1424f068a20c6db49de005c";
     public static final String REDIRECT_URI = "spotifywrapped://auth";
     public static final String[] SCOPES = new String[] {
@@ -36,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
     public static User activeUser;
-
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    public static String token;
+    public static final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
 
@@ -48,29 +63,54 @@ public class LoginActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        DatabaseHelper.init(this);
-
         EditText usernameTextField = findViewById(R.id.username);
         EditText passwordTextField = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Thread loginThread = new Thread(new Runnable() {
+                if (passwordTextField.getText().toString().length() < 6) {
+                    Toast.makeText(LoginActivity.this, "Password must be 6 characters long", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mAuth.signInWithEmailAndPassword(usernameTextField.getText().toString(), passwordTextField.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void run() {
-                        if (DatabaseHelper.loginCredentialsExist(usernameTextField.getText().toString(), passwordTextField.getText().toString())) {
-                            activeUser = DatabaseHelper.getUserByLoginCredentials(usernameTextField.getText().toString(), passwordTextField.getText().toString());
-                            while (!tokenRecieved.get());
-                            Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
-                            Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
-                            startActivity(i);
-                        } else {
-                            Log.e("LoginActivity", "Login credentials invalid");
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Thread thread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getToken();
+                                    while(!tokenRecieved.get());
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference ref = database.getReference("test_group/test_data");
+
+                                    AtomicInteger prevValue = new AtomicInteger(0);
+                                    AtomicBoolean recievedPrevData = new AtomicBoolean(false);
+                                    ref.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            Log.d(TAG, "Previous data: " + snapshot.getValue(Integer.class));
+                                            prevValue.set(snapshot.getValue(Integer.class));
+                                            recievedPrevData.set(true);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Log.e(TAG, "Failed to read data from database");
+                                        }
+                                    });
+                                    while (!recievedPrevData.get());
+                                    ref.setValue(prevValue.get() + 1);
+
+                                    //Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
+                                    //startActivity(i);
+                                }
+                            });
+                            thread.start();
                         }
                     }
                 });
-                loginThread.start();
             }
         });
 
@@ -108,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             //Log.d("LoginActivity", "Response: " + response.getAccessToken());
-            activeUser.sToken = response.getAccessToken();
+            token = response.getAccessToken();
             tokenRecieved.set(true);
         }
     }

@@ -3,13 +3,14 @@ package com.group3.spotifywrapped.database;
 import android.content.Context;
 import android.util.Log;
 
-import com.group3.spotifywrapped.LoginActivity;
+import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class DatabaseHelper {
@@ -26,10 +27,38 @@ public class DatabaseHelper {
         db = MyDatabase.getInstance(context);
     }
     public static boolean usernameExists(String username) {
-        return db.myDatabaseDao().getUsernameList().contains(username);
+        AtomicBoolean result = new AtomicBoolean(false);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                result.set(db.myDatabaseDao().getUsernameList().contains(username));
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch(Exception e) {
+            Log.e("DatabaseHelper", e.toString());
+        }
+
+        return result.get();
     }
     public static boolean passwordExists(String password) {
-        return db.myDatabaseDao().getPasswordList().contains(password);
+        AtomicBoolean result = new AtomicBoolean(false);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                result.set(db.myDatabaseDao().getPasswordList().contains(password));
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch(Exception e) {
+            Log.e("DatabaseHelper", e.toString());
+        }
+
+        return result.get();
     }
     public static boolean loginCredentialsExist(String username, String password) {
         return usernameExists(username) || passwordExists(password);

@@ -2,7 +2,7 @@ package com.group3.spotifywrapped.utils;
 
 import android.util.Log;
 
-import com.group3.spotifywrapped.LoginActivity;
+import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

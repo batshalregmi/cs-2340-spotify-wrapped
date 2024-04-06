@@ -3,7 +3,7 @@ package com.group3.spotifywrapped.utils;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-import com.group3.spotifywrapped.LoginActivity;
+import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
 import com.group3.spotifywrapped.database.Artist;
 import com.group3.spotifywrapped.database.Track;
 

@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 

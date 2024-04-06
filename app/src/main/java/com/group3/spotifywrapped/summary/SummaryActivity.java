@@ -16,16 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
-import com.group3.spotifywrapped.SignUpActivity;
 import com.group3.spotifywrapped.database.Artist;
 import com.group3.spotifywrapped.database.DatabaseHelper;
 import com.group3.spotifywrapped.database.Track;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class SummaryActivity extends AppCompatActivity {

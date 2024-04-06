@@ -1,6 +1,5 @@
-package com.group3.spotifywrapped;
+package com.group3.spotifywrapped.CoreAppViews;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.DatabaseHelper;
 import com.group3.spotifywrapped.database.User;
-import com.group3.spotifywrapped.summary.SummarySelectorActivity;
 
 
 public class SignUpActivity extends AppCompatActivity {

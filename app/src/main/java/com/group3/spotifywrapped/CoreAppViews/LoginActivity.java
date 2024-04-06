@@ -1,4 +1,4 @@
-package com.group3.spotifywrapped;
+package com.group3.spotifywrapped.CoreAppViews;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,14 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.DatabaseHelper;
-import com.group3.spotifywrapped.summary.SummaryActivity;
-import com.group3.spotifywrapped.database.MyDatabase;
 import com.group3.spotifywrapped.database.User;
-import com.group3.spotifywrapped.database.MyDatabaseDao;
 
 import com.group3.spotifywrapped.summary.SummarySelectorActivity;
 import com.spotify.sdk.android.auth.AuthorizationClient;
@@ -50,20 +47,17 @@ public class LoginActivity extends AppCompatActivity {
 
         DatabaseHelper.init(this);
 
-        EditText username = findViewById(R.id.username);
-        EditText password = findViewById(R.id.password);
+        EditText usernameTextField = findViewById(R.id.username);
+        EditText passwordTextField = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
-        Button signUpButton = findViewById(R.id.signUpButton);
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Thread loginThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (DatabaseHelper.loginCredentialsExist(username.getText().toString(), password.getText().toString())) {
-                            activeUser = DatabaseHelper.getUserByLoginCredentials(username.getText().toString(), password.getText().toString());
-                            getToken();
+                        if (DatabaseHelper.loginCredentialsExist(usernameTextField.getText().toString(), passwordTextField.getText().toString())) {
+                            activeUser = DatabaseHelper.getUserByLoginCredentials(usernameTextField.getText().toString(), passwordTextField.getText().toString());
                             while (!tokenRecieved.get());
                             Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
                             Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
@@ -76,6 +70,8 @@ public class LoginActivity extends AppCompatActivity {
                 loginThread.start();
             }
         });
+
+        Button signUpButton = findViewById(R.id.signUpButton);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

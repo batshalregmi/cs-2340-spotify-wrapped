@@ -20,10 +20,10 @@
             android:name=".summary.SummaryActivity"
             android:exported="true" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".CoreAppViews.SignUpActivity"
             android:exported="true"/>
         <activity
-            android:name=".LoginActivity"
+            android:name=".CoreAppViews.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <data

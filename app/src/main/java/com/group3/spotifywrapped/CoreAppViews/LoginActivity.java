@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.DatabaseHelper;
 import com.group3.spotifywrapped.database.User;
@@ -35,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
     public static User activeUser;
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
 

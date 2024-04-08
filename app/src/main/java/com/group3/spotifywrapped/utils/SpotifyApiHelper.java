@@ -84,11 +84,10 @@ public class SpotifyApiHelper {
     public static List<Artist> getTopArtistList() {
         List<Artist> result = new ArrayList<>();
         try {
-            JSONObject topArtistsResponse = callSpotifyApi("/me/top/artists?time_range=long_term&limit=5", LoginActivity.activeUser.sToken, "GET");
+            JSONObject topArtistsResponse = callSpotifyApi("/me/top/artists?time_range=long_term&limit=5", LoginActivity.token, "GET");
             JSONArray topArtistsJSONArray = topArtistsResponse.getJSONArray("items");
             for (int i = 0; i < topArtistsJSONArray.length(); ++i) {
                 Artist newArtist = Artist.parseFromJSON((JSONObject)topArtistsJSONArray.get(i));
-                newArtist.rank = i;
                 result.add(newArtist);
             }
         } catch (Exception e) {
@@ -99,11 +98,10 @@ public class SpotifyApiHelper {
     public static List<Track> getTopTrackList() {
         List<Track> result = new ArrayList<>();
         try {
-            JSONObject topTracksResponse = callSpotifyApi("/me/top/tracks?time_range=long_term&limit=5", LoginActivity.activeUser.sToken, "GET");
+            JSONObject topTracksResponse = callSpotifyApi("/me/top/tracks?time_range=long_term&limit=5", LoginActivity.token, "GET");
             JSONArray topTracksJSONArray = topTracksResponse.getJSONArray("items");
             for (int i = 0; i < topTracksJSONArray.length(); ++i) {
                 Track newTrack = Track.parseFromJSON((JSONObject)topTracksJSONArray.get(i));
-                newTrack.rank = i;
                 result.add(newTrack);
             }
         } catch (Exception e) {

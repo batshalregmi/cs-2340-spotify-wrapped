@@ -12,24 +12,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.group3.spotifywrapped.Foo;
 import com.group3.spotifywrapped.R;
-import com.group3.spotifywrapped.database.DatabaseHelper;
+import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.User;
 
-import com.group3.spotifywrapped.summary.SummaryActivity;
 import com.group3.spotifywrapped.summary.SummarySelectorActivity;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -52,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public static User activeUser;
     public static String token;
-    public static final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
 
@@ -66,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText usernameTextField = findViewById(R.id.username);
         EditText passwordTextField = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Password must be 6 characters long", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signInWithEmailAndPassword(usernameTextField.getText().toString(), passwordTextField.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -80,31 +78,11 @@ public class LoginActivity extends AppCompatActivity {
                             Thread thread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    activeUser = FirebaseHelper.getUserByFirebaseUser();
                                     getToken();
                                     while(!tokenRecieved.get());
-                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                    DatabaseReference ref = database.getReference("test_group/test_data");
-
-                                    AtomicInteger prevValue = new AtomicInteger(0);
-                                    AtomicBoolean recievedPrevData = new AtomicBoolean(false);
-                                    ref.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            Log.d(TAG, "Previous data: " + snapshot.getValue(Integer.class));
-                                            prevValue.set(snapshot.getValue(Integer.class));
-                                            recievedPrevData.set(true);
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                            Log.e(TAG, "Failed to read data from database");
-                                        }
-                                    });
-                                    while (!recievedPrevData.get());
-                                    ref.setValue(prevValue.get() + 1);
-
-                                    //Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
-                                    //startActivity(i);
+                                    Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
+                                    startActivity(i);
                                 }
                             });
                             thread.start();

@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.Artist;
-import com.group3.spotifywrapped.database.DatabaseHelper;
 import com.group3.spotifywrapped.database.Track;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SummaryActivity extends AppCompatActivity {
+    private List<Artist> artists = new ArrayList<>();
     private List<TopListItem> topTracksList = new ArrayList<>();
     private List<TopListItem> topArtistsList = new ArrayList<>();
 
@@ -40,12 +40,6 @@ public class SummaryActivity extends AppCompatActivity {
             songNumberView = itemView.findViewById(R.id.song_number_text_view);
             albumCoverView = itemView.findViewById(R.id.album_cover_view);
         }
-
-        public TextView getSongNameView() {
-            return songNameView;
-        }
-        public TextView getSongNumberView() { return songNumberView; }
-        public ImageView getCoverView() { return albumCoverView; }
     }
     private class MyAdapter extends RecyclerView.Adapter<SummaryActivity.MyViewHolder> {
         private Context context;
@@ -94,14 +88,7 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     private void loadTopArtistsList() {
-        List<Artist> artists = DatabaseHelper.getArtists(SummarySelectorActivity.getSelectedEntryId());
-        for (Artist it : artists) {
-            try {
-                topArtistsList.add(new TopListItem(it.name, SpotifyApiHelper.loadImageFromURL(it.profilePictureUrl)));
-            } catch (Exception e) {
-                Log.e("SummaryActivity", e.toString());
-            }
-        }
+
 
         RecyclerView recyclerView = findViewById(R.id.top_artists_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -109,14 +96,7 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     private void loadTopTracksList() {
-        List<Track> tracks = DatabaseHelper.getTracks(SummarySelectorActivity.getSelectedEntryId());
-        for (Track it : tracks) {
-            try {
-                topTracksList.add(new TopListItem(it.name, SpotifyApiHelper.loadImageFromURL(it.albumUrl)));
-            } catch (Exception e) {
-                Log.e("SummaryActivity", e.toString());
-            }
-        }
+
 
         RecyclerView recyclerView = findViewById(R.id.top_tracks_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

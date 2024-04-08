@@ -35,7 +35,7 @@ public class UserTrackHistory {
             Duration difference = Duration.between(endPoint, currentMoment);
             String millis = Long.toString(difference.toMillis());
             Log.d("UserTrackHistory", "Getting history since: " + endPoint + " / " + millis);
-            JSONObject response = SpotifyApiHelper.callSpotifyApi("/me/player/recently-played?after=" + millis + "&limit=50", LoginActivity.activeUser.sToken, "GET");
+            JSONObject response = SpotifyApiHelper.callSpotifyApi("/me/player/recently-played?after=" + millis + "&limit=50", LoginActivity.token, "GET");
             List<TrackHistoryItem> parsedResponse = parseTrackHistorySegment(response);
             if (parsedResponse.isEmpty() || parsedResponse.size() < 2) {
                 break;

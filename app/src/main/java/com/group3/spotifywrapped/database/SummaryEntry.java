@@ -5,21 +5,25 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 public class SummaryEntry {
-    @NonNull
-    @PrimaryKey
-    public long id;
+    private LocalDateTime dateCreated;
 
-    @ColumnInfo(name = "user_id")
-    public long userId;
+    private List<Artist> artists;
+    private List<Track> tracks;
 
-    @ColumnInfo(name = "date_created")
-    public String dateCreated;
+    public SummaryEntry(LocalDateTime dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 
-    public SummaryEntry(@NonNull long id, long userId, String dateCreated) {
-        this.id = id;
-        this.userId = userId;
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 }

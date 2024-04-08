@@ -43,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         ImageView profilePicture = findViewById(R.id.userProfilePicture);
-        JSONObject userResponse = SpotifyApiHelper.callSpotifyApi("/me", LoginActivity.activeUser.sToken, "GET");
+        JSONObject userResponse = SpotifyApiHelper.callSpotifyApi("/me", LoginActivity.token, "GET");
         String imageUrl = null;
         Log.d("SettingsActivity", "User response: " + userResponse.toString());
         try {

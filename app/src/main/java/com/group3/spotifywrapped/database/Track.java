@@ -8,31 +8,13 @@ import androidx.room.PrimaryKey;
 
 import org.json.JSONObject;
 
-@Entity
 public class Track {
-    @NonNull
-    @PrimaryKey
-    public long id;
-
-    @ColumnInfo(name = "summary_entry_id")
-    public long summaryEntryId;
-
-    @ColumnInfo(name = "rank")
-    public int rank;
-
-    @ColumnInfo(name = "name")
     public String name;
-
-    @ColumnInfo(name = "album_url")
     public String albumUrl;
 
-    @Ignore
     public Track() {}
 
-    public Track(@NonNull long id, long summaryEntryId, int rank, String name, String albumUrl) {
-        this.id = id;
-        this.summaryEntryId = summaryEntryId;
-        this.rank = rank;
+    public Track(String name, String albumUrl) {
         this.name = name;
         this.albumUrl = albumUrl;
     }
@@ -55,6 +37,6 @@ public class Track {
             return false;
         }
         Track temp = (Track)o;
-        return id == temp.id && summaryEntryId == temp.summaryEntryId && rank == temp.rank && name.equals(temp.name) && albumUrl.equals(temp.albumUrl);
+        return name.equals(temp.name) && albumUrl.equals(temp.albumUrl);
     }
 }

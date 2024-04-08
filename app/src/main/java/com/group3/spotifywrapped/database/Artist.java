@@ -11,30 +11,12 @@ import org.json.JSONObject;
 
 import java.util.Comparator;
 
-@Entity
 public class Artist {
-    @NonNull
-    @PrimaryKey
-    public long id;
+    private String name;
+    private String profilePictureUrl;
 
-    @ColumnInfo(name = "summary_entry_id")
-    public long summaryEntryId;
-
-    @ColumnInfo(name = "rank")
-    public int rank;
-
-    @ColumnInfo(name = "name")
-    public String name;
-
-    @ColumnInfo(name = "profile_picture_url")
-    public String profilePictureUrl;
-
-    @Ignore
     public Artist() {}
-    public Artist(@NonNull long id, long summaryEntryId, int rank, String name, String profilePictureUrl) {
-        this.id = id;
-        this.summaryEntryId = summaryEntryId;
-        this.rank = rank;
+    public Artist(String name, String profilePictureUrl) {
         this.name = name;
         this.profilePictureUrl = profilePictureUrl;
     }
@@ -45,6 +27,9 @@ public class Artist {
         newArtist.profilePictureUrl = src.getJSONArray("images").getJSONObject(0).getString("url");
         return newArtist;
     }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
     @Override
     public String toString() {
@@ -57,6 +42,6 @@ public class Artist {
             return false;
         }
         Artist temp = (Artist)o;
-        return id == temp.id && summaryEntryId == temp.summaryEntryId && rank == temp.rank && name.equals(temp.name) && profilePictureUrl.equals(temp.profilePictureUrl);
+        return name.equals(temp.name) && profilePictureUrl.equals(temp.profilePictureUrl);
     }
 }

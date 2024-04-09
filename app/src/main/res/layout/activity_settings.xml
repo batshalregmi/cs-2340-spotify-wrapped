@@ -17,14 +17,14 @@
         android:layout_marginBottom="0dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
-        android:background="@color/green"
-        android:backgroundTint="#D4EFE9">
+        android:background="@drawable/setting_background"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="#D4EFE9"
+            android:background="@drawable/setting_background2"
             android:orientation="vertical"
             android:padding="20dp">
             <TextView
@@ -64,7 +64,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="Go to Spotify" />
+                android:text="Link Spotify Account" />
 
             <Button
                 android:id="@+id/unlink_spotify"
@@ -73,7 +73,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="unlink spotify account" />
+                android:text="Unlink Spotify Account" />
 
             <Button
                 android:onClick="ShowPopup"
@@ -83,7 +83,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="change password" />
+                android:text="Change Password" />
 
             <Button
                 android:id="@+id/delete_account"
@@ -92,7 +92,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#FF0000"
-                android:text="delete account" />
+                android:text="Delete Account" />
 
 
         </LinearLayout>

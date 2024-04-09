@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.media3.exoplayer.ExoPlayer;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
+import com.group3.spotifywrapped.utils.Playback;
 
 public class MainPageActivity extends AppCompatActivity {
 
@@ -21,6 +23,9 @@ public class MainPageActivity extends AppCompatActivity {
         String username = LoginActivity.activeUser.username;
         String message = (String) welcomeMessage.getText();
         welcomeMessage.setText(message.replace("{{USER}}", username));
+
+        Playback playback = new Playback(this);
+        playback.startMedia();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {

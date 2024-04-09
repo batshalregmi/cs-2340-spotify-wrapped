@@ -72,4 +72,12 @@ public class UserTrackHistory {
     public String toString() {
         return trackHistory.toString();
     }
+
+    public List<String> getTrackIDs() {
+        ArrayList<String> trackIDs = new ArrayList<>();
+        for (TrackHistoryItem item : trackHistory) {
+            trackIDs.add(item.id);
+        }
+        return trackIDs;
+    }
 }

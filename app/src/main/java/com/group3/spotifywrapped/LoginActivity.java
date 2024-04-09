@@ -1,7 +1,9 @@
 package com.group3.spotifywrapped;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.media3.exoplayer.ExoPlayer;
 import androidx.room.Room;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,9 +20,12 @@ import com.group3.spotifywrapped.database.AppDatabase;
 import com.group3.spotifywrapped.database.User;
 import com.group3.spotifywrapped.database.UserDao;
 
+import com.group3.spotifywrapped.utils.Playback;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
+
+import org.json.JSONException;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String CLIENT_ID = "9e3e12a5d1424f068a20c6db49de005c";
@@ -36,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
     public static User activeUser;
-
     private UserDao userDao;
     private boolean tokenRecieved = false;
 
@@ -71,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                             getToken();
                             while (!tokenRecieved);
                             Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
+
                             //switch to settings screen
                             Intent i = new Intent(view.getContext(), MainPageActivity.class);
                             startActivity(i);

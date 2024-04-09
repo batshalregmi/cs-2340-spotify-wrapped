@@ -1,10 +1,8 @@
 package com.group3.spotifywrapped.database;
 
 import android.util.Log;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
-import androidx.room.Database;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -12,34 +10,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class FirebaseHelper {
     private static final String TAG = "FirebaseHelper";
-    private static final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    public static User getUserByFirebaseUser() {
+    public static AtomicReference<DatabaseReference> getUserByFirebaseUser() {
         String Uid = FirebaseAuth.getInstance().getUid();
-        AtomicReference<User> result = new AtomicReference<>(null);
+        AtomicReference<DatabaseReference> result = new AtomicReference<>(null);
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot it : snapshot.getChildren()) {
-                    User curr = it.getValue(User.class);
-                    if (curr.Uid.equals(Uid)) {
-                        result.set(curr);
+                    if (it.child("userUid").getValue(String.class).equals(Uid)) {
+                        result.set(it.getRef());
                     }
                 }
             }
@@ -49,11 +38,71 @@ public class FirebaseHelper {
                 Log.w(TAG, "loadPost:onCancelled", error.toException());
             }
         });
-        return result.get();
+
+        return result;
     }
 
-    public static void addUser(User newUser) {
+    public static DatabaseReference addUser(User newUser) {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users");
-        userRef.push().setValue(newUser);
+        DatabaseReference result = userRef.push();
+        result.setValue(newUser);
+        return result;
+    }
+
+    public static DatabaseReference addSummaryEntry(SummaryEntry newEntry, DatabaseReference userRef) {
+        DatabaseReference result = userRef.child("entries").push();
+        result.setValue(newEntry);
+        return result;
+    }
+
+    public static DatabaseReference addArtist(Artist artist, DatabaseReference entryRef) {
+        DatabaseReference result = entryRef.child("artists").push();
+        result.setValue(artist);
+        return result;
+    }
+
+    public static DatabaseReference addTrack(Track track, DatabaseReference entryRef) {
+        DatabaseReference result = entryRef.child("tracks").push();
+        result.setValue(track);
+        return result;
+    }
+
+    public static List<Artist> getArtistsFromEntry(DatabaseReference entryRef) {
+        List<Artist> result = new ArrayList<>();
+        entryRef.child("artists").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                result.clear();
+                for (DataSnapshot it : snapshot.getChildren()) {
+                    result.add(it.getValue(Artist.class));
+                }
+                Log.d(TAG, "artists found: " + result.toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read artists", error.toException());
+            }
+        });
+        return result;
+    }
+
+    public static List<Track> getTracksFromEntry(DatabaseReference entryRef) {
+        List<Track> result = Collections.synchronizedList(new ArrayList<>());
+        entryRef.child("tracks").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                result.clear();
+                for (DataSnapshot it : snapshot.getChildren()) {
+                    result.add(it.getValue(Track.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read tracks", error.toException());
+            }
+        });
+        return result;
     }
 }

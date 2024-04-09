@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
-    public static User activeUser;
+    public static AtomicReference<DatabaseReference> activeUser = new AtomicReference<>(null);
     public static String token;
 
     private AtomicBoolean tokenRecieved = new AtomicBoolean(false);

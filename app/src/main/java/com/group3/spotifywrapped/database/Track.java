@@ -1,23 +1,28 @@
 package com.group3.spotifywrapped.database;
 
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.group3.spotifywrapped.utils.SpotifyApiHelper;
+
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class Track {
+    private static final String TAG = "Track";
+
     public String name;
-    public String albumUrl;
+    private String albumUrl;
+    private Drawable albumImage;
 
     public Track() {}
-
-    public Track(String name, String albumUrl) {
-        this.name = name;
-        this.albumUrl = albumUrl;
-    }
 
     public static Track parseFromJSON(JSONObject src) throws Exception {
         Track newTrack = new Track();
@@ -26,17 +31,19 @@ public class Track {
         return newTrack;
     }
 
+    public String getAlbumUrl() { return albumUrl; }
+    public void setAlbumUrl(String albumUrl) {
+        this.albumUrl = albumUrl;
+        try {
+            this.albumImage = SpotifyApiHelper.loadImageFromURL(albumUrl);
+        } catch (IOException e) {
+            Log.e(TAG, e.toString());
+        }
+    }
+    public Drawable getAlbumImage() { return albumImage; }
+
     @Override
     public String toString() {
         return String.format("Track::%s", name);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || !getClass().equals(o.getClass())) {
-            return false;
-        }
-        Track temp = (Track)o;
-        return name.equals(temp.name) && albumUrl.equals(temp.albumUrl);
     }
 }

@@ -77,6 +77,6 @@ public class SettingsActivity extends AppCompatActivity {
             profilePicture.setImageDrawable(image);
         }
         TextView username = findViewById(R.id.usernameUnderPicture);
-        username.setText(LoginActivity.activeUser.username);
+        //username.setText(LoginActivity.activeUser.username);
     }
 }

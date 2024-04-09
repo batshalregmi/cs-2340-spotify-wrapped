@@ -1,24 +1,33 @@
 package com.group3.spotifywrapped.database;
 
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.group3.spotifywrapped.utils.SpotifyApiHelper;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Comparator;
 
 public class Artist {
-    private String name;
+    private static final String TAG = "Artist";
+
+    public String name;
     private String profilePictureUrl;
+    private Drawable profilePicture;
 
     public Artist() {}
     public Artist(String name, String profilePictureUrl) {
         this.name = name;
-        this.profilePictureUrl = profilePictureUrl;
+        setProfilePictureUrl(profilePictureUrl);
     }
 
     public static Artist parseFromJSON(JSONObject src) throws Exception {
@@ -28,20 +37,19 @@ public class Artist {
         return newArtist;
     }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getProfilePictureUrl() { return profilePictureUrl; }
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+        try {
+            this.profilePicture = SpotifyApiHelper.loadImageFromURL(profilePictureUrl);
+        } catch (IOException e) {
+            Log.e(TAG, e.toString());
+        }
+    }
+    public Drawable getProfilePicture() { return profilePicture; }
 
     @Override
     public String toString() {
         return String.format("Artist::%s", name);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || !getClass().equals(o.getClass())) {
-            return false;
-        }
-        Artist temp = (Artist)o;
-        return name.equals(temp.name) && profilePictureUrl.equals(temp.profilePictureUrl);
     }
 }

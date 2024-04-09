@@ -3,7 +3,6 @@ package com.group3.spotifywrapped.summary;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +17,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.Artist;
+import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.Track;
-import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SummaryActivity extends AppCompatActivity {
-    private List<Artist> artists = new ArrayList<>();
-    private List<TopListItem> topTracksList = new ArrayList<>();
-    private List<TopListItem> topArtistsList = new ArrayList<>();
+    private AtomicBoolean continueUpdate = new AtomicBoolean(true);
+
+    private MyArtistAdapter artistAdapter;
+    private MyTrackAdapter trackAdapter;
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView songNameView;
@@ -41,11 +41,11 @@ public class SummaryActivity extends AppCompatActivity {
             albumCoverView = itemView.findViewById(R.id.album_cover_view);
         }
     }
-    private class MyAdapter extends RecyclerView.Adapter<SummaryActivity.MyViewHolder> {
+    private class MyArtistAdapter extends RecyclerView.Adapter<SummaryActivity.MyViewHolder> {
         private Context context;
-        private List<TopListItem> items;
+        private List<Artist> items;
 
-        public MyAdapter(Context context, List<TopListItem> items) {
+        public MyArtistAdapter(Context context, List<Artist> items) {
             this.context = context;
             this.items = items;
         }
@@ -58,9 +58,36 @@ public class SummaryActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull SummaryActivity.MyViewHolder holder, int position) {
-            holder.songNameView.setText(items.get(position).getName());
+            holder.songNameView.setText(items.get(position).name);
             holder.songNumberView.setText(Integer.toString(position + 1));
-            holder.albumCoverView.setImageDrawable(items.get(position).getImage());
+            holder.albumCoverView.setImageDrawable(items.get(position).getProfilePicture());
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+    }
+    private class MyTrackAdapter extends RecyclerView.Adapter<SummaryActivity.MyViewHolder> {
+        private Context context;
+        private List<Track> items;
+
+        public MyTrackAdapter(Context context, List<Track> items) {
+            this.context = context;
+            this.items = items;
+        }
+
+        @NonNull
+        @Override
+        public SummaryActivity.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new SummaryActivity.MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull SummaryActivity.MyViewHolder holder, int position) {
+            holder.songNameView.setText(items.get(position).name);
+            holder.songNumberView.setText(Integer.toString(position + 1));
+            holder.albumCoverView.setImageDrawable(items.get(position).getAlbumImage());
         }
 
         @Override
@@ -74,32 +101,36 @@ public class SummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
-        loadTopArtistsList();
-        loadTopTracksList();
+        RecyclerView artistRecyclerView = findViewById(R.id.top_artists_list);
+        artistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        artistAdapter = new MyArtistAdapter(getApplicationContext(), FirebaseHelper.getArtistsFromEntry(SummarySelectorActivity.getSelectedSummaryEntry()));
+        artistRecyclerView.setAdapter(artistAdapter);
+
+        RecyclerView trackRecyclerView = findViewById(R.id.top_tracks_list);
+        trackRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        trackAdapter = new MyTrackAdapter(getApplicationContext(), FirebaseHelper.getTracksFromEntry(SummarySelectorActivity.getSelectedSummaryEntry()));
+        trackRecyclerView.setAdapter(trackAdapter);
+
+        Thread recyclerUpdaterThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (continueUpdate.get()) {
+
+                }
+            }
+        });
+        recyclerUpdaterThread.start();
 
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(SummaryActivity.this, SummarySelectorActivity.class);
-                startActivity(i);
+                artistAdapter.notifyDataSetChanged();
+                trackAdapter.notifyDataSetChanged();
+
+                //Intent i = new Intent(SummaryActivity.this, SummarySelectorActivity.class);
+                //startActivity(i);
             }
         });
-    }
-
-    private void loadTopArtistsList() {
-
-
-        RecyclerView recyclerView = findViewById(R.id.top_artists_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topArtistsList));
-    }
-
-    private void loadTopTracksList() {
-
-
-        RecyclerView recyclerView = findViewById(R.id.top_tracks_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SummaryActivity.MyAdapter(getApplicationContext(), topTracksList));
     }
 }

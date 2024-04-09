@@ -41,10 +41,10 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             User newUser = new User();
-                            newUser.Uid = FirebaseAuth.getInstance().getUid();
+                            newUser.userUid = FirebaseAuth.getInstance().getUid();
                             newUser.username = username.getText().toString();
                             newUser.name = name.getText().toString();
-                            FirebaseHelper.addUser(newUser);
+                            LoginActivity.activeUser.set(FirebaseHelper.addUser(newUser));
                             Intent i = new Intent(SignUpActivity.this, SummarySelectorActivity.class);
                             startActivity(i);
                         } else {

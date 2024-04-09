@@ -64,7 +64,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="Go to Spotify" />
+                android:text="Link Spotify Account" />
 
             <Button
                 android:id="@+id/unlink_spotify"
@@ -73,7 +73,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="unlink spotify account" />
+                android:text="Unlink Spotify Account" />
 
             <Button
                 android:onClick="ShowPopup"
@@ -83,7 +83,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="change password" />
+                android:text="Change Password" />
 
             <Button
                 android:id="@+id/delete_account"
@@ -92,7 +92,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#FF0000"
-                android:text="delete account" />
+                android:text="Delete Account" />
 
 
         </LinearLayout>

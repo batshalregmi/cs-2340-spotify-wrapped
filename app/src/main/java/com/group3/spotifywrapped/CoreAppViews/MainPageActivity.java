@@ -7,7 +7,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
 
 public class MainPageActivity extends AppCompatActivity {
@@ -18,9 +17,9 @@ public class MainPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_postlogin);
         TextView welcomeMessage = findViewById(R.id.welcomeMessage);
-        String username = LoginActivity.activeUser.username;
+        //String username = LoginActivity.activeUser.username;
         String message = (String) welcomeMessage.getText();
-        welcomeMessage.setText(message.replace("{{USER}}", username));
+        //welcomeMessage.setText(message.replace("{{USER}}", username));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {

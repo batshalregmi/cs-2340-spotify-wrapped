@@ -3,14 +3,19 @@ package com.group3.spotifywrapped.utils;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-import com.group3.spotifywrapped.LoginActivity;
+import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
+import com.group3.spotifywrapped.database.Artist;
+import com.group3.spotifywrapped.database.Track;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
@@ -74,5 +79,34 @@ public class SpotifyApiHelper {
     public static Drawable loadImageFromURL(String url) throws java.io.IOException {
         InputStream is = (InputStream)(new URL(url).getContent());
         return Drawable.createFromStream(is, "src name");
+    }
+
+    public static List<Artist> getTopArtistList() {
+        List<Artist> result = new ArrayList<>();
+        try {
+            JSONObject topArtistsResponse = callSpotifyApi("/me/top/artists?time_range=long_term&limit=5", LoginActivity.token, "GET");
+            JSONArray topArtistsJSONArray = topArtistsResponse.getJSONArray("items");
+            for (int i = 0; i < topArtistsJSONArray.length(); ++i) {
+                Artist newArtist = Artist.parseFromJSON((JSONObject)topArtistsJSONArray.get(i));
+                result.add(newArtist);
+            }
+        } catch (Exception e) {
+            Log.e("SpotifyApiHelper", e.toString());
+        }
+        return result;
+    }
+    public static List<Track> getTopTrackList() {
+        List<Track> result = new ArrayList<>();
+        try {
+            JSONObject topTracksResponse = callSpotifyApi("/me/top/tracks?time_range=long_term&limit=5", LoginActivity.token, "GET");
+            JSONArray topTracksJSONArray = topTracksResponse.getJSONArray("items");
+            for (int i = 0; i < topTracksJSONArray.length(); ++i) {
+                Track newTrack = Track.parseFromJSON((JSONObject)topTracksJSONArray.get(i));
+                result.add(newTrack);
+            }
+        } catch (Exception e) {
+            Log.e("SpotifyApiHelper", e.toString());
+        }
+        return result;
     }
 }

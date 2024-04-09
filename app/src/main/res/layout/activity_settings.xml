@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/settings_background"
+            android:background="@color/green"
             android:orientation="vertical"
             android:padding="20dp">
             <TextView
@@ -39,12 +39,11 @@
                 android:textStyle="bold" />
 
             <ImageView
-
                 android:layout_marginTop="5dp"
                 android:id="@+id/userProfilePicture"
                 android:layout_width="330dp"
                 android:layout_gravity="center"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 tools:src="@tools:sample/avatars"
                 android:contentDescription="spotify profile picture" />
 
@@ -55,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:layout_gravity="center"
-                android:text="@string/username_spotify" />
+                android:text="username" />
 
             <Button
                 android:id="@+id/link_to_spotify"
@@ -64,7 +63,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="@string/link_spotify_account" />
+                android:text="link spotify acount" />
 
             <Button
                 android:id="@+id/unlink_spotify"
@@ -73,7 +72,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="@string/unlink_spotify_account" />
+                android:text="unlink spotify account" />
 
             <Button
                 android:onClick="ShowPopup"
@@ -83,7 +82,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="@string/change_password" />
+                android:text="change password" />
 
             <Button
                 android:id="@+id/delete_account"
@@ -92,7 +91,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#FF0000"
-                android:text="@string/delete_account" />
+                android:text="delete account" />
 
 
         </LinearLayout>
@@ -101,6 +100,7 @@
 
 
     </androidx.cardview.widget.CardView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

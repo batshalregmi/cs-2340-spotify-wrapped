@@ -5,9 +5,16 @@
     android:layout_height="400dp"
     app:cardCornerRadius="30dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:backgroundTint="#D9EDE9"
     android:orientation="vertical"
     android:layout_gravity="center">
+
+<!--    <ImageView-->
+<!--        android:contentDescription="@string/popup_background"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:src="@drawable/popup"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        />-->
 
 
     <LinearLayout
@@ -16,20 +23,18 @@
         android:layout_gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="24dp"
-
         android:gravity="center"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/txtclose"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/circlebackground"
+            android:background="@color/green"
             android:gravity="center"
             android:text="X"
             android:textColor="@color/green"

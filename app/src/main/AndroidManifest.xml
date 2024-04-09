@@ -14,10 +14,16 @@
         android:theme="@style/Theme.Spotifywrapped"
         tools:targetApi="31">
         <activity
-            android:name=".SummaryView.SummaryActivity"
+            android:name=".summary.SummarySelectorActivity"
             android:exported="true" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".summary.SummaryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CoreAppViews.SignUpActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".CoreAppViews.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <data
@@ -31,25 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUpActivity"
-            android:exported="true" />
-        <activity
-            android:name=".TestActivity"
-            android:exported="true">
-            <intent-filter>
-                <data
-                    android:host="auth"
-                    android:scheme="spotifywrapped" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".DevStartActivity"
-            android:exported="true">
-        </activity>
-        <activity android:name=".CoreAppViews.SettingsActivity"
-            android:exported="true">
-        </activity>
-        <activity android:name=".CoreAppViews.MainPageActivity"
             android:exported="true">
         </activity>
     </application>

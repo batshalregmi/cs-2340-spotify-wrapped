@@ -1,9 +1,7 @@
 package com.group3.spotifywrapped;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +9,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.HashMap;
+import com.group3.spotifywrapped.database.Artist;
+import com.group3.spotifywrapped.database.Track;
+
+import java.util.List;
 import java.util.Map;
 
 public class DevStartActivity extends AppCompatActivity {

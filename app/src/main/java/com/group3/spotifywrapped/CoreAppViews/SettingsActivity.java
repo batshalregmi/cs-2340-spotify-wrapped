@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.group3.spotifywrapped.LoginActivity;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
@@ -44,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         ImageView profilePicture = findViewById(R.id.userProfilePicture);
-        JSONObject userResponse = SpotifyApiHelper.callSpotifyApi("/me", LoginActivity.activeUser.sToken, "GET");
+        JSONObject userResponse = SpotifyApiHelper.callSpotifyApi("/me", LoginActivity.token, "GET");
         String imageUrl = null;
         Log.d("SettingsActivity", "User response: " + userResponse.toString());
         try {
@@ -78,6 +77,6 @@ public class SettingsActivity extends AppCompatActivity {
             profilePicture.setImageDrawable(image);
         }
         TextView username = findViewById(R.id.usernameUnderPicture);
-        username.setText(LoginActivity.activeUser.username);
+        //username.setText(LoginActivity.activeUser.username);
     }
 }

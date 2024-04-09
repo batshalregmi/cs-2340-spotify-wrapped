@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class settingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
     Dialog myDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

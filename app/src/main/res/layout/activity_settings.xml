@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="#B7E1D7"
-    tools:context=".settingsActivity">
+    tools:context=".SettingsActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="570dp"

@@ -2,7 +2,7 @@ package com.group3.spotifywrapped.utils;
 
 import android.util.Log;
 
-import com.group3.spotifywrapped.LoginActivity;
+import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+//I wanted to do something with this but turned out ot be too much work. Might implement later with a server for fun - Trent
 public class UserTrackHistory {
     private class TrackHistoryItem {
         public String id;
@@ -34,7 +35,7 @@ public class UserTrackHistory {
             Duration difference = Duration.between(endPoint, currentMoment);
             String millis = Long.toString(difference.toMillis());
             Log.d("UserTrackHistory", "Getting history since: " + endPoint + " / " + millis);
-            JSONObject response = SpotifyApiHelper.callSpotifyApi("/me/player/recently-played?after=" + millis + "&limit=50", LoginActivity.activeUser.sToken, "GET");
+            JSONObject response = SpotifyApiHelper.callSpotifyApi("/me/player/recently-played?after=" + millis + "&limit=50", LoginActivity.token, "GET");
             List<TrackHistoryItem> parsedResponse = parseTrackHistorySegment(response);
             if (parsedResponse.isEmpty() || parsedResponse.size() < 2) {
                 break;

@@ -111,16 +111,6 @@ public class SummaryActivity extends AppCompatActivity {
         trackAdapter = new MyTrackAdapter(getApplicationContext(), FirebaseHelper.getTracksFromEntry(SummarySelectorActivity.getSelectedSummaryEntry()));
         trackRecyclerView.setAdapter(trackAdapter);
 
-        Thread recyclerUpdaterThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (continueUpdate.get()) {
-
-                }
-            }
-        });
-        recyclerUpdaterThread.start();
-
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

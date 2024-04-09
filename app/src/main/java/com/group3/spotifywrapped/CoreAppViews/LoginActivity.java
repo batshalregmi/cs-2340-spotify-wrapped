@@ -48,10 +48,10 @@ public class LoginActivity extends AppCompatActivity {
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
+    private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
+
     public static AtomicReference<DatabaseReference> activeUser = new AtomicReference<>(null);
     public static String token;
-
-    private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

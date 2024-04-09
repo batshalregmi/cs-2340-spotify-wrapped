@@ -17,14 +17,14 @@
         android:layout_marginBottom="0dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
-        android:background="@color/green"
-        android:backgroundTint="#D4EFE9">
+        android:background="@drawable/setting_background"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@color/green"
+            android:background="@drawable/setting_background2"
             android:orientation="vertical"
             android:padding="20dp">
             <TextView
@@ -39,11 +39,11 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:id="@+id/userProfilePicture"
                 android:layout_width="330dp"
                 android:layout_gravity="center"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 tools:src="@tools:sample/avatars"
                 android:contentDescription="spotify profile picture" />
 
@@ -51,6 +51,7 @@
                 android:layout_marginTop="5dp"
                 android:id="@+id/usernameUnderPicture"
                 android:layout_width="93dp"
+                android:paddingTop="5dp"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:layout_gravity="center"
@@ -63,7 +64,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="link spotify acount" />
+                android:text="Link Spotify Account" />
 
             <Button
                 android:id="@+id/unlink_spotify"
@@ -72,7 +73,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="unlink spotify account" />
+                android:text="Unlink Spotify Account" />
 
             <Button
                 android:onClick="ShowPopup"
@@ -82,7 +83,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="change password" />
+                android:text="Change Password" />
 
             <Button
                 android:id="@+id/delete_account"
@@ -91,7 +92,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#FF0000"
-                android:text="delete account" />
+                android:text="Delete Account" />
 
 
         </LinearLayout>

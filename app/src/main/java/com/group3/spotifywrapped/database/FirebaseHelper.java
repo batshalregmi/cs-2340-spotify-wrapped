@@ -67,6 +67,24 @@ public class FirebaseHelper {
         return result;
     }
 
+    public static List<SummaryEntry> getEntryFromUser(DatabaseReference userRef) {
+        List<SummaryEntry> result = new ArrayList<>();
+        userRef.child("entries").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                result.clear();
+                for (DataSnapshot it : snapshot.getChildren()) {
+                    result.add(it.getValue(SummaryEntry.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read entries", error.toException());
+            }
+        });
+        return result;
+    }
     public static List<Artist> getArtistsFromEntry(DatabaseReference entryRef) {
         List<Artist> result = new ArrayList<>();
         entryRef.child("artists").addValueEventListener(new ValueEventListener() {
@@ -88,7 +106,7 @@ public class FirebaseHelper {
     }
 
     public static List<Track> getTracksFromEntry(DatabaseReference entryRef) {
-        List<Track> result = Collections.synchronizedList(new ArrayList<>());
+        List<Track> result = new ArrayList<>();
         entryRef.child("tracks").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

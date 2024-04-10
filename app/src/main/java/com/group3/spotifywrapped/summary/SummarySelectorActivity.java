@@ -31,8 +31,8 @@ public class SummarySelectorActivity extends AppCompatActivity {
 
     private static final String TAG = "SummarySelectorActivity";
     private static DatabaseReference selectedSummaryEntry = null;
-    private static final int MAX_TABLE_ROWS = 2;
-    private static final int MAX_TABLE_COLUMNS = 3;
+    private static final int MAX_TABLE_ROWS = 10;
+    private static final int MAX_TABLE_COLUMNS = 2;
 
     private String selectedTimeRange = "short_term";
 
@@ -93,13 +93,18 @@ public class SummarySelectorActivity extends AppCompatActivity {
                 while (LoginActivity.activeUser.get() == null);
                 final List<DataSnapshot> entries = FirebaseHelper.getEntrySnapList(LoginActivity.activeUser.get());
                 while (!foundEntries.get());
+                foundEntries.set(false);
+
+                Log.d(TAG, "Num entries found: " + entries.size());
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d(TAG, "Num entries found: " + entries.size());
+
                         TableLayout table = findViewById(R.id.recentWrapsTable);
                         TableRow row = null;
-                        for (int i = 0; i < MAX_TABLE_COLUMNS * MAX_TABLE_ROWS; ++i) {
+                        for (int i = 0; i < MAX_TABLE_COLUMNS * MAX_TABLE_ROWS && i < entries.size(); ++i) {
                             if (i % MAX_TABLE_COLUMNS == 0) {
                                 row = new TableRow(SummarySelectorActivity.this);
                                 table.addView(row);
@@ -115,6 +120,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
                                     selectedSummaryEntry = ref;
                                     Intent i = new Intent(SummarySelectorActivity.this, SummaryActivity.class);
                                     startActivity(i);
+                                    table.removeAllViews();
                                 }
                             });
                             row.addView(button);

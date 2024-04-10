@@ -88,6 +88,7 @@ public class FirebaseHelper {
                 for (DataSnapshot it : snapshot.getChildren()) {
                     result.add(it);
                 }
+                Log.d(TAG, "Num entries found: " + result.size());
                 SummarySelectorActivity.foundEntries.set(true);
             }
 

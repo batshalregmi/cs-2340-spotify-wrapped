@@ -43,7 +43,7 @@ public class SpotifyItem {
 
     private void loadImage() {
         if (imageUrl == null) {
-            //Log.e(TAG, "Must set image URL before loading image");
+            //Log.w(TAG, "Must set image URL before loading image");
             return;
         }
         try {

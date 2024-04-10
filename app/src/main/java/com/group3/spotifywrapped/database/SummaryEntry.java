@@ -7,10 +7,8 @@ import java.util.List;
 
 @Entity
 public class SummaryEntry {
-    //fields which get added directly to database
     public String dateCreated;
 
-    //fields which are not automatically added to database
     private List<Artist> artists = new ArrayList<>();
     private List<Track> tracks = new ArrayList<>();
 

@@ -11,36 +11,33 @@ import androidx.room.PrimaryKey;
 
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class Track {
+public class Track extends SpotifyItem {
     private static final String TAG = "Track";
 
-    public String name;
-    private String albumUrl;
-    private Drawable albumImage;
-
-    public Track() {}
-
-    public static Track parseFromJSON(JSONObject src) throws Exception {
-        Track newTrack = new Track();
-        newTrack.name = src.getString("name");
-        newTrack.albumUrl = src.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url");
-        return newTrack;
+    public Track() {
+        super(SpotifyItem.TRACK, null, null, null);
+    }
+    public Track(String spotifyId, String name, String imageUrl) {
+        super(SpotifyItem.TRACK, spotifyId, name, imageUrl);
     }
 
-    public String getAlbumUrl() { return albumUrl; }
-    public void setAlbumUrl(String albumUrl) {
-        this.albumUrl = albumUrl;
+    public static Track parseFromJSON(JSONObject src) {
+        Track temp = new Track();
         try {
-            this.albumImage = SpotifyApiHelper.loadImageFromURL(albumUrl);
-        } catch (IOException e) {
-            Log.e(TAG, e.toString());
+            temp.spotifyId = src.getString("id");
+            temp.name = src.getString("name");
+            temp.setImageUrl(src.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url"));
+            return temp;
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse Track from JSON: " + e.toString());
         }
+        return temp;
     }
-    public Drawable getAlbumImage() { return albumImage; }
 
     @Override
     public String toString() {

@@ -6,14 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -22,11 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.group3.spotifywrapped.Foo;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.FirebaseHelper;
-import com.group3.spotifywrapped.database.User;
 
 import com.group3.spotifywrapped.summary.SummarySelectorActivity;
 import com.spotify.sdk.android.auth.AuthorizationClient;
@@ -76,20 +70,20 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Thread thread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    activeUser = FirebaseHelper.getUserByFirebaseUser();
-                                    getToken();
-                                    while(!tokenRecieved.get());
-                                    Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
-                                    startActivity(i);
-                                }
-                            });
-                            thread.start();
+                            activeUser = FirebaseHelper.getUserByFirebaseUser();
                         }
                     }
                 });
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getToken();
+                        while(!tokenRecieved.get());
+                        Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
+                        startActivity(i);
+                    }
+                });
+                thread.start();
             }
         });
 

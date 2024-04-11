@@ -56,6 +56,7 @@
                     android:id="@+id/top_tracks_list"
                     android:layout_width="175dp"
                     android:layout_height="wrap_content"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent"

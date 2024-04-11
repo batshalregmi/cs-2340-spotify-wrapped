@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
 import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
+import com.group3.spotifywrapped.CoreAppViews.SettingsActivity;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.SummaryEntry;

@@ -1,5 +1,6 @@
 package com.group3.spotifywrapped.summary;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.group3.spotifywrapped.CoreAppViews.MainPageActivity;
+import com.group3.spotifywrapped.CoreAppViews.SettingsActivity;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.Artist;
 import com.group3.spotifywrapped.database.FirebaseHelper;
@@ -100,6 +104,7 @@ public class SummaryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
+
 
         RecyclerView artistRecyclerView = findViewById(R.id.top_artists_list);
         artistRecyclerView.setLayoutManager(new LinearLayoutManager(this));

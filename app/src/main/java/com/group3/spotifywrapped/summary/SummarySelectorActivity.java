@@ -1,5 +1,6 @@
 package com.group3.spotifywrapped.summary;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
 import com.group3.spotifywrapped.CoreAppViews.SettingsActivity;
@@ -27,6 +29,19 @@ public class SummarySelectorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary_selector);
 
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.bottom_wrapped:
+                    break;
+
+                case R.id.bottom_settings:
+                    Intent intent1 = new Intent(SummarySelectorActivity.this, SettingsActivity.class);
+                    startActivity(intent1);
+                    break;
+            }
+            return false;
+        });
         Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
         genSummaryButton.setOnClickListener(new View.OnClickListener() {
             @Override

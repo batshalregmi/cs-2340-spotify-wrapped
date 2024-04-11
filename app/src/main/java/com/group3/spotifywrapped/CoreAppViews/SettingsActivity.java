@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,8 @@ import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.FirebaseHelper;
+import com.group3.spotifywrapped.summary.SummaryActivity;
+import com.group3.spotifywrapped.summary.SummarySelectorActivity;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
 import org.json.JSONArray;
@@ -50,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.bottom_wrapped:
-                    Intent intent1 = new Intent(SettingsActivity.this, MainPageActivity.class);
+                    Intent intent1 = new Intent(SettingsActivity.this, SummarySelectorActivity.class);
                     startActivity(intent1);
                     break;
                 case R.id.bottom_settings:
@@ -118,6 +121,7 @@ public class SettingsActivity extends AppCompatActivity {
             user.signOut();
             Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
             startActivity(intent);
+            Toast.makeText(this, "Password reset link sent to email!", Toast.LENGTH_LONG).show();
         });
         //username.setText(LoginActivity.activeUser.username);
 
@@ -150,6 +154,7 @@ public class SettingsActivity extends AppCompatActivity {
                             user.signOut();
                             Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                             startActivity(intent);
+                            Toast.makeText(this, "Email Updated, Please Login", Toast.LENGTH_LONG).show();
                         }
                     })
                     .addOnFailureListener(e -> {

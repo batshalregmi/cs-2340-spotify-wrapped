@@ -21,22 +21,6 @@ public class MainPageActivity extends AppCompatActivity {
         String message = (String) welcomeMessage.getText();
         //welcomeMessage.setText(message.replace("{{USER}}", username));
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.bottom_wrapped:
-
-                    break;
-
-                case R.id.bottom_settings:
-                    Intent intent1 = new Intent(MainPageActivity.this, SettingsActivity.class);
-                    startActivity(intent1);
-                    break;
-            }
-
-
-            return false;
-        });
 
     }
 }

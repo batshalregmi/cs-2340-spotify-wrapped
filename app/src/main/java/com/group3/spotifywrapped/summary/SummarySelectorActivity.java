@@ -3,6 +3,7 @@ package com.group3.spotifywrapped.summary;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,10 +24,12 @@ import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SummarySelectorActivity extends AppCompatActivity {
+    public static final List<Pair<DatabaseReference, SummaryEntry>> entries = Collections.synchronizedList(new ArrayList<>());
     public static AtomicBoolean foundEntries = new AtomicBoolean(false);
 
     private static final String TAG = "SummarySelectorActivity";
@@ -90,12 +93,11 @@ public class SummarySelectorActivity extends AppCompatActivity {
         Thread previousEntriesGridThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (LoginActivity.activeUser.get() == null);
-                final List<DataSnapshot> entries = FirebaseHelper.getEntrySnapList(LoginActivity.activeUser.get());
-                while (!foundEntries.get());
-                foundEntries.set(false);
-
-                Log.d(TAG, "Num entries found: " + entries.size());
+                if (!foundEntries.get()) {
+                    while (LoginActivity.activeUser.get() == null);
+                    FirebaseHelper.getEntriesFromUser(LoginActivity.activeUser.get(), entries);
+                    while (!foundEntries.get());
+                }
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -103,6 +105,8 @@ public class SummarySelectorActivity extends AppCompatActivity {
                         Log.d(TAG, "Num entries found: " + entries.size());
 
                         TableLayout table = findViewById(R.id.recentWrapsTable);
+                        table.removeAllViewsInLayout();
+
                         TableRow row = null;
                         for (int i = 0; i < MAX_TABLE_COLUMNS * MAX_TABLE_ROWS && i < entries.size(); ++i) {
                             if (i % MAX_TABLE_COLUMNS == 0) {
@@ -111,16 +115,17 @@ public class SummarySelectorActivity extends AppCompatActivity {
                             }
 
                             Button button = new Button(SummarySelectorActivity.this);
-                            button.setText(entries.get(i).child("dateCreated").getValue(String.class));
+                            LocalDateTime tempTime = entries.get(i).second.dateCreated;
+                            button.setText("");
                             button.setId(i);
-                            final DatabaseReference ref = entries.get(i).getRef();
+                            final DatabaseReference ref = entries.get(i).first;
                             button.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     selectedSummaryEntry = ref;
+                                    Log.d(TAG, "Num entries found: " + entries.size());
                                     Intent i = new Intent(SummarySelectorActivity.this, SummaryActivity.class);
                                     startActivity(i);
-                                    table.removeAllViews();
                                 }
                             });
                             row.addView(button);

@@ -1,6 +1,7 @@
 package com.group3.spotifywrapped.database;
 
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -52,7 +53,7 @@ public class FirebaseHelper {
 
     public static DatabaseReference addSummaryEntry(SummaryEntry newEntry, DatabaseReference userRef) {
         DatabaseReference result = userRef.child("entries").push();
-        result.child("dateCreated").setValue(newEntry.dateCreated);
+        result.child("dateCreated").setValue(newEntry.dateCreated.toString());
         for (Artist it : newEntry.getArtists()) {
             addArtist(it, result);
         }
@@ -79,14 +80,14 @@ public class FirebaseHelper {
         return result;
     }
 
-    public static List<DataSnapshot> getEntrySnapList(DatabaseReference userRef) {
-        List<DataSnapshot> result = new ArrayList<>();
+    public static void getEntriesFromUser(DatabaseReference userRef, List<Pair<DatabaseReference, SummaryEntry>> result) {
         userRef.child("entries").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "Updating entry list");
                 result.clear();
                 for (DataSnapshot it : snapshot.getChildren()) {
-                    result.add(it);
+                    result.add(new Pair<DatabaseReference, SummaryEntry>(it.getRef(), new SummaryEntry(it.child("dateCreated").getValue(String.class))));
                 }
                 Log.d(TAG, "Num entries found: " + result.size());
                 SummarySelectorActivity.foundEntries.set(true);
@@ -97,7 +98,6 @@ public class FirebaseHelper {
                 Log.w(TAG, "Failed to load summary entry list", error.toException());
             }
         });
-        return result;
     }
 
     public static List<SpotifyItem> getArtistsFromEntry(DatabaseReference entryRef) {

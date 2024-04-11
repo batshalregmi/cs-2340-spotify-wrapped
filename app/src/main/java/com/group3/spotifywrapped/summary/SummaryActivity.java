@@ -3,6 +3,7 @@ package com.group3.spotifywrapped.summary;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class SummaryActivity extends AppCompatActivity {
     public static AtomicBoolean foundArtists = new AtomicBoolean(false);
     public static AtomicBoolean foundTracks = new AtomicBoolean(false);
 
+    private static final String TAG = "SummaryActivity";
     private SpotifyItemAdapter artistAdapter;
     private SpotifyItemAdapter trackAdapter;
 
@@ -130,6 +132,7 @@ public class SummaryActivity extends AppCompatActivity {
                         });
                     }
                 }
+                Log.d(TAG, "Num entries found: " + SummarySelectorActivity.entries.size());
                 foundArtists.set(false);
                 foundTracks.set(false);
             }

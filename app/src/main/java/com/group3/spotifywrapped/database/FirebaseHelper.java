@@ -104,6 +104,8 @@ public class FirebaseHelper {
         });
         return result;
     }
+
+
     public static List<Artist> getArtistsFromEntry(DatabaseReference entryRef) {
         List<Artist> result = new ArrayList<>();
         entryRef.child("artists").addValueEventListener(new ValueEventListener() {

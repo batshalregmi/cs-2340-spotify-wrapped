@@ -47,7 +47,7 @@
                 android:inputType="text"
                 android:textColorHint="@color/yellow"
                 android:padding="8dp"
-                android:textColor="@color/black"
+                android:textColor="@color/yellow"
                 android:textColorHighlight="@color/cardview_dark_background" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -68,6 +68,7 @@
                     android:layout_width="300dp"
                     android:layout_height="50dp"
                     android:textColorHint="@color/yellow"
+                    android:textColor="@color/yellow"
                     app:hintAnimationEnabled="false"
                     android:background="@drawable/custom_edittext"
                     android:hint="@string/password"

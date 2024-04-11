@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#B7E1D7"
+    android:background="@color/main_bg"
     tools:context=".SettingsActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -24,80 +24,80 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/setting_background2"
+            android:background="@drawable/sample2"
             android:orientation="vertical"
             android:padding="20dp">
+
             <TextView
                 android:id="@+id/settingsText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/string_Settings"
                 android:backgroundTint="@color/cardview_dark_background"
+                android:text="@string/string_Settings"
                 android:textAlignment="center"
-                android:textColor="@color/green"
+                android:textColor="@color/yellow"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
             <ImageView
-                android:layout_marginTop="15dp"
                 android:id="@+id/userProfilePicture"
                 android:layout_width="330dp"
-                android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                tools:src="@tools:sample/avatars"
-                android:contentDescription="spotify profile picture" />
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:contentDescription="spotify profile picture"
+                tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:id="@+id/usernameUnderPicture"
                 android:layout_width="93dp"
-                android:paddingTop="5dp"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
+                android:textColor="@color/yellow"
                 android:layout_gravity="center"
-                android:text="username" />
+                android:layout_marginTop="5dp"
+                android:paddingTop="5dp"
+                android:text="Username"
+                android:textAlignment="center" />
 
             <Button
                 android:id="@+id/link_to_spotify"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/green"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/title_featured"
                 android:text="Link Spotify Account" />
 
             <Button
                 android:id="@+id/unlink_spotify"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/green"
-                android:text="Unlink Spotify Account" />
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/title_featured"
+                android:text="Change Email" />
 
             <Button
-                android:onClick="ShowPopup"
                 android:id="@+id/change_password"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/green"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/title_featured"
+                android:onClick="ShowPopup"
                 android:text="Change Password" />
 
             <Button
                 android:id="@+id/delete_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="30dp"
                 android:backgroundTint="#FF0000"
                 android:text="Delete Account" />
 
 
         </LinearLayout>
-
-
 
 
     </androidx.cardview.widget.CardView>

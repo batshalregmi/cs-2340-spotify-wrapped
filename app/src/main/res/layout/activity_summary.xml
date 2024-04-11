@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_bg"
     tools:context=".summary.SummaryActivity">
 
     <Button
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:text="Back"
+        android:backgroundTint="@color/title_featured"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -46,6 +48,7 @@
                     android:text="Top Tracks"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:textColor="@color/yellow"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,6 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-black"
+                    android:textColor="@color/yellow"
                     android:text="Top Artists"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -99,6 +103,7 @@
         <TextView
             android:id="@+id/pageTitle"
             android:layout_width="wrap_content"
+            android:textColor="@color/yellow"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-black"

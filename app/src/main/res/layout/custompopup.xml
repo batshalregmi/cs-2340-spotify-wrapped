@@ -12,7 +12,7 @@
         android:contentDescription="Background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/setting_background"
+        android:src="@drawable/sample2_2"
         android:scaleType="centerCrop"
         />
 
@@ -37,7 +37,7 @@
             android:background="@drawable/custom_edittext"
             android:gravity="center"
             android:text="X"
-            android:textColor="@color/green"
+            android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:text="Change Password"
             android:textAlignment="center"
-            android:textColor="@color/green"
+            android:textColor="@color/yellow"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -61,7 +61,7 @@
             app:cursorColor="@color/purple"
             app:hintEnabled="false"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/green">
+            app:passwordToggleTint="@color/yellow">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/newPassword"
@@ -71,7 +71,7 @@
                 android:background="@drawable/custom_edittext"
                 android:defaultFocusHighlightEnabled="false"
                 android:hint="New Password"
-                android:textColorHint="#7DD5BF"
+                android:textColorHint="@color/yellow"
                 android:inputType="textPassword"
                 android:padding="8dp"
                 app:hintAnimationEnabled="false" />
@@ -86,7 +86,7 @@
             app:cursorColor="@color/purple"
             app:hintEnabled="false"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/green">
+            app:passwordToggleTint="@color/yellow">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/confirm_newPassword"
@@ -96,7 +96,7 @@
                 android:defaultFocusHighlightEnabled="false"
                 android:layout_gravity="center"
                 android:hint="Confirm Password"
-                android:textColorHint="#7DD5BF"
+                android:textColorHint="@color/yellow"
 
                 android:inputType="textPassword"
                 android:padding="8dp"
@@ -109,7 +109,7 @@
             android:layout_gravity="center"
             android:layout_height="60dp"
             android:layout_marginTop="30dp"
-            android:backgroundTint="@color/green"
+            android:backgroundTint="@color/title_featured"
             android:text="Submit"
             android:textSize="18sp"
             app:cornerRadius="20dp" />

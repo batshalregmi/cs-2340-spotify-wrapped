@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="400dp"
+    app:cardCornerRadius="30dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:contentDescription="Background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/sample2_2"
+        android:scaleType="centerCrop"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txtclose"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:background="@drawable/custom_edittext"
+            android:gravity="center"
+            android:text="X"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/emailText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Change Email"
+            android:textAlignment="center"
+            android:textColor="@color/yellow"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/newEmail"
+                android:layout_width="280dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/custom_edittext"
+                android:defaultFocusHighlightEnabled="false"
+                android:hint="New Email"
+                android:textColorHint="@color/yellow"
+                android:inputType="textPassword"
+                android:padding="8dp"
+                app:hintAnimationEnabled="false" />
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/confirm_email"
+                android:layout_width="280dp"
+                android:layout_height="50dp"
+                android:background="@drawable/custom_edittext"
+                android:defaultFocusHighlightEnabled="false"
+                android:hint="Confirm Email"
+                android:textColorHint="@color/yellow"
+                android:layout_marginTop="20dp"
+                android:padding="8dp"
+                />
+
+        <Button
+            android:id="@+id/changeEmailButton"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/title_featured"
+            android:text="Submit"
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

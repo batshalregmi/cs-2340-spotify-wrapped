@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@color/main_bg"
-    tools:context=".SettingsActivity">
+    tools:context=".CoreAppViews.SettingsActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="570dp"
@@ -74,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
+                android:onClick="ShowPopupEmail"
                 android:backgroundTint="@color/title_featured"
                 android:text="Change Email" />
 
@@ -84,7 +85,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:backgroundTint="@color/title_featured"
-                android:onClick="ShowPopup"
+                android:onClick="ShowPopupPassword"
                 android:text="Change Password" />
 
             <Button

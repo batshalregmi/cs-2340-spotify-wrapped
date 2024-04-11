@@ -105,10 +105,6 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
-//
-//            //FirebaseHelper.deleteUser(LoginActivity.activeUser);
-//            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-//            startActivity(intent);
         });
 
 

@@ -19,6 +19,25 @@ import java.util.concurrent.atomic.AtomicReference;
 public class FirebaseHelper {
     private static final String TAG = "FirebaseHelper";
 
+    public static void deleteUser(FirebaseUser userRef) {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+        usersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot it : snapshot.getChildren()) {
+                    if (it.child("userUid").getValue(String.class).equals(userRef.getUid())) {
+                        it.getRef().removeValue();
+                    }
+                }
+                userRef.delete();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "loadPost:onCancelled", error.toException());
+            }
+        });
+    }
+
     public static AtomicReference<DatabaseReference> getUserByFirebaseUser() {
         String Uid = FirebaseAuth.getInstance().getUid();
         AtomicReference<DatabaseReference> result = new AtomicReference<>(null);
@@ -47,25 +66,6 @@ public class FirebaseHelper {
         DatabaseReference result = userRef.push();
         result.setValue(newUser);
         return result;
-    }
-
-    public static void deleteUser(FirebaseUser userRef) {
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
-        usersRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot it : snapshot.getChildren()) {
-                    if (it.child("userUid").getValue(String.class).equals(userRef.getUid())) {
-                        it.getRef().removeValue();
-                    }
-                }
-                userRef.delete();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG, "loadPost:onCancelled", error.toException());
-            }
-        });
     }
 
     public static DatabaseReference addSummaryEntry(SummaryEntry newEntry, DatabaseReference userRef) {

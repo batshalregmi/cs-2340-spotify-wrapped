@@ -111,18 +111,18 @@ public class SettingsActivity extends AppCompatActivity {
 //            startActivity(intent);
         });
 
-        changeEmailButton.setOnClickListener(v -> {
-            // open dialog to change email
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-            builder.setTitle("Change Email");
-            builder.setMessage("Enter new email address");
-
-
-
-            builder.create();
-
-        });
+//        changeEmailButton.setOnClickListener(v -> {
+//            // open dialog to change email
+//
+//            AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+//            builder.setTitle("Change Email");
+//            builder.setMessage("Enter new email address");
+//
+//
+//
+//            builder.create();
+//
+//        });
 
     }
     public void ShowPopupEmail(View v) {

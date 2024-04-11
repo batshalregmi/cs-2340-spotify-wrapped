@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.FirebaseHelper;
@@ -94,11 +95,20 @@ public class SettingsActivity extends AppCompatActivity {
             profilePicture.setImageDrawable(image);
         }
         TextView username = findViewById(R.id.usernameUnderPicture);
+        Button changePasswordButton = findViewById(R.id.change_password);
+
+        changePasswordButton.setOnClickListener(v -> {
+            FirebaseAuth user = FirebaseAuth.getInstance();
+            user.sendPasswordResetEmail(user.getCurrentUser().getEmail());
+            user.signOut();
+            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
         //username.setText(LoginActivity.activeUser.username);
 
 
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changeEmailButton = findViewById(R.id.change_email);
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changePasswordButton = findViewById(R.id.change_password);
+//        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changePasswordButton = findViewById(R.id.change_password);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button deleteAccountButton = findViewById(R.id.delete_account);
     }
     public void ShowPopupEmail(View v) {
@@ -120,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity {
         TextView txtclose;
         Button btnFollow;
         passwordDialog.setContentView(R.layout.password_custompopup);
-        txtclose =(TextView) passwordDialog.findViewById(R.id.txtclose);
+        txtclose = (TextView) passwordDialog.findViewById(R.id.txtclose);
         txtclose.setText("X");
         txtclose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +145,7 @@ public class SettingsActivity extends AppCompatActivity {
         TextView txtclose;
         Button btnFollow;
         deleteDialog.setContentView(R.layout.deleteaccount_custompopup);
-        txtclose =(TextView) deleteDialog.findViewById(R.id.txtclose);
+        txtclose = (TextView) deleteDialog.findViewById(R.id.txtclose);
         txtclose.setText("X");
         txtclose.setOnClickListener(new View.OnClickListener() {
             @Override

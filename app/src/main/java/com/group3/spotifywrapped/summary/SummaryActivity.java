@@ -132,7 +132,6 @@ public class SummaryActivity extends AppCompatActivity {
                         });
                     }
                 }
-                Log.d(TAG, "Num entries found: " + SummarySelectorActivity.entries.size());
                 foundArtists.set(false);
                 foundTracks.set(false);
             }

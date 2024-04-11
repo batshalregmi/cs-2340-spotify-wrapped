@@ -84,24 +84,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </TableLayout>
+                app:layout_constraintTop_toBottomOf="@+id/textView10"/>
 
             <TextView
                 android:id="@+id/textView10"
@@ -131,7 +114,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
-                android:id="@+id/wrappedSelctor"
+                android:id="@+id/allPreviousWrapSpinner"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

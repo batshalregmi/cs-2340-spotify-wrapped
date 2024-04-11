@@ -89,7 +89,6 @@ public class FirebaseHelper {
                 for (DataSnapshot it : snapshot.getChildren()) {
                     result.add(new Pair<DatabaseReference, SummaryEntry>(it.getRef(), new SummaryEntry(it.child("dateCreated").getValue(String.class))));
                 }
-                Log.d(TAG, "Num entries found: " + result.size());
                 SummarySelectorActivity.foundEntries.set(true);
             }
 
@@ -114,7 +113,6 @@ public class FirebaseHelper {
                     );
                     result.add(newArtist);
                 }
-                Log.d(TAG, "artists found: " + result.toString());
                 SummaryActivity.foundArtists.set(true);
             }
 

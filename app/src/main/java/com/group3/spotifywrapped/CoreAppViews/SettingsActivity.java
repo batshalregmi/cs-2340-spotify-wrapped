@@ -1,16 +1,25 @@
 package com.group3.spotifywrapped.CoreAppViews;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.group3.spotifywrapped.R;
+import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
 import org.json.JSONArray;
@@ -78,5 +87,35 @@ public class SettingsActivity extends AppCompatActivity {
         }
         TextView username = findViewById(R.id.usernameUnderPicture);
         //username.setText(LoginActivity.activeUser.username);
+
+
+        Button deleteButton = findViewById(R.id.delete_account);
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changeEmailButton = findViewById(R.id.change_email);
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changePasswordButton = findViewById(R.id.change_password);
+        deleteButton.setOnClickListener(v -> {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                FirebaseHelper.deleteUser(FirebaseAuth.getInstance().getCurrentUser());
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+//
+//            //FirebaseHelper.deleteUser(LoginActivity.activeUser);
+//            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+//            startActivity(intent);
+        });
+
+        changeEmailButton.setOnClickListener(v -> {
+            // open dialog to change email
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+            builder.setTitle("Change Email");
+            builder.setMessage("Enter new email address");
+
+
+
+            builder.create();
+
+        });
     }
 }

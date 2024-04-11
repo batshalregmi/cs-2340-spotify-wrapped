@@ -82,7 +82,8 @@ public class LoginActivity extends AppCompatActivity {
                                     activeUser = FirebaseHelper.getUserByFirebaseUser();
                                     getToken();
                                     while(!tokenRecieved.get());
-                                    Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
+//                                    Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class); //TODO: CHANGE THIS BACK
+                                    Intent i = new Intent(LoginActivity.this, SettingsActivity.class);
                                     startActivity(i);
                                 }
                             });

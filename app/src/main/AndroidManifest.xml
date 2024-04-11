@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DevStartActivity"
+            android:name=".SettingsActivity"
             android:exported="true">
         </activity>
     </application>

@@ -58,22 +58,13 @@
                 android:text="username" />
 
             <Button
-                android:id="@+id/link_to_spotify"
+                android:id="@+id/change_Email_Button"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
-                android:text="Link Spotify Account" />
-
-            <Button
-                android:id="@+id/unlink_spotify"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_gravity="center"
-                android:backgroundTint="@color/green"
-                android:text="Unlink Spotify Account" />
+                android:text="Change Login Email" />
 
             <Button
                 android:onClick="ShowPopup"
@@ -84,6 +75,17 @@
                 android:layout_gravity="center"
                 android:backgroundTint="@color/green"
                 android:text="Change Password" />
+
+<!--            <Button-->
+<!--                android:id="@+id/unlink_spotify"-->
+<!--                android:layout_width="200dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="30dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:backgroundTint="@color/green"-->
+<!--                android:text="Unlink Spotify Account" />-->
+
+
 
             <Button
                 android:id="@+id/delete_account"

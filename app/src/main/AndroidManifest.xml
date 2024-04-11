@@ -19,8 +19,12 @@
         <activity
             android:name=".summary.SummaryActivity"
             android:exported="true" />
+        <activity android:name=".CoreAppViews.SettingsActivity"
+            android:exported="true" />
         <activity
             android:name=".CoreAppViews.SignUpActivity"
+            android:exported="true"/>
+        <activity android:name=".CoreAppViews.MainPageActivity"
             android:exported="true"/>
         <activity
             android:name=".CoreAppViews.LoginActivity"

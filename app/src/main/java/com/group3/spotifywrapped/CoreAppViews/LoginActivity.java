@@ -38,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
             "user-read-email",
             "user-top-read"
     };
-
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 

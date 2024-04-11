@@ -21,7 +21,13 @@
             android:exported="true" />
         <activity
             android:name=".CoreAppViews.SignUpActivity"
-            android:exported="true"/>
+            android:exported="true">
+            <intent-filter>
+                <data
+                    android:host="auth"
+                    android:scheme="spotifywrapped" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".CoreAppViews.LoginActivity"
             android:exported="true">
@@ -32,7 +38,6 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

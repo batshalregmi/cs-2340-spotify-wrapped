@@ -13,12 +13,14 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
+import com.group3.spotifywrapped.CoreAppViews.SignUpActivity;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.SummaryEntry;
@@ -112,6 +114,19 @@ public class SummarySelectorActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+
+        Button openEntryButton = findViewById(R.id.openWrappedButton);
+        openEntryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedSummaryEntry != null) {
+                    Intent i = new Intent(SummarySelectorActivity.this, SummaryActivity.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(SummarySelectorActivity.this, "Must select an summary entry before opening one", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -187,4 +202,5 @@ public class SummarySelectorActivity extends AppCompatActivity {
     public static DatabaseReference getSelectedSummaryEntry() {
         return selectedSummaryEntry;
     }
+    public static void setSelectedSummaryEntry(DatabaseReference ref) { selectedSummaryEntry = ref; }
 }

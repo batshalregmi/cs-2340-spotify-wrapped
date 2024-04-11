@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.R;
-import com.group3.spotifywrapped.ViewModel.SummaryViewModel;
 import com.group3.spotifywrapped.database.Artist;
 import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.SpotifyItem;
@@ -88,6 +87,7 @@ public class SummaryActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SummarySelectorActivity.setSelectedSummaryEntry(null);
                 Intent i = new Intent(SummaryActivity.this, SummarySelectorActivity.class);
                 startActivity(i);
             }

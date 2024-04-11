@@ -106,8 +106,8 @@ public class FirebaseHelper {
     }
 
 
-    public static List<Artist> getArtistsFromEntry(DatabaseReference entryRef) {
-        List<Artist> result = new ArrayList<>();
+    public static List<SpotifyItem> getArtistsFromEntry(DatabaseReference entryRef) {
+        List<SpotifyItem> result = new ArrayList<>();
         entryRef.child("artists").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -126,8 +126,8 @@ public class FirebaseHelper {
         return result;
     }
 
-    public static List<Track> getTracksFromEntry(DatabaseReference entryRef) {
-        List<Track> result = new ArrayList<>();
+    public static List<SpotifyItem> getTracksFromEntry(DatabaseReference entryRef) {
+        List<SpotifyItem> result = new ArrayList<>();
         entryRef.child("tracks").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -1,33 +1,35 @@
-package com.group3.spotifywrapped;
+package com.group3.spotifywrapped.CoreAppViews;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.media3.exoplayer.ExoPlayer;
-import androidx.room.Room;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
-import com.group3.spotifywrapped.CoreAppViews.MainPageActivity;
-import com.group3.spotifywrapped.database.AppDatabase;
-import com.group3.spotifywrapped.database.User;
-import com.group3.spotifywrapped.database.UserDao;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.group3.spotifywrapped.R;
+import com.group3.spotifywrapped.database.FirebaseHelper;
 
-import com.group3.spotifywrapped.utils.Playback;
+import com.group3.spotifywrapped.summary.SummarySelectorActivity;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
-import org.json.JSONException;
-
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
+
     public static final String CLIENT_ID = "9e3e12a5d1424f068a20c6db49de005c";
     public static final String REDIRECT_URI = "spotifywrapped://auth";
     public static final String[] SCOPES = new String[] {
@@ -40,9 +42,10 @@ public class LoginActivity extends AppCompatActivity {
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
-    public static User activeUser;
-    private UserDao userDao;
-    private boolean tokenRecieved = false;
+    private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
+
+    public static AtomicReference<DatabaseReference> activeUser = new AtomicReference<>(null);
+    public static String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,43 +54,40 @@ public class LoginActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        EditText username = findViewById(R.id.username);
-        EditText password = findViewById(R.id.password);
+        EditText usernameTextField = findViewById(R.id.username);
+        EditText passwordTextField = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
-        Button signUpButton = findViewById(R.id.signUpButton);
-
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "local-database")
-                .fallbackToDestructiveMigration()
-                .build();
-        userDao = db.userDao();
-
-        //addTestUser();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Thread loginThread = new Thread(new Runnable() {
+                if (passwordTextField.getText().toString().length() < 6) {
+                    Toast.makeText(LoginActivity.this, "Password must be 6 characters long", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signInWithEmailAndPassword(usernameTextField.getText().toString(), passwordTextField.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void run() {
-                        List<User> usersFound = userDao.findByLoginInfo(username.getText().toString(), password.getText().toString());
-                        if (!usersFound.isEmpty()) {
-                            activeUser = usersFound.get(0);
-                            getToken();
-                            while (!tokenRecieved);
-                            Log.d("LoginActivity", "Token recieved: " + activeUser.sToken);
-
-                            //switch to settings screen
-                            Intent i = new Intent(view.getContext(), MainPageActivity.class);
-                            startActivity(i);
-                        } else {
-                            Log.e("LoginActivity", "Login credentials invalid");
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            activeUser = FirebaseHelper.getUserByFirebaseUser();
                         }
                     }
                 });
-                loginThread.start();
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getToken();
+                        while(!tokenRecieved.get());
+                        Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
+                        startActivity(i);
+                    }
+                });
+                thread.start();
             }
         });
 
+        Button signUpButton = findViewById(R.id.signUpButton);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,24 +121,8 @@ public class LoginActivity extends AppCompatActivity {
 
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             //Log.d("LoginActivity", "Response: " + response.getAccessToken());
-            activeUser.sToken = response.getAccessToken();
-            tokenRecieved = true;
+            token = response.getAccessToken();
+            tokenRecieved.set(true);
         }
-    }
-
-    private void addTestUser() {
-        User trentUser = new User(
-                "tdoiron0",
-                "1234",
-                "trentwdoiron@gmail.com",
-                "Trent Doiron"
-        );
-        Thread insertUserThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                userDao.insert(trentUser);
-            }
-        });
-        insertUserThread.start();
     }
 }

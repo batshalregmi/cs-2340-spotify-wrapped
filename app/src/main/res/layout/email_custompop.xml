@@ -58,12 +58,12 @@
                 android:layout_width="280dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
+                android:textColor="@color/yellow"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/custom_edittext"
                 android:defaultFocusHighlightEnabled="false"
                 android:hint="New Email"
                 android:textColorHint="@color/yellow"
-                android:inputType="textPassword"
                 android:padding="8dp"
                 app:hintAnimationEnabled="false" />
 
@@ -74,6 +74,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/custom_edittext"
                 android:defaultFocusHighlightEnabled="false"
+                android:textColor="@color/yellow"
                 android:hint="Confirm Email"
                 android:textColorHint="@color/yellow"
                 android:layout_marginTop="20dp"

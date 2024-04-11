@@ -10,21 +10,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
@@ -38,9 +31,8 @@ import java.io.IOException;
 public class SettingsActivity extends AppCompatActivity {
     Dialog passwordDialog;
     Dialog emailDialog;
+    Dialog deleteDialog;
 
-    String changedPassword;
-    String changedEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         emailDialog = new Dialog(this);
         passwordDialog = new Dialog(this);
+        deleteDialog = new Dialog(this);
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
@@ -104,75 +97,25 @@ public class SettingsActivity extends AppCompatActivity {
         //username.setText(LoginActivity.activeUser.username);
 
 
-        Button deleteButton = findViewById(R.id.delete_account);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changeEmailButton = findViewById(R.id.change_email);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changePasswordButton = findViewById(R.id.change_password);
-        deleteButton.setOnClickListener(v -> {
-            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                FirebaseHelper.deleteUser(FirebaseAuth.getInstance().getCurrentUser());
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button deleteAccountButton = findViewById(R.id.delete_account);
     }
     public void ShowPopupEmail(View v) {
         TextView txtclose;
         Button btnFollow;
         emailDialog.setContentView(R.layout.email_custompop);
-        txtclose = (TextView) emailDialog.findViewById(R.id.txtclose);
+        txtclose =(TextView) emailDialog.findViewById(R.id.txtclose);
         txtclose.setText("X");
-
-        Button changeEmailSubmitButton = emailDialog.findViewById(R.id.changeEmailButton);
-        EditText newEmailEditText = emailDialog.findViewById(R.id.newEmail); // Get the EditText for new email
-
         txtclose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 emailDialog.dismiss();
             }
         });
-
         emailDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         emailDialog.show();
-
-        changeEmailSubmitButton.setOnClickListener(x -> {
-            changedEmail = newEmailEditText.getText().toString(); // Get the new email from EditText
-            TextView emailNowPassword = emailDialog.findViewById(R.id.confirm_email);
-            if (changedEmail != null) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                // Get auth credentials from the user for re-authentication
-                AuthCredential credential = EmailAuthProvider
-                        .getCredential("regmibat@gmail.com", "123456"); // Current Login Credentials \\
-                // Prompt the user to re-provide their sign-in credentials
-                user.reauthenticate(credential)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Log.d("SETTINGSPAGEACTIVITY", "User re-authenticated.");
-                                //Now change your email address \\
-                                //----------------Code for Changing Email Address----------\\
-                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                user.updateEmail(changedEmail)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Log.d("SETTINGSPAGEACTIVITY", "User email address updated.");
-                                                }
-                                            }
-                                        });
-                                //----------------------------------------------------------\\
-                            }
-                        });
-            }
-            emailDialog.dismiss();
-        });
     }
-
     public void ShowPopupPassword(View v) {
         TextView txtclose;
         Button btnFollow;
@@ -187,6 +130,28 @@ public class SettingsActivity extends AppCompatActivity {
         });
         passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         passwordDialog.show();
+    }
+    public void ShowPopupDelete(View v) {
+        TextView txtclose;
+        Button btnFollow;
+        deleteDialog.setContentView(R.layout.deleteaccount_custompopup);
+        txtclose =(TextView) deleteDialog.findViewById(R.id.txtclose);
+        txtclose.setText("X");
+        txtclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteDialog.dismiss();
+            }
+        });
+        Button deleteButton = deleteDialog.findViewById(R.id.confirmAccountDeletion);
+        deleteButton.setOnClickListener(q -> {
+            FirebaseHelper.deleteUser(FirebaseAuth.getInstance().getCurrentUser());
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
+        deleteDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        deleteDialog.show();
     }
 
 }

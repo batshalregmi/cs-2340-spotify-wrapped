@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -97,6 +98,20 @@ public class SettingsActivity extends AppCompatActivity {
         TextView username = findViewById(R.id.usernameUnderPicture);
         Button changePasswordButton = findViewById(R.id.change_password);
 
+        Button changeEmailButton = emailDialog.findViewById(R.id.changeEmailButton);
+//        changeEmailButton.setOnClickListener(v -> {
+//            FirebaseAuth user = FirebaseAuth.getInstance();
+//            user.getCurrentUser().updateEmail(emailDialog.findViewById(R.id.newEmail).toString())
+//                    .addOnCompleteListener(task -> {
+//                        if (task.isSuccessful()) {
+//                            Log.d("SettingsActivity", "User email address updated.");
+//                            user.signOut();
+//                            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    });
+//        });
+
         changePasswordButton.setOnClickListener(v -> {
             FirebaseAuth user = FirebaseAuth.getInstance();
             user.sendPasswordResetEmail(user.getCurrentUser().getEmail());
@@ -107,7 +122,6 @@ public class SettingsActivity extends AppCompatActivity {
         //username.setText(LoginActivity.activeUser.username);
 
 
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changeEmailButton = findViewById(R.id.change_email);
 //        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changePasswordButton = findViewById(R.id.change_password);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button deleteAccountButton = findViewById(R.id.delete_account);
     }
@@ -123,6 +137,27 @@ public class SettingsActivity extends AppCompatActivity {
                 emailDialog.dismiss();
             }
         });
+
+        // Set up the changeEmailButton here, after the emailDialog has been inflated
+        Button changeEmailButton = emailDialog.findViewById(R.id.changeEmailButton);
+        EditText newEmail = emailDialog.findViewById(R.id.newEmail);
+        changeEmailButton.setOnClickListener(x -> {
+            FirebaseAuth user = FirebaseAuth.getInstance();
+            user.getCurrentUser().updateEmail(newEmail.getText().toString())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("SettingsActivity", "User email address updated.");
+                            user.signOut();
+                            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        // This block will be executed if the task fails
+                        Log.d("SettingsActivity", "Failed to update user email address.", e);
+                    });
+        });
+
         emailDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         emailDialog.show();
     }

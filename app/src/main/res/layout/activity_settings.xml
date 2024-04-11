@@ -95,6 +95,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:backgroundTint="#FF0000"
+                android:onClick="ShowPopupDelete"
                 android:text="Delete Account" />
 
 

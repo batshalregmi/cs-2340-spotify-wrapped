@@ -31,6 +31,7 @@ import java.io.IOException;
 public class SettingsActivity extends AppCompatActivity {
     Dialog passwordDialog;
     Dialog emailDialog;
+    Dialog deleteDialog;
 
 
     @Override
@@ -40,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         emailDialog = new Dialog(this);
         passwordDialog = new Dialog(this);
+        deleteDialog = new Dialog(this);
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
@@ -95,19 +97,9 @@ public class SettingsActivity extends AppCompatActivity {
         //username.setText(LoginActivity.activeUser.username);
 
 
-        Button deleteButton = findViewById(R.id.delete_account);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changeEmailButton = findViewById(R.id.change_email);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button changePasswordButton = findViewById(R.id.change_password);
-        deleteButton.setOnClickListener(v -> {
-            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                FirebaseHelper.deleteUser(FirebaseAuth.getInstance().getCurrentUser());
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button deleteAccountButton = findViewById(R.id.delete_account);
     }
     public void ShowPopupEmail(View v) {
         TextView txtclose;
@@ -138,6 +130,28 @@ public class SettingsActivity extends AppCompatActivity {
         });
         passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         passwordDialog.show();
+    }
+    public void ShowPopupDelete(View v) {
+        TextView txtclose;
+        Button btnFollow;
+        deleteDialog.setContentView(R.layout.deleteaccount_custompopup);
+        txtclose =(TextView) deleteDialog.findViewById(R.id.txtclose);
+        txtclose.setText("X");
+        txtclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteDialog.dismiss();
+            }
+        });
+        Button deleteButton = deleteDialog.findViewById(R.id.confirmAccountDeletion);
+        deleteButton.setOnClickListener(q -> {
+            FirebaseHelper.deleteUser(FirebaseAuth.getInstance().getCurrentUser());
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
+        deleteDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        deleteDialog.show();
     }
 
 }

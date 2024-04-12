@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/loginbg"
+    android:background="@drawable/loginbg_try"
     tools:context=".CoreAppViews.LoginActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -25,6 +25,7 @@
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="24dp">
+
             <TextView
                 android:id="@+id/loginText"
                 android:layout_width="match_parent"
@@ -40,21 +41,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="40dp"
-                android:paddingStart="15dp"
                 android:background="@drawable/custom_edittext"
                 android:drawablePadding="8dp"
                 android:hint="@string/username"
                 android:inputType="text"
-                android:textColorHint="@color/yellow"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:paddingStart="15dp"
+                android:textColor="@color/white"
+                android:textColorHighlight="@color/cardview_dark_background"
+                android:textColorHint="@color/yellow" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginTop="19dp"
                 android:id="@+id/passwordParent"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
 
                 android:textColor="@color/black"
                 app:cursorColor="@color/purple"
@@ -67,20 +68,21 @@
                     android:id="@+id/password"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:textColorHint="@color/yellow"
-                    app:hintAnimationEnabled="false"
                     android:background="@drawable/custom_edittext"
-                    android:hint="@string/password"
-                    android:inputType="textPassword"
                     android:defaultFocusHighlightEnabled="false"
-                    android:padding="8dp" />
+                    android:hint="@string/password"
+                    android:textColor="@color/white"
+                    android:inputType="textPassword"
+                    android:padding="8dp"
+                    android:textColorHint="@color/yellow"
+                    app:hintAnimationEnabled="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/loginButton"
-                android:layout_gravity="center"
                 android:layout_width="150dp"
                 android:layout_height="60dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:backgroundTint="@color/title_featured"
                 android:text="@string/login"

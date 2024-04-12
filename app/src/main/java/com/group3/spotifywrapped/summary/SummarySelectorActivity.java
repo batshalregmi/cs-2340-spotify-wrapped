@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +29,8 @@ public class SummarySelectorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_summary_selector);
 
         Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
+
+
         genSummaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

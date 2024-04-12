@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.ExoPlayer;
 
-import com.group3.spotifywrapped.LoginActivity;
+import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
 
 import org.json.JSONObject;
 
@@ -20,6 +20,14 @@ public class Playback {
         uth = new UserTrackHistory();
     }
 
+    public void playSong(String url) {
+        player.stop();
+        player.clearMediaItems();
+        player.addMediaItem(MediaItem.fromUri(url));
+        player.prepare();
+        player.play();
+    }
+
     private void initQueue() {
         uth.retrieveHistory();
         List<String> trackIDs = uth.getTrackIDs();
@@ -32,9 +40,9 @@ public class Playback {
         }
     }
 
-    private String getTrackURL(String trackID) {
+    public String getTrackURL(String trackID) {
         try {
-            JSONObject response = SpotifyApiHelper.callSpotifyApi("/tracks/" + trackID, LoginActivity.activeUser.sToken, "GET");
+            JSONObject response = SpotifyApiHelper.callSpotifyApi("/tracks/" + trackID, LoginActivity.token, "GET");
             return response.getString("preview_url");
         } catch (Exception e) {
             return null;

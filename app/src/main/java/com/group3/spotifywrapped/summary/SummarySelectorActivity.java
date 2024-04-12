@@ -41,12 +41,10 @@ public class SummarySelectorActivity extends AppCompatActivity {
     private static final List<String> entriesStringList = new ArrayList<>();
     private ArrayAdapter<String> allPreviousEntrySpinnerAdapter = null;
     public static AtomicBoolean foundEntries = new AtomicBoolean(false);
-
     private static final String TAG = "SummarySelectorActivity";
     private static DatabaseReference selectedSummaryEntry = null;
     private static final int MAX_TABLE_ROWS = 2;
     private static final int MAX_TABLE_COLUMNS = 4;
-
     private String selectedTimeRange = "short_term";
 
     @Override
@@ -98,6 +96,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (LoginActivity.activeUser.get() != null) {
                     SummaryEntry newEntry = new SummaryEntry(LocalDateTime.now().toString());
+                    newEntry.timeFrame = selectedTimeRange;
                     newEntry.getArtists().addAll(SpotifyApiHelper.getTopArtistList(selectedTimeRange));
                     newEntry.getTracks().addAll(SpotifyApiHelper.getTopTrackList(selectedTimeRange));
                     selectedSummaryEntry = FirebaseHelper.addSummaryEntry(newEntry, LoginActivity.activeUser.get());

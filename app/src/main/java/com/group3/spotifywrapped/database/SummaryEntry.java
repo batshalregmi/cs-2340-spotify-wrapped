@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 public class SummaryEntry {
     public LocalDateTime dateCreated;
+    public String timeFrame;
 
     private List<Artist> artists = new ArrayList<>();
     private List<Track> tracks = new ArrayList<>();

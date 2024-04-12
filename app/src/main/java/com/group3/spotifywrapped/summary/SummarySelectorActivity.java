@@ -72,7 +72,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
                 R.array.time_frame_choices,
                 android.R.layout.simple_spinner_item
         );
-        timeRangeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timeRangeSpinnerAdapter.setDropDownViewResource(R.layout.color_spinner_layout);
         timeRangeSpinner.setAdapter(timeRangeSpinnerAdapter);
 
         timeRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

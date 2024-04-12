@@ -101,7 +101,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
-
                 android:spinnerMode="dropdown"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,10 +113,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_height="wrap_content"
                     android:text="Open Selected Wrapped"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     android:backgroundTint="@color/title_featured"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+                    />
                 <TableLayout
                     android:id="@+id/recentWrapsTable"
                     android:layout_width="match_parent"

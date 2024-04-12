@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/loginbg"
+    android:background="@drawable/loginpageartnew"
     tools:context=".CoreAppViews.SignUpActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -22,7 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@color/main_bg2"
             android:orientation="vertical"
             android:padding="24dp">
 
@@ -32,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:text="Create New Account"
                 android:textAlignment="center"
-                android:textColor="@color/yellow"
+                android:textColor="@color/green"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -42,12 +41,11 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/custom_edittext"
-                android:paddingStart="18dp"
-                android:textColorHint="@color/yellow"
+                android:drawablePadding="8dp"
                 android:hint="Username"
                 android:inputType="text"
                 android:padding="8dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
 
             <EditText
@@ -56,12 +54,11 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/custom_edittext"
-                android:paddingStart="18dp"
-                android:textColorHint="@color/yellow"
+                android:drawablePadding="8dp"
                 android:hint="Email"
                 android:inputType="text"
                 android:padding="8dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
 
             <EditText
@@ -70,12 +67,11 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/custom_edittext"
-                android:paddingStart="18dp"
+                android:drawablePadding="8dp"
                 android:hint="Full Name"
-                android:textColorHint="@color/yellow"
                 android:inputType="text"
                 android:padding="8dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -88,15 +84,12 @@
                 app:cursorColor="@color/purple"
                 app:hintEnabled="false"
                 app:passwordToggleEnabled="true"
-                app:hintTextColor="@color/white"
-                app:passwordToggleTint="@color/yellow">
+                app:passwordToggleTint="@color/green">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:textColorHint="@color/yellow"
-                    android:textColor="@color/white"
                     app:hintAnimationEnabled="false"
                     android:background="@drawable/custom_edittext"
                     android:hint="@string/password"
@@ -115,15 +108,13 @@
                 app:cursorColor="@color/purple"
                 app:hintEnabled="false"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/yellow">
+                app:passwordToggleTint="@color/green">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confirmPassword"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
                     app:hintAnimationEnabled="false"
-                    android:textColorHint="@color/yellow"
-                    android:textColor="@color/white"
                     android:background="@drawable/custom_edittext"
                     android:hint="@string/password"
                     android:inputType="textPassword"
@@ -137,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
-                android:backgroundTint="@color/title_featured"
+                android:backgroundTint="@color/green"
                 android:text="Create Account"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />

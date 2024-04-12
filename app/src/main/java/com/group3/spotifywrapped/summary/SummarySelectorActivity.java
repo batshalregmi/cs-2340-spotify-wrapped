@@ -90,7 +90,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
+        Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
         genSummaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

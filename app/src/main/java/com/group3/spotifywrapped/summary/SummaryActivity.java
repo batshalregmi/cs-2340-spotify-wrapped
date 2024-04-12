@@ -1,5 +1,6 @@
 package com.group3.spotifywrapped.summary;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
@@ -27,7 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.R;
-import com.group3.spotifywrapped.ViewModel.SummaryViewModel;
 import com.group3.spotifywrapped.database.Artist;
 import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.SpotifyItem;
@@ -74,7 +74,7 @@ public class SummaryActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull SummaryActivity.MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull SummaryActivity.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
             holder.songNameView.setText(items.get(position).name);
             holder.songNumberView.setText(Integer.toString(position + 1));
             holder.albumCoverView.setImageDrawable(items.get(position).getImage());

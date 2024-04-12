@@ -1,10 +1,12 @@
 package com.group3.spotifywrapped.database;
 
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,6 +21,25 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class FirebaseHelper {
     private static final String TAG = "FirebaseHelper";
+
+    public static void deleteUser(FirebaseUser userRef) {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+        usersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot it : snapshot.getChildren()) {
+                    if (it.child("userUid").getValue(String.class).equals(userRef.getUid())) {
+                        it.getRef().removeValue();
+                    }
+                }
+                userRef.delete();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "loadPost:onCancelled", error.toException());
+            }
+        });
+    }
 
     public static AtomicReference<DatabaseReference> getUserByFirebaseUser() {
         String Uid = FirebaseAuth.getInstance().getUid();
@@ -52,7 +73,7 @@ public class FirebaseHelper {
 
     public static DatabaseReference addSummaryEntry(SummaryEntry newEntry, DatabaseReference userRef) {
         DatabaseReference result = userRef.child("entries").push();
-        result.child("dateCreated").setValue(newEntry.dateCreated);
+        result.child("dateCreated").setValue(newEntry.dateCreated.toString());
         for (Artist it : newEntry.getArtists()) {
             addArtist(it, result);
         }
@@ -79,16 +100,15 @@ public class FirebaseHelper {
         return result;
     }
 
-    public static List<DataSnapshot> getEntrySnapList(DatabaseReference userRef) {
-        List<DataSnapshot> result = new ArrayList<>();
+    public static void getEntriesFromUser(DatabaseReference userRef, List<Pair<DatabaseReference, SummaryEntry>> result) {
         userRef.child("entries").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "Updating entry list");
                 result.clear();
                 for (DataSnapshot it : snapshot.getChildren()) {
-                    result.add(it);
+                    result.add(new Pair<DatabaseReference, SummaryEntry>(it.getRef(), new SummaryEntry(it.child("dateCreated").getValue(String.class))));
                 }
-                Log.d(TAG, "Num entries found: " + result.size());
                 SummarySelectorActivity.foundEntries.set(true);
             }
 
@@ -97,7 +117,6 @@ public class FirebaseHelper {
                 Log.w(TAG, "Failed to load summary entry list", error.toException());
             }
         });
-        return result;
     }
 
     public static List<SpotifyItem> getArtistsFromEntry(DatabaseReference entryRef) {
@@ -114,7 +133,6 @@ public class FirebaseHelper {
                     );
                     result.add(newArtist);
                 }
-                Log.d(TAG, "artists found: " + result.toString());
                 SummaryActivity.foundArtists.set(true);
             }
 

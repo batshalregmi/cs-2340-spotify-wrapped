@@ -2,10 +2,10 @@ package com.group3.spotifywrapped.CoreAppViews;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +24,7 @@ import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class SignUpActivity extends AppCompatActivity {
@@ -41,6 +42,10 @@ public class SignUpActivity extends AppCompatActivity {
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
+    private static final int SIGN_IN_PROCESSING = 0;
+    private static final int SIGN_IN_FAIL = 1;
+    private static final int SIGN_IN_SUCCESS = 2;
+    private AtomicInteger signInState = new AtomicInteger(SIGN_IN_PROCESSING);
     private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
 
     @Override
@@ -48,11 +53,11 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        EditText username = findViewById(R.id.username);
-        EditText password = findViewById(R.id.password);
-        EditText confirmPassword = findViewById(R.id.confirmPassword);
-        EditText email = findViewById(R.id.email);
-        EditText name = findViewById(R.id.name);
+        EditText usernameTextField = findViewById(R.id.username);
+        EditText passwordTextField = findViewById(R.id.password);
+        EditText confirmPasswordTextField = findViewById(R.id.confirmPassword);
+        EditText emailTextField = findViewById(R.id.email);
+        EditText nameTextField = findViewById(R.id.name);
         Button createAccountButton = findViewById(R.id.createAccount);
 
         createAccountButton.setOnClickListener(new View.OnClickListener() {
@@ -61,24 +66,37 @@ public class SignUpActivity extends AppCompatActivity {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        Log.d(TAG, String.format("Registering new user using\nemail: %s\npassword: %s", emailTextField.getText().toString(), passwordTextField.getText().toString()));
+                        FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailTextField.getText().toString(), passwordTextField.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     User newUser = new User();
                                     newUser.userUid = FirebaseAuth.getInstance().getUid();
-                                    newUser.username = username.getText().toString();
-                                    newUser.name = name.getText().toString();
+                                    newUser.username = usernameTextField.getText().toString();
+                                    newUser.name = nameTextField.getText().toString();
+                                    Log.d(TAG, "adding new user to database");
                                     LoginActivity.activeUser.set(FirebaseHelper.addUser(newUser));
+                                    Log.d(TAG, "Finished adding new user to database");
+                                    signInState.set(SIGN_IN_SUCCESS);
                                 } else {
                                     Toast.makeText(SignUpActivity.this, "Failed to sign up", Toast.LENGTH_SHORT).show();
+                                    signInState.set(SIGN_IN_FAIL);
                                 }
                             }
                         });
-                        getToken();
-                        while(!tokenRecieved.get());
-                        Intent i = new Intent(SignUpActivity.this, SummarySelectorActivity.class);
-                        startActivity(i);
+
+                        while (signInState.get() == SIGN_IN_PROCESSING);
+                        if (signInState.get() == SIGN_IN_SUCCESS) {
+                            signInState.set(SIGN_IN_PROCESSING);
+                            Log.d(TAG, "Getting token");
+                            getToken();
+                            while(!tokenRecieved.get());
+                            Log.d(TAG, "Token recieved: " + LoginActivity.token);
+                            Intent i = new Intent(SignUpActivity.this, SummarySelectorActivity.class);
+                            startActivity(i);
+                        }
+                        signInState.set(SIGN_IN_PROCESSING);
                     }
                 });
                 thread.start();
@@ -94,7 +112,7 @@ public class SignUpActivity extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(SCOPES) // <--- Change the scope of your requested token here
+                .setScopes(SCOPES)
                 .setCampaign("your-campaign-token")
                 .build();
     }

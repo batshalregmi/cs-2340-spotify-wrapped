@@ -7,12 +7,15 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/trial3"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/trial3"
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotifywrapped"
         tools:targetApi="31">
+        <activity
+            android:name=".CoreAppViews.SettingsActivity"
+            android:exported="true"/>
         <activity
             android:name=".summary.SummarySelectorActivity"
             android:exported="true" />
@@ -21,7 +24,13 @@
             android:exported="true" />
         <activity
             android:name=".CoreAppViews.SignUpActivity"
-            android:exported="true"/>
+            android:exported="true">
+            <intent-filter>
+                <data
+                    android:host="auth"
+                    android:scheme="spotifywrapped" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".CoreAppViews.LoginActivity"
             android:exported="true">
@@ -32,7 +41,6 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

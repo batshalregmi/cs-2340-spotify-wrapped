@@ -5,4 +5,9 @@
     <color name="green">#16c99d</color>
     <color name="purple">#8692F7</color>
     <color name="light_green">#D3F1B5</color>
+    <color name="main_bg">#023047</color>
+    <color name="yellow">#FFB703</color>
+    <color name="title_featured">#66CBCBCB</color>
+    <color name="main_bg2">#0a4c86</color>
+    <color name="category">#C0C0C0</color>
 </resources>

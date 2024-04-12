@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,10 +39,13 @@ public class LoginActivity extends AppCompatActivity {
             "user-read-email",
             "user-top-read"
     };
-
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
+    private static final int SIGN_IN_PROCESSING = 0;
+    private static final int SIGN_IN_FAIL = 1;
+    private static final int SIGN_IN_SUCCESS = 2;
+    private AtomicInteger signInState = new AtomicInteger(SIGN_IN_PROCESSING);
     private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
 
     public static AtomicReference<DatabaseReference> activeUser = new AtomicReference<>(null);
@@ -65,22 +69,32 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Password must be 6 characters long", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signInWithEmailAndPassword(usernameTextField.getText().toString(), passwordTextField.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            activeUser = FirebaseHelper.getUserByFirebaseUser();
-                        }
-                    }
-                });
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        getToken();
-                        while(!tokenRecieved.get());
-                        Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
-                        startActivity(i);
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        mAuth.signInWithEmailAndPassword(usernameTextField.getText().toString(), passwordTextField.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    activeUser = FirebaseHelper.getUserByFirebaseUser();
+                                    signInState.set(SIGN_IN_SUCCESS);
+                                } else{
+                                    Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+                                    signInState.set(SIGN_IN_FAIL);
+                                }
+                            }
+                        });
+
+                        while (signInState.get() == SIGN_IN_PROCESSING);
+                        if (signInState.get() == SIGN_IN_SUCCESS) {
+                            signInState.set(SIGN_IN_PROCESSING);
+                            getToken();
+                            while(!tokenRecieved.get());
+                            Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
+                            startActivity(i);
+                        }
+                        signInState.set(SIGN_IN_PROCESSING);
                     }
                 });
                 thread.start();

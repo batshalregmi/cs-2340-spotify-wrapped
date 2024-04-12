@@ -1,21 +1,29 @@
 package com.group3.spotifywrapped.summary;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.group3.spotifywrapped.CoreAppViews.LoginActivity;
+import com.group3.spotifywrapped.CoreAppViews.SettingsActivity;
+import com.group3.spotifywrapped.CoreAppViews.SignUpActivity;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.SummaryEntry;
@@ -23,17 +31,20 @@ import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SummarySelectorActivity extends AppCompatActivity {
+    private static final List<Pair<DatabaseReference, SummaryEntry>> entries = Collections.synchronizedList(new ArrayList<>());
+    private static final List<String> entriesStringList = new ArrayList<>();
+    private ArrayAdapter<String> allPreviousEntrySpinnerAdapter = null;
     public static AtomicBoolean foundEntries = new AtomicBoolean(false);
-
     private static final String TAG = "SummarySelectorActivity";
     private static DatabaseReference selectedSummaryEntry = null;
-    private static final int MAX_TABLE_ROWS = 10;
-    private static final int MAX_TABLE_COLUMNS = 2;
-
+    private static final int MAX_TABLE_ROWS = 2;
+    private static final int MAX_TABLE_COLUMNS = 4;
     private String selectedTimeRange = "short_term";
 
     @Override
@@ -41,16 +52,30 @@ public class SummarySelectorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary_selector);
 
-        Spinner timerRangeSpinner = findViewById(R.id.timeRangeSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.bottom_wrapped:
+                    break;
+
+                case R.id.bottom_settings:
+                    Intent intent1 = new Intent(SummarySelectorActivity.this, SettingsActivity.class);
+                    startActivity(intent1);
+                    break;
+            }
+            return false;
+        });
+
+        Spinner timeRangeSpinner = findViewById(R.id.timeRangeSpinner);
+        ArrayAdapter<CharSequence> timeRangeSpinnerAdapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.time_frame_choices,
                 android.R.layout.simple_spinner_item
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        timerRangeSpinner.setAdapter(adapter);
+        timeRangeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timeRangeSpinner.setAdapter(timeRangeSpinnerAdapter);
 
-        timerRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        timeRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch ((String)parent.getItemAtPosition(position)) {
@@ -65,12 +90,13 @@ public class SummarySelectorActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
         genSummaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (LoginActivity.activeUser.get() != null) {
                     SummaryEntry newEntry = new SummaryEntry(LocalDateTime.now().toString());
+                    newEntry.timeFrame = selectedTimeRange;
                     newEntry.getArtists().addAll(SpotifyApiHelper.getTopArtistList(selectedTimeRange));
                     newEntry.getTracks().addAll(SpotifyApiHelper.getTopTrackList(selectedTimeRange));
                     selectedSummaryEntry = FirebaseHelper.addSummaryEntry(newEntry, LoginActivity.activeUser.get());
@@ -78,6 +104,42 @@ public class SummarySelectorActivity extends AppCompatActivity {
                     startActivity(i);
                 } else {
                     Log.w(TAG, "activeUser must not be null before generating new wrapped");
+                }
+            }
+        });
+
+        Spinner allPreviousEntrySpinner = findViewById(R.id.allPreviousWrapSpinner);
+        allPreviousEntrySpinnerAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                entriesStringList
+        );
+        allPreviousEntrySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        allPreviousEntrySpinner.setAdapter(allPreviousEntrySpinnerAdapter);
+        allPreviousEntrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String target = (String)parent.getItemAtPosition(position);
+                for (Pair<DatabaseReference, SummaryEntry> it : entries) {
+                    if (target.equals(it.second.dateCreated.toString())) {
+                        selectedSummaryEntry = it.first;
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        Button openEntryButton = findViewById(R.id.openWrappedButton);
+        openEntryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedSummaryEntry != null) {
+                    Intent i = new Intent(SummarySelectorActivity.this, SummaryActivity.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(SummarySelectorActivity.this, "Must select an summary entry before opening one", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -90,41 +152,62 @@ public class SummarySelectorActivity extends AppCompatActivity {
         Thread previousEntriesGridThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (LoginActivity.activeUser.get() == null);
-                final List<DataSnapshot> entries = FirebaseHelper.getEntrySnapList(LoginActivity.activeUser.get());
-                while (!foundEntries.get());
-                foundEntries.set(false);
-
-                Log.d(TAG, "Num entries found: " + entries.size());
+                if (!foundEntries.get()) {
+                    while (LoginActivity.activeUser.get() == null);
+                    FirebaseHelper.getEntriesFromUser(LoginActivity.activeUser.get(), entries);
+                    while (!foundEntries.get());
+                }
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Log.d(TAG, "Num entries found: " + entries.size());
 
+                        entries.sort(new Comparator<Pair<DatabaseReference, SummaryEntry>>() {
+                            @Override
+                            public int compare(Pair<DatabaseReference, SummaryEntry> o1, Pair<DatabaseReference, SummaryEntry> o2) {
+                                return o2.second.dateCreated.compareTo(o1.second.dateCreated);
+                            }
+                        });
+
                         TableLayout table = findViewById(R.id.recentWrapsTable);
+                        table.removeAllViewsInLayout();
+
                         TableRow row = null;
                         for (int i = 0; i < MAX_TABLE_COLUMNS * MAX_TABLE_ROWS && i < entries.size(); ++i) {
                             if (i % MAX_TABLE_COLUMNS == 0) {
                                 row = new TableRow(SummarySelectorActivity.this);
+                                row.setGravity(Gravity.CENTER);
                                 table.addView(row);
                             }
 
-                            Button button = new Button(SummarySelectorActivity.this);
-                            button.setText(entries.get(i).child("dateCreated").getValue(String.class));
-                            button.setId(i);
-                            final DatabaseReference ref = entries.get(i).getRef();
-                            button.setOnClickListener(new View.OnClickListener() {
+                            Button btn = new Button(SummarySelectorActivity.this);
+                            LocalDateTime tempDate = entries.get(i).second.dateCreated;
+                            btn.setText(String.format("%d-%d-%d\n%d:%02d %s", tempDate.getMonthValue(), tempDate.getDayOfMonth(), tempDate.getYear(), ((tempDate.getHour() == 12 || tempDate.getHour() == 0) ? 12 : tempDate.getHour() % 12), tempDate.getMinute(), ((tempDate.getHour() >= 12) ? "PM" : "AM")));
+                            btn.setId(i);
+                            final DatabaseReference ref = entries.get(i).first;
+                            btn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     selectedSummaryEntry = ref;
+                                    Log.d(TAG, "Num entries found: " + entries.size());
                                     Intent i = new Intent(SummarySelectorActivity.this, SummaryActivity.class);
                                     startActivity(i);
-                                    table.removeAllViews();
                                 }
                             });
-                            row.addView(button);
+                            row.addView(btn);
                         }
+                    }
+                });
+
+                entriesStringList.clear();
+                for (Pair<DatabaseReference, SummaryEntry> it : entries) {
+                    entriesStringList.add(it.second.dateCreated.toString());
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        allPreviousEntrySpinnerAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -135,4 +218,5 @@ public class SummarySelectorActivity extends AppCompatActivity {
     public static DatabaseReference getSelectedSummaryEntry() {
         return selectedSummaryEntry;
     }
+    public static void setSelectedSummaryEntry(DatabaseReference ref) { selectedSummaryEntry = ref; }
 }

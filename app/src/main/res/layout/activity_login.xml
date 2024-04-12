@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/loginpageartnew"
+    android:background="@drawable/loginbg_try"
     tools:context=".CoreAppViews.LoginActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -16,6 +16,7 @@
         android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
+        app:cardBackgroundColor="#0a4c86"
         android:background="@drawable/custom_edittext">
 
         <LinearLayout
@@ -24,13 +25,14 @@
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="24dp">
+
             <TextView
                 android:id="@+id/loginText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/login"
                 android:textAlignment="center"
-                android:textColor="@color/green"
+                android:textColor="@color/yellow"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -44,39 +46,45 @@
                 android:hint="@string/username"
                 android:inputType="text"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:paddingStart="15dp"
+                android:textColor="@color/white"
+                android:textColorHighlight="@color/cardview_dark_background"
+                android:textColorHint="@color/yellow" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginTop="15dp"
                 android:id="@+id/passwordParent"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
 
                 android:textColor="@color/black"
                 app:cursorColor="@color/purple"
                 app:hintEnabled="false"
+                app:hintTextColor="@color/yellow"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/green">
+                app:passwordToggleTint="@color/yellow">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    app:hintAnimationEnabled="false"
                     android:background="@drawable/custom_edittext"
-                    android:hint="@string/password"
-                    android:inputType="textPassword"
                     android:defaultFocusHighlightEnabled="false"
-                    android:padding="8dp" />
+                    android:hint="@string/password"
+                    android:textColor="@color/white"
+                    android:inputType="textPassword"
+                    android:padding="8dp"
+                    android:textColorHint="@color/yellow"
+                    app:hintAnimationEnabled="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/loginButton"
-                android:layout_width="match_parent"
+                android:layout_width="150dp"
                 android:layout_height="60dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:backgroundTint="@color/green"
+                android:backgroundTint="@color/title_featured"
                 android:text="@string/login"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
@@ -91,7 +99,7 @@
         android:padding="8dp"
         android:text="@string/not_yet_registered"
         android:textAlignment="center"
-        android:textColor="@color/green"
+        android:textColor="@color/yellow"
         android:background="#00000000"
         android:textSize="14sp" />
 </LinearLayout>

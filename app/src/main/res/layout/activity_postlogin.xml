@@ -1,58 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical"
+    android:gravity="center"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".CoreAppViews.MainPageActivity">
 
-    <FrameLayout
-        android:id="@+id/flFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+    <TextView
+        android:id="@+id/welcomeMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="290dp"
+        android:text="Welcome {{USER}} to your Spotify Wrapped!"
+        android:textColor="@color/yellow"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/welcomeMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="49dp"
-            android:layout_marginTop="300dp"
-            android:text="Welcome {{USER}} to your Spotify Wrapped!"
+    <Button
+        android:id="@+id/wrapped"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/title_featured"
+        android:text="My Spotify Wrapped!" />
 
-            android:textAlignment="center"
-            android:textColor="@color/green"
-            android:textSize="20sp" />
-
-    </FrameLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity"
+        android:layout_gravity="center"
+        android:textAlignment="center"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
-            android:layout_width="match_parent"
+            android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="13dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/bottom_background"
             android:elevation="2dp"
-            app:itemIconSize="40dp"
-            app:itemIconTint="@drawable/item_selector"
+            app:itemIconSize="55dp"
             app:itemRippleColor="@android:color/transparent"
             app:labelVisibilityMode="unlabeled"
-            app:menu="@menu/bottom_menu" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/bottom_menu"
+            android:layout_marginStart="10dp"
+            app:itemIconTint="@drawable/item_selector"
+            tools:layout_editor_absoluteX="20dp" />
     </RelativeLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

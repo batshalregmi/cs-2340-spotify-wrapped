@@ -1,10 +1,14 @@
 package com.group3.spotifywrapped.summary;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -26,7 +31,10 @@ import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.Artist;
 import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.SpotifyItem;
+import com.group3.spotifywrapped.database.Track;
+import com.group3.spotifywrapped.utils.Playback;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -34,9 +42,9 @@ public class SummaryActivity extends AppCompatActivity {
     public static AtomicBoolean foundArtists = new AtomicBoolean(false);
     public static AtomicBoolean foundTracks = new AtomicBoolean(false);
 
-    private static final String TAG = "SummaryActivity";
     private SpotifyItemAdapter artistAdapter;
     private SpotifyItemAdapter trackAdapter;
+    private Playback player;
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView songNameView;
@@ -66,10 +74,25 @@ public class SummaryActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull SummaryActivity.MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull SummaryActivity.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
             holder.songNameView.setText(items.get(position).name);
             holder.songNumberView.setText(Integer.toString(position + 1));
             holder.albumCoverView.setImageDrawable(items.get(position).getImage());
+
+            try {
+                holder.albumCoverView.setOnClickListener(new View.OnClickListener() {
+                    Track track = (Track) items.get(position);
+                    String previewUrl = player.getTrackURL(track.spotifyId);
+
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("TEST", "MSG: " + previewUrl);
+                        player.playSong(previewUrl);
+                    }
+                });
+            } catch (Exception e) {
+                Log.d("Exception", e.getMessage());
+            }
         }
 
         @Override
@@ -83,11 +106,12 @@ public class SummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
+        player = new Playback(this);
+
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SummarySelectorActivity.setSelectedSummaryEntry(null);
                 Intent i = new Intent(SummaryActivity.this, SummarySelectorActivity.class);
                 startActivity(i);
             }

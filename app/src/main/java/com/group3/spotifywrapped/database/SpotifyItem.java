@@ -2,6 +2,7 @@ package com.group3.spotifywrapped.database;
 
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.View;
 
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 

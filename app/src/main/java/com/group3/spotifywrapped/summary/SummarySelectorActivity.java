@@ -114,7 +114,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item,
                 entriesStringList
         );
-        allPreviousEntrySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        allPreviousEntrySpinnerAdapter.setDropDownViewResource(R.layout.color_spinner_layout);
         allPreviousEntrySpinner.setAdapter(allPreviousEntrySpinnerAdapter);
         allPreviousEntrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

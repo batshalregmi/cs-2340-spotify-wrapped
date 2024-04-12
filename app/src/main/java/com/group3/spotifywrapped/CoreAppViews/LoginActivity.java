@@ -6,15 +6,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,11 +20,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.group3.spotifywrapped.Foo;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.FirebaseHelper;
-import com.group3.spotifywrapped.database.User;
 
 import com.group3.spotifywrapped.summary.SummarySelectorActivity;
 import com.spotify.sdk.android.auth.AuthorizationClient;
@@ -44,14 +39,17 @@ public class LoginActivity extends AppCompatActivity {
             "user-read-email",
             "user-top-read"
     };
-
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
+    private static final int SIGN_IN_PROCESSING = 0;
+    private static final int SIGN_IN_FAIL = 1;
+    private static final int SIGN_IN_SUCCESS = 2;
+    private AtomicInteger signInState = new AtomicInteger(SIGN_IN_PROCESSING);
+    private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
+
     public static AtomicReference<DatabaseReference> activeUser = new AtomicReference<>(null);
     public static String token;
-
-    private AtomicBoolean tokenRecieved = new AtomicBoolean(false);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,25 +69,35 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Password must be 6 characters long", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signInWithEmailAndPassword(usernameTextField.getText().toString(), passwordTextField.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                Thread thread = new Thread(new Runnable() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Thread thread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
+                    public void run() {
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        mAuth.signInWithEmailAndPassword(usernameTextField.getText().toString(), passwordTextField.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
                                     activeUser = FirebaseHelper.getUserByFirebaseUser();
-                                    getToken();
-                                    while(!tokenRecieved.get());
-                                    Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class); //TODO: CHANGE THIS BACK
-                                    startActivity(i);
+                                    signInState.set(SIGN_IN_SUCCESS);
+                                } else{
+                                    Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+                                    signInState.set(SIGN_IN_FAIL);
                                 }
-                            });
-                            thread.start();
+                            }
+                        });
+
+                        while (signInState.get() == SIGN_IN_PROCESSING);
+                        if (signInState.get() == SIGN_IN_SUCCESS) {
+                            signInState.set(SIGN_IN_PROCESSING);
+                            getToken();
+                            while(!tokenRecieved.get());
+                            Intent i = new Intent(LoginActivity.this, SummarySelectorActivity.class);
+                            startActivity(i);
                         }
+                        signInState.set(SIGN_IN_PROCESSING);
                     }
                 });
+                thread.start();
             }
         });
 

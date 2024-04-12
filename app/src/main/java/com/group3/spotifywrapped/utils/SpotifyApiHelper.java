@@ -81,10 +81,10 @@ public class SpotifyApiHelper {
         return Drawable.createFromStream(is, "src name");
     }
 
-    public static List<Artist> getTopArtistList() {
+    public static List<Artist> getTopArtistList(String timeRange) {
         List<Artist> result = new ArrayList<>();
         try {
-            JSONObject topArtistsResponse = callSpotifyApi("/me/top/artists?time_range=long_term&limit=5", LoginActivity.token, "GET");
+            JSONObject topArtistsResponse = callSpotifyApi("/me/top/artists?time_range=" + timeRange + "&limit=5", LoginActivity.token, "GET");
             JSONArray topArtistsJSONArray = topArtistsResponse.getJSONArray("items");
             for (int i = 0; i < topArtistsJSONArray.length(); ++i) {
                 Artist newArtist = Artist.parseFromJSON((JSONObject)topArtistsJSONArray.get(i));
@@ -95,10 +95,10 @@ public class SpotifyApiHelper {
         }
         return result;
     }
-    public static List<Track> getTopTrackList() {
+    public static List<Track> getTopTrackList(String timeRange) {
         List<Track> result = new ArrayList<>();
         try {
-            JSONObject topTracksResponse = callSpotifyApi("/me/top/tracks?time_range=long_term&limit=5", LoginActivity.token, "GET");
+            JSONObject topTracksResponse = callSpotifyApi("/me/top/tracks?time_range=" + timeRange + "&limit=5", LoginActivity.token, "GET");
             JSONArray topTracksJSONArray = topTracksResponse.getJSONArray("items");
             for (int i = 0; i < topTracksJSONArray.length(); ++i) {
                 Track newTrack = Track.parseFromJSON((JSONObject)topTracksJSONArray.get(i));

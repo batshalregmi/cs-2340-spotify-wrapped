@@ -2,8 +2,12 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:padding="5dp"
+    android:textAlignment="center"
+    android:text="test"
+    android:clickable="true"
+    android:background="@color/main_bg2"
     android:textColor="@color/yellow"
-    android:textSize="20sp">
+    android:textSize="18sp">
 
 </TextView>

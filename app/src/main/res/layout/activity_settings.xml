@@ -83,7 +83,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:backgroundTint="@color/title_featured"
-                android:onClick="ShowPopupPassword"
                 android:text="Change Password" />
 
             <Button

@@ -2,20 +2,19 @@ package com.group3.spotifywrapped.database;
 
 import androidx.room.Entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 public class SummaryEntry {
-    //fields which get added directly to database
-    public String dateCreated;
+    public LocalDateTime dateCreated;
+    public String timeFrame;
 
-    //fields which are not automatically added to database
     private List<Artist> artists = new ArrayList<>();
     private List<Track> tracks = new ArrayList<>();
 
     public SummaryEntry(String dateCreated) {
-        this.dateCreated = dateCreated;
+        this.dateCreated = LocalDateTime.parse(dateCreated);
     }
 
     public List<Artist> getArtists() { return artists; }

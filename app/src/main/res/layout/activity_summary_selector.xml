@@ -71,7 +71,7 @@
                         android:textSize="18sp" />
 
                     <Spinner
-                        android:id="@+id/spinner3"
+                        android:id="@+id/timeRangeSpinner"
                         android:dropDownWidth="wrap_content"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
@@ -95,7 +95,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
-                android:id="@+id/wrappedSelctor"
+                android:id="@+id/allPreviousWrapSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -107,17 +107,32 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/selectWrappedLabel" />
                 <Button
-                    android:id="@+id/generateNewWrappedButton"
+                    android:id="@+id/openWrappedButton"
                     android:layout_width="wrap_content"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:layout_height="wrap_content"
-                    android:text="Generate New Wrapped"
+                    android:text="Open Selected Wrapped"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:backgroundTint="@color/title_featured"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+                <TableLayout
+                    android:id="@+id/recentWrapsTable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+                <Button
+                    android:id="@+id/generateNewWrappedButton"
+                    android:layout_width="wrap_content"
+                    android:backgroundTint="@color/title_featured"
+                    android:text="Generate New Wrapped"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/button"

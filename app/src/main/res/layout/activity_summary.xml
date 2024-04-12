@@ -104,15 +104,21 @@
         <TextView
             android:id="@+id/pageTitle"
             android:layout_width="wrap_content"
-            android:textColor="@color/yellow"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-black"
-            android:text="Your [Mode] Summary"
+            android:text="Your Wrapped"
+            android:textColor="@color/yellow"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MainActivity"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -17,36 +17,28 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Comparator;
 
-public class Artist {
+public class Artist extends SpotifyItem{
     private static final String TAG = "Artist";
 
-    public String name;
-    private String profilePictureUrl;
-    private Drawable profilePicture;
-
-    public Artist() {}
-    public Artist(String name, String profilePictureUrl) {
-        this.name = name;
-        setProfilePictureUrl(profilePictureUrl);
+    public Artist() {
+        super(SpotifyItem.ARTIST, null, null, null);
+    }
+    public Artist(String spotifyId, String name, String imageUrl) {
+        super(SpotifyItem.ARTIST, spotifyId, name, imageUrl);
     }
 
-    public static Artist parseFromJSON(JSONObject src) throws Exception {
-        Artist newArtist = new Artist();
-        newArtist.name = src.getString("name");
-        newArtist.profilePictureUrl = src.getJSONArray("images").getJSONObject(0).getString("url");
-        return newArtist;
-    }
-
-    public String getProfilePictureUrl() { return profilePictureUrl; }
-    public void setProfilePictureUrl(String profilePictureUrl) {
-        this.profilePictureUrl = profilePictureUrl;
+    public static Artist parseFromJSON(JSONObject src) {
+        Artist temp = new Artist();
         try {
-            this.profilePicture = SpotifyApiHelper.loadImageFromURL(profilePictureUrl);
-        } catch (IOException e) {
-            Log.e(TAG, e.toString());
+            temp.spotifyId = src.getString("id");
+            temp.name = src.getString("name");
+            temp.setImageUrl(src.getJSONArray("images").getJSONObject(0).getString("url"));
+            return temp;
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse Artist from JSON: " + e.toString());
         }
+        return temp;
     }
-    public Drawable getProfilePicture() { return profilePicture; }
 
     @Override
     public String toString() {

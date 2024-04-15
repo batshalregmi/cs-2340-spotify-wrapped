@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.group3.spotifywrapped.summary.SummaryActivity;
 import com.group3.spotifywrapped.summary.SummarySelectorActivity;
+import com.group3.spotifywrapped.utils.LiveDataList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,9 +120,8 @@ public class FirebaseHelper {
         });
     }
 
-    public static List<SpotifyItem> getArtistsFromEntry(DatabaseReference entryRef) {
-        List<SpotifyItem> result = new ArrayList<>();
-        entryRef.child("artists").addValueEventListener(new ValueEventListener() {
+    public static void getArtistsFromEntry(DatabaseReference entryRef, LiveDataList<SpotifyItem> result) {
+        entryRef.child("artists").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 result.clear();
@@ -133,7 +133,7 @@ public class FirebaseHelper {
                     );
                     result.add(newArtist);
                 }
-                SummaryActivity.foundArtists.set(true);
+                //SummaryActivity.foundArtists.set(true);
             }
 
             @Override
@@ -141,12 +141,10 @@ public class FirebaseHelper {
                 Log.w(TAG, "Failed to read artists", error.toException());
             }
         });
-        return result;
     }
 
-    public static List<SpotifyItem> getTracksFromEntry(DatabaseReference entryRef) {
-        List<SpotifyItem> result = new ArrayList<>();
-        entryRef.child("tracks").addValueEventListener(new ValueEventListener() {
+    public static void getTracksFromEntry(DatabaseReference entryRef, LiveDataList<SpotifyItem> result) {
+        entryRef.child("tracks").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 result.clear();
@@ -166,6 +164,5 @@ public class FirebaseHelper {
                 Log.w(TAG, "Failed to read tracks", error.toException());
             }
         });
-        return result;
     }
 }

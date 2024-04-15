@@ -26,17 +26,20 @@ import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.Artist;
 import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.SpotifyItem;
+import com.group3.spotifywrapped.utils.DataListener;
+import com.group3.spotifywrapped.utils.LiveDataList;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SummaryActivity extends AppCompatActivity {
-    public static AtomicBoolean foundArtists = new AtomicBoolean(false);
-    public static AtomicBoolean foundTracks = new AtomicBoolean(false);
-
     private static final String TAG = "SummaryActivity";
+
     private SpotifyItemAdapter artistAdapter;
     private SpotifyItemAdapter trackAdapter;
+
+    private final LiveDataList<SpotifyItem> artists = new LiveDataList<>();
+    private final LiveDataList<SpotifyItem> tracks = new LiveDataList<>();
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView songNameView;
@@ -92,14 +95,6 @@ public class SummaryActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        List<SpotifyItem> artists = FirebaseHelper.getArtistsFromEntry(SummarySelectorActivity.getSelectedSummaryEntry());
-        List<SpotifyItem> tracks = FirebaseHelper.getTracksFromEntry(SummarySelectorActivity.getSelectedSummaryEntry());
 
         RecyclerView artistRecyclerView = findViewById(R.id.top_artists_list);
         artistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -111,31 +106,26 @@ public class SummaryActivity extends AppCompatActivity {
         trackAdapter = new SpotifyItemAdapter(getApplicationContext(), tracks);
         trackRecyclerView.setAdapter(trackAdapter);
 
-        Thread updateListsThread = new Thread(new Runnable() {
+        artists.addListener(new DataListener() {
             @Override
             public void run() {
-                while (!foundArtists.get() || !foundTracks.get()) {
-                    if (foundArtists.get()) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                artistAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                    if (foundTracks.get()) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                trackAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                }
-                foundArtists.set(false);
-                foundTracks.set(false);
+                artistAdapter.notifyDataSetChanged();
             }
         });
-        updateListsThread.start();
+
+        tracks.addListener(new DataListener() {
+            @Override
+            public void run() {
+                trackAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        FirebaseHelper.getArtistsFromEntry(SummarySelectorActivity.getSelectedSummaryEntry(), artists);
+        FirebaseHelper.getTracksFromEntry(SummarySelectorActivity.getSelectedSummaryEntry(), tracks);
     }
 }

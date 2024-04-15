@@ -156,7 +156,6 @@ public class FirebaseHelper {
                     );
                     result.add(newTrack);
                 }
-                SummaryActivity.foundTracks.set(true);
             }
 
             @Override

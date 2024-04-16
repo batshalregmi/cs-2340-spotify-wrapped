@@ -70,9 +70,9 @@ public class SummarySelectorActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> timeRangeSpinnerAdapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.time_frame_choices,
-                android.R.layout.simple_spinner_item
+                R.layout.spinner_layout
         );
-        timeRangeSpinnerAdapter.setDropDownViewResource(R.layout.color_spinner_layout);
+        timeRangeSpinnerAdapter.setDropDownViewResource(R.layout.spinner_layout);
         timeRangeSpinner.setAdapter(timeRangeSpinnerAdapter);
 
         timeRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -111,10 +111,10 @@ public class SummarySelectorActivity extends AppCompatActivity {
         Spinner allPreviousEntrySpinner = findViewById(R.id.allPreviousWrapSpinner);
         allPreviousEntrySpinnerAdapter = new ArrayAdapter<>(
                 this,
-                android.R.layout.simple_spinner_item,
+                R.layout.spinner_layout,
                 entriesStringList
         );
-        allPreviousEntrySpinnerAdapter.setDropDownViewResource(R.layout.color_spinner_layout);
+        allPreviousEntrySpinnerAdapter.setDropDownViewResource(R.layout.spinner_layout);
         allPreviousEntrySpinner.setAdapter(allPreviousEntrySpinnerAdapter);
         allPreviousEntrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

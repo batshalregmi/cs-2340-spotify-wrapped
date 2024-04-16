@@ -27,6 +27,7 @@ import com.group3.spotifywrapped.CoreAppViews.SignUpActivity;
 import com.group3.spotifywrapped.R;
 import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.SummaryEntry;
+import com.group3.spotifywrapped.utils.LiveDataList;
 import com.group3.spotifywrapped.utils.SpotifyApiHelper;
 
 import java.time.LocalDateTime;

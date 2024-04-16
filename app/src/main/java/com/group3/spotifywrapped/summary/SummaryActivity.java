@@ -3,7 +3,6 @@ package com.group3.spotifywrapped.summary;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,24 +12,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.spotifywrapped.R;
-import com.group3.spotifywrapped.database.Artist;
 import com.group3.spotifywrapped.database.FirebaseHelper;
 import com.group3.spotifywrapped.database.SpotifyItem;
-import com.group3.spotifywrapped.utils.DataListener;
+import com.group3.spotifywrapped.utils.ElementObserver;
 import com.group3.spotifywrapped.utils.LiveDataList;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SummaryActivity extends AppCompatActivity {
     private static final String TAG = "SummaryActivity";
@@ -106,16 +97,16 @@ public class SummaryActivity extends AppCompatActivity {
         trackAdapter = new SpotifyItemAdapter(getApplicationContext(), tracks);
         trackRecyclerView.setAdapter(trackAdapter);
 
-        artists.addListener(new DataListener() {
+        artists.addObserver(new ElementObserver() {
             @Override
-            public void run() {
+            public void onChange() {
                 artistAdapter.notifyDataSetChanged();
             }
         });
 
-        tracks.addListener(new DataListener() {
+        tracks.addObserver(new ElementObserver() {
             @Override
-            public void run() {
+            public void onChange() {
                 trackAdapter.notifyDataSetChanged();
             }
         });
@@ -125,6 +116,8 @@ public class SummaryActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        artists.clear();
+        tracks.clear();
         FirebaseHelper.getArtistsFromEntry(SummarySelectorActivity.getSelectedSummaryEntry(), artists);
         FirebaseHelper.getTracksFromEntry(SummarySelectorActivity.getSelectedSummaryEntry(), tracks);
     }

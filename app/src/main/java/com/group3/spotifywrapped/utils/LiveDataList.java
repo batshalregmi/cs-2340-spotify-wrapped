@@ -1,39 +1,47 @@
 package com.group3.spotifywrapped.utils;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class LiveDataList<E> extends ArrayList<E> {
-    private List<DataListener> listeners = new ArrayList<>();
+    private List<ElementObserver> observers = new ArrayList<>();
 
     public LiveDataList() {}
 
-    private void updateListeners() {
-        for (DataListener it : listeners) {
-            it.run();
+    private void notifyObservers() {
+        for (ElementObserver it : observers) {
+            it.onChange();
         }
     }
 
-    public void addListener(DataListener listener) {
-        listeners.add(listener);
+    public void addObserver(ElementObserver observer) {
+        observers.add(observer);
     }
+    public void clearObservers() { observers.clear(); }
 
     @Override
     public boolean add(E e) {
         boolean result = super.add(e);
-        updateListeners();
+        notifyObservers();
+        return result;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        boolean result = super.addAll(c);
+        notifyObservers();
         return result;
     }
 
     @Override
     public void clear() {
         super.clear();
-        updateListeners();
+        notifyObservers();
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

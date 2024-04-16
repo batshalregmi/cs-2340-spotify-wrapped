@@ -124,16 +124,16 @@ public class FirebaseHelper {
         entryRef.child("artists").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                result.clear();
+                List<SpotifyItem> temp = new ArrayList<>();
                 for (DataSnapshot it : snapshot.getChildren()) {
                     Artist newArtist = new Artist(
                             it.child("spotifyId").getValue(String.class),
                             it.child("name").getValue(String.class),
                             it.child("imageUrl").getValue(String.class)
                     );
-                    result.add(newArtist);
+                    temp.add(newArtist);
                 }
-                //SummaryActivity.foundArtists.set(true);
+                result.addAll(temp);
             }
 
             @Override
@@ -147,15 +147,16 @@ public class FirebaseHelper {
         entryRef.child("tracks").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                result.clear();
+                List<SpotifyItem> temp = new ArrayList<>();
                 for (DataSnapshot it : snapshot.getChildren()) {
                     Track newTrack = new Track(
                             it.child("spotifyId").getValue(String.class),
                             it.child("name").getValue(String.class),
                             it.child("imageUrl").getValue(String.class)
                     );
-                    result.add(newTrack);
+                    temp.add(newTrack);
                 }
+                result.addAll(temp);
             }
 
             @Override

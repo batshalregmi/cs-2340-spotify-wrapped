@@ -43,6 +43,7 @@ dependencies {
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
     implementation libs.activity
+    implementation libs.androidx.media3.common
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -50,6 +51,11 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation 'com.google.firebase:firebase-analytics'
     implementation "com.google.firebase:firebase-auth"
+
+    implementation libs.media3.exoplayer
+    implementation libs.androidx.media3.exoplayer.dash
+    implementation libs.androidx.media3.ui
+
 
     def room_version = "2.6.1"
     implementation "androidx.room:room-runtime:$room_version"

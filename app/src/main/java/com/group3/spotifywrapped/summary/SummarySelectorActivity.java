@@ -73,7 +73,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
                 R.array.time_frame_choices,
                 android.R.layout.simple_spinner_item
         );
-        timeRangeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timeRangeSpinnerAdapter.setDropDownViewResource(R.layout.color_spinner_layout);
         timeRangeSpinner.setAdapter(timeRangeSpinnerAdapter);
 
         timeRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -91,7 +91,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
         genSummaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +115,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item,
                 entriesStringList
         );
-        allPreviousEntrySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        allPreviousEntrySpinnerAdapter.setDropDownViewResource(R.layout.color_spinner_layout);
         allPreviousEntrySpinner.setAdapter(allPreviousEntrySpinnerAdapter);
         allPreviousEntrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

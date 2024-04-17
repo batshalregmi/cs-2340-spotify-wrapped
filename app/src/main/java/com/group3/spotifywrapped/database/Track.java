@@ -31,6 +31,7 @@ public class Track extends SpotifyItem {
         try {
             temp.spotifyId = src.getString("id");
             temp.name = src.getString("name");
+            temp.setImageUrl(src.getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url"));
             return temp;
         } catch (JSONException e) {
             Log.e(TAG, "Failed to parse Track from JSON: " + e.toString());

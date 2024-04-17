@@ -53,6 +53,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary_selector);
 
+        Log.d(TAG, "Summary selector start");
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -67,6 +68,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
             return false;
         });
 
+        Log.d(TAG, "Creating time range spinner");
         Spinner timeRangeSpinner = findViewById(R.id.timeRangeSpinner);
         ArrayAdapter<CharSequence> timeRangeSpinnerAdapter = ArrayAdapter.createFromResource(
                 this,
@@ -91,6 +93,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+        Log.d(TAG, "Gen summary button");
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button genSummaryButton = findViewById(R.id.generateNewWrappedButton);
         genSummaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +112,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
             }
         });
 
+        Log.d(TAG, "Previous entry spinner");
         Spinner allPreviousEntrySpinner = findViewById(R.id.allPreviousWrapSpinner);
         allPreviousEntrySpinnerAdapter = new ArrayAdapter<>(
                 this,
@@ -150,6 +154,7 @@ public class SummarySelectorActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        Log.d(TAG, "onResume()");
         Thread previousEntriesGridThread = new Thread(new Runnable() {
             @Override
             public void run() {

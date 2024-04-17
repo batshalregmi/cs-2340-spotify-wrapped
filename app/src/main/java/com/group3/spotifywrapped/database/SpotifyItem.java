@@ -42,16 +42,18 @@ public class SpotifyItem {
         return image;
     }
 
-    private void loadImage() {
+    private boolean loadImage() {
         if (imageUrl == null) {
             //Log.w(TAG, "Must set image URL before loading image");
-            return;
+            return false;
         }
         try {
             image = SpotifyApiHelper.loadImageFromURL(imageUrl);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
+            return false;
         }
+        return true;
     }
 
     @Override

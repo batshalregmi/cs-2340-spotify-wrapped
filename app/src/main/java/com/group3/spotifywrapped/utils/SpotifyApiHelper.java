@@ -26,16 +26,20 @@ import okhttp3.Response;
 
 // STATIC class which we can use without instantiating
 public class SpotifyApiHelper {
+    private static final String TAG = "SpotifyApiHelper";
     private static final OkHttpClient mOkHttpClient = new OkHttpClient();
     private static Call mCall;
     private static JSONObject retValue = null;
 
     public static JSONObject callSpotifyApi(String endpoint, String mAccessToken, String method) {
-        Log.d("SpotifyApiHelper", "Making Spotify API call...");
+        DebugTimer timer = new DebugTimer(String.format("%s.callSpotifyApi(%s)", TAG, endpoint));
+        //Log.d("SpotifyApiHelper", "Making Spotify API call...");
+
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1" + endpoint)
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
+        timer.addSplit("Created request");
 
         mCall = mOkHttpClient.newCall(request);
 
@@ -50,6 +54,8 @@ public class SpotifyApiHelper {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                timer.addSplit("Spotify API response");
+
                 JSONObject jsonObject = null;
                 if (response.isSuccessful()) {
                     try {
@@ -65,6 +71,7 @@ public class SpotifyApiHelper {
                 latch.countDown();
             }
         });
+        timer.addSplit("Enqueue callback");
 
         try {
             latch.await();
@@ -73,12 +80,18 @@ public class SpotifyApiHelper {
             Thread.currentThread().interrupt();
         }
 
+        timer.dumpToLog();
         return retValue;
     }
 
     public static Drawable loadImageFromURL(String url) throws java.io.IOException {
+        DebugTimer timer = new DebugTimer(TAG + ".loadImageFromURL");
         InputStream is = (InputStream)(new URL(url).getContent());
-        return Drawable.createFromStream(is, "src name");
+        timer.addSplit("Stream from URL response");
+        Drawable result = Drawable.createFromStream(is, "src name");
+        timer.addSplit("Drawable created");
+        timer.dumpToLog();
+        return result;
     }
 
     public static List<Artist> getTopArtistList(String timeRange) {

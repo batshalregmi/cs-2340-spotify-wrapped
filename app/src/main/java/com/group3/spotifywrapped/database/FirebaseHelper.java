@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.group3.spotifywrapped.summary.SummaryActivity;
 import com.group3.spotifywrapped.summary.SummarySelectorActivity;
+import com.group3.spotifywrapped.utils.DebugTimer;
 import com.group3.spotifywrapped.utils.LiveDataList;
 
 import java.util.ArrayList;
@@ -120,10 +121,13 @@ public class FirebaseHelper {
         });
     }
 
-    public static void getArtistsFromEntry(DatabaseReference entryRef, LiveDataList<SpotifyItem> result) {
+    public static void getArtistsFromEntry(DatabaseReference entryRef, LiveDataList<SpotifyItem> dest) {
+        DebugTimer timer = new DebugTimer(TAG);
         entryRef.child("artists").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                timer.addSplit("Firebase artist response");
+
                 List<SpotifyItem> temp = new ArrayList<>();
                 for (DataSnapshot it : snapshot.getChildren()) {
                     Artist newArtist = new Artist(
@@ -133,7 +137,11 @@ public class FirebaseHelper {
                     );
                     temp.add(newArtist);
                 }
-                result.addAll(temp);
+                timer.addSplit("Loaded objects from response");
+
+                dest.addAll(temp);
+                timer.addSplit("Added response to destination list");
+                timer.dumpToLog();
             }
 
             @Override
@@ -143,10 +151,12 @@ public class FirebaseHelper {
         });
     }
 
-    public static void getTracksFromEntry(DatabaseReference entryRef, LiveDataList<SpotifyItem> result) {
+    public static void getTracksFromEntry(DatabaseReference entryRef, LiveDataList<SpotifyItem> dest) {
+        DebugTimer timer = new DebugTimer(TAG);
         entryRef.child("tracks").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                timer.addSplit("Firebase tracks response");
                 List<SpotifyItem> temp = new ArrayList<>();
                 for (DataSnapshot it : snapshot.getChildren()) {
                     Track newTrack = new Track(
@@ -156,7 +166,9 @@ public class FirebaseHelper {
                     );
                     temp.add(newTrack);
                 }
-                result.addAll(temp);
+                dest.addAll(temp);
+                timer.addSplit("Added response to destination list");
+                timer.dumpToLog();
             }
 
             @Override

@@ -34,11 +34,13 @@ public class DebugTimer {
         timerStart = System.nanoTime();
     }
     public void dumpToLog() {
-        Log.d("Timer", String.format("%s: begin", name));
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%s: begin\n", name));
         while (splits.peek() != null) {
             Split temp = splits.poll();
-            Log.d("Timer", String.format("%s: %d ms, %s", name, temp.getMilli(), temp.name));
+            sb.append(String.format("\t%s: %d ms, %s\n", name, temp.getMilli(), temp.name));
         }
-        Log.d("Timer", String.format("%s: end", name));
+        sb.append(String.format("%s: end", name));
+        Log.d("Timer", sb.toString());
     }
 }

@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
     Dialog passwordDialog;
@@ -146,7 +147,7 @@ public class SettingsActivity extends AppCompatActivity {
         EditText newEmail = emailDialog.findViewById(R.id.newEmail);
         changeEmailButton.setOnClickListener(x -> {
             FirebaseAuth user = FirebaseAuth.getInstance();
-            user.getCurrentUser().updateEmail(newEmail.getText().toString())
+            Objects.requireNonNull(user.getCurrentUser()).updateEmail(newEmail.getText().toString())
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Log.d("SettingsActivity", "User email address updated.");

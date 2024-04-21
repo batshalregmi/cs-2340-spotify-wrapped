@@ -98,7 +98,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
             profilePicture.setImageDrawable(image);
         }
-        TextView username = findViewById(R.id.usernameUnderPicture);
         Button changePasswordButton = findViewById(R.id.change_password);
 
         Button changeEmailButton = emailDialog.findViewById(R.id.changeEmailButton);
